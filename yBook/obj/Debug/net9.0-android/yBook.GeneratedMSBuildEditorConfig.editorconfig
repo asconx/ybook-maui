@@ -47,3 +47,9 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = yBook.Resources.Styles.Styles.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
+
+[C:/Users/admini/Documents/ybook-maui/yBook/StatusPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.StatusPage.xaml
+build_metadata.AdditionalFiles.TargetPath = StatusPage.xaml
+build_metadata.AdditionalFiles.RelativePath = StatusPage.xaml

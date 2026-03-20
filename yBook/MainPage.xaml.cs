@@ -169,12 +169,13 @@
                 case "Pokoje":
                 case "SyncICal":
                 case "Uzytkownicy":
-                case "Szablony":
                 case "KonfFaktur":
                 case "Powiadomienia":
                     await DisplayAlert("yBook", $"Nawigacja do: {page}", "OK");
                     break;
-
+                case "Status":
+                    await Navigation.PushAsync(new StatusPage());
+                    break;
                 case "Logout":
                     bool confirm = await DisplayAlert(
                         "Wylogowanie",

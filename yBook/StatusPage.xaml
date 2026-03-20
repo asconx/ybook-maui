@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.StatusPage"
+             Title="Statusy rezerwacji"
+             NavigationPage.HasNavigationBar="True">
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="16" RowSpacing="12"
+          BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+
+        <VerticalStackLayout Grid.Row="0" Spacing="2">
+            <Label Text="Statusy rezerwacji"
+                   FontSize="22" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light=#1A237E, Dark=#90CAF9}"/>
+            <Label Text="Zarządzaj statusami i powiązanymi powiadomieniami"
+                   FontSize="13"
+                   TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"/>
+        </VerticalStackLayout>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout x:Name="StatusList" Spacing="12">
+
+                <Frame CornerRadius="14" Padding="14" HasShadow="True"
+                       BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                    <Grid ColumnDefinitions="18,*,Auto" ColumnSpacing="12">
+
+                        <BoxView Grid.Column="0"
+                                 WidthRequest="6"
+                                 CornerRadius="3"
+                                 BackgroundColor="#43A047"
+                                 VerticalOptions="Fill"/>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                            <Label Text="Potwierdzona"
+                                   FontSize="15" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                            <Label Text="Opis: Rezerwacja została potwierdzona przez recepcję."
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"/>
+                            <Label Text="🔔 Powiadomienia: E-mail potwierdzający, SMS do gościa"
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light=#78909C, Dark=#90A4AE}"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="2" Spacing="6" VerticalOptions="Center">
+                            <ImageButton BackgroundColor="Transparent" Padding="4"
+                                         Clicked="OnEditStatusClicked"
+                                         CommandParameter="Potwierdzona">
+                                <ImageButton.Source>
+                                    <FontImageSource FontFamily="OpenSansRegular"
+                                                     Glyph="&#9998;"
+                                                     Color="#1565C0" Size="18"/>
+                                </ImageButton.Source>
+                            </ImageButton>
+                            <ImageButton BackgroundColor="Transparent" Padding="4"
+                                         Clicked="OnDeleteStatusClicked"
+                                         CommandParameter="Potwierdzona">
+                                <ImageButton.Source>
+                                    <FontImageSource FontFamily="OpenSansRegular"
+                                                     Glyph="&#128465;"
+                                                     Color="#E53935" Size="18"/>
+                                </ImageButton.Source>
+                            </ImageButton>
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </Frame>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Button Grid.Row="2"
+                Text="+ Dodaj status"
+                Clicked="OnAddStatusClicked"
+                BackgroundColor="#1565C0"
+                TextColor="White"
+                FontAttributes="Bold"
+                FontSize="15"
+                CornerRadius="12"
+                HeightRequest="50"
+                HorizontalOptions="Fill"/>
+
+    </Grid>
+
+</ContentPage>

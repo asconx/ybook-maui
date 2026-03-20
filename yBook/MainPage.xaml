@@ -862,10 +862,10 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" Text="📧" FontSize="14" VerticalOptions="Center"/>
-                            <Label Grid.Column="1" Text="Szablony e-mail / SMS"
+                            <Label Grid.Column="1" Text="Status"
                                    FontSize="13" TextColor="#CFD8DC" VerticalOptions="Center"/>
                             <Grid.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnMenuItemTapped" CommandParameter="Szablony"/>
+                                <TapGestureRecognizer Tapped="OnMenuItemTapped" CommandParameter="Status"/>
                             </Grid.GestureRecognizers>
                         </Grid>
                         <Grid Padding="42,11,18,11" BackgroundColor="Transparent">
