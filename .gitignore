@@ -1,0 +1,45 @@
+# ── Build output ──────────────────────────────────────────────────────────────
+bin/
+obj/
+
+# ── Visual Studio ─────────────────────────────────────────────────────────────
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ── JetBrains Rider ───────────────────────────────────────────────────────────
+.idea/
+*.DotSettings.user
+
+# ── Klucze i sekrety — NIGDY NIE COMMITUJ ────────────────────────────────────
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+*.pfx
+*.p12
+*.keystore
+google-services.json
+GoogleService-Info.plist
+
+# ── MAUI / Mobile ─────────────────────────────────────────────────────────────
+*.ipa
+*.apk
+*.aab
+*.dSYM/
+
+# ── NuGet ─────────────────────────────────────────────────────────────────────
+*.nupkg
+.nuget/
+packages/
+
+# ── Testy i coverage ──────────────────────────────────────────────────────────
+TestResults/
+coverage*/
+*.trx
+
+# ── System operacyjny ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
