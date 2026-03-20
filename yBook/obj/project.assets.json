@@ -26140,11 +26140,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\admini\\source\\repos\\yBook\\yBook\\yBook.csproj",
+      "projectUniqueName": "C:\\Users\\admini\\Documents\\ybook-maui\\yBook\\yBook.csproj",
       "projectName": "yBook",
-      "projectPath": "C:\\Users\\admini\\source\\repos\\yBook\\yBook\\yBook.csproj",
+      "projectPath": "C:\\Users\\admini\\Documents\\ybook-maui\\yBook\\yBook.csproj",
       "packagesPath": "C:\\Users\\admini\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\admini\\source\\repos\\yBook\\yBook\\obj\\",
+      "outputPath": "C:\\Users\\admini\\Documents\\ybook-maui\\yBook\\obj\\",
       "projectStyle": "PackageReference",
       "crossTargeting": true,
       "fallbackFolders": [
