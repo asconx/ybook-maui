@@ -1,14 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="yBook.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:yBook"
-    Title="yBook">
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:yBook"
+       xmlns:finanse="clr-namespace:yBook.Views.Finanse"
+       x:Class="yBook.AppShell"
+       Shell.NavBarIsVisible="False"
+       FlyoutBehavior="Disabled">
+
+    <!-- Trasy są rejestrowane w AppShell.xaml.cs przez Routing.RegisterRoute -->
+    <!-- Shell.NavBarIsVisible="False" — używamy własnego headera w każdej stronie -->
 
     <ShellContent
-        Title="Home"
+        Title="Pulpit"
         ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Route="MainPage"/>
 
 </Shell>

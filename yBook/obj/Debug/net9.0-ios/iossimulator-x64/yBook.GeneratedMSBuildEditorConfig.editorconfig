@@ -30,11 +30,47 @@ build_metadata.AdditionalFiles.ManifestResourceName = yBook.AppShell.xaml
 build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 
+[C:/Users/admini/Documents/ybook-maui/yBook/DokumentyPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.DokumentyPage.xaml
+build_metadata.AdditionalFiles.TargetPath = DokumentyPage.xaml
+build_metadata.AdditionalFiles.RelativePath = DokumentyPage.xaml
+
+[C:/Users/admini/Documents/ybook-maui/yBook/DrawerMenu.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.DrawerMenu.xaml
+build_metadata.AdditionalFiles.TargetPath = DrawerMenu.xaml
+build_metadata.AdditionalFiles.RelativePath = DrawerMenu.xaml
+
+[C:/Users/admini/Documents/ybook-maui/yBook/ImportMT940Page.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.ImportMT940Page.xaml
+build_metadata.AdditionalFiles.TargetPath = ImportMT940Page.xaml
+build_metadata.AdditionalFiles.RelativePath = ImportMT940Page.xaml
+
+[C:/Users/admini/Documents/ybook-maui/yBook/KontaFinansowePage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.KontaFinansowePage.xaml
+build_metadata.AdditionalFiles.TargetPath = KontaFinansowePage.xaml
+build_metadata.AdditionalFiles.RelativePath = KontaFinansowePage.xaml
+
 [C:/Users/admini/Documents/ybook-maui/yBook/MainPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = yBook.MainPage.xaml
 build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
 build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
+
+[C:/Users/admini/Documents/ybook-maui/yBook/PageHeader.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.PageHeader.xaml
+build_metadata.AdditionalFiles.TargetPath = PageHeader.xaml
+build_metadata.AdditionalFiles.RelativePath = PageHeader.xaml
+
+[C:/Users/admini/Documents/ybook-maui/yBook/RejestrPlatnosciPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.RejestrPlatnosciPage.xaml
+build_metadata.AdditionalFiles.TargetPath = RejestrPlatnosciPage.xaml
+build_metadata.AdditionalFiles.RelativePath = RejestrPlatnosciPage.xaml
 
 [C:/Users/admini/Documents/ybook-maui/yBook/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml

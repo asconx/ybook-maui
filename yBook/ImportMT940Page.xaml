@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:yBook.Controls"
+             x:Class="yBook.Views.Finanse.ImportMT940Page"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="60,*"
+          BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+
+        <ctrl:PageHeader Grid.Row="0"
+                         Title="Import MT940"
+                         Icon="🏛️"
+                         ShowBack="True"
+                         x:Name="Header"/>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="16">
+
+                <!-- Przycisk importu nowego pliku -->
+                <Frame CornerRadius="16" Padding="20" HasShadow="True"
+                       BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Importuj wyciąg bankowy"
+                               FontSize="16" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        <Label Text="Obsługiwane formaty: MT940 (.mt940, .txt, .sta)"
+                               FontSize="13"
+                               TextColor="{AppThemeBinding Light=#78909C, Dark=#90A4AE}"/>
+
+                        <!-- Strefa upuszczania pliku -->
+                        <Border StrokeShape="RoundRectangle 12"
+                                Stroke="#90CAF9"
+                                StrokeThickness="1.5"
+                                Padding="24"
+                                BackgroundColor="{AppThemeBinding Light=#F8FBFF, Dark=#1A2744}">
+                            <Border.StrokeDashArray>
+                                <x:Array Type="{x:Type x:Double}">
+                                    <x:Double>6</x:Double>
+                                    <x:Double>4</x:Double>
+                                </x:Array>
+                            </Border.StrokeDashArray>
+                            <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                                <Label Text="📂" FontSize="40" HorizontalOptions="Center"/>
+                                <Label Text="Wybierz plik MT940"
+                                       FontSize="15" FontAttributes="Bold"
+                                       TextColor="#1565C0"
+                                       HorizontalOptions="Center"/>
+                                <Label Text="lub przeciągnij i upuść tutaj"
+                                       FontSize="12"
+                                       TextColor="{AppThemeBinding Light=#90A4AE, Dark=#607D8B}"
+                                       HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnWybierzPlikClicked"/>
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <Button Text="Wybierz plik..."
+                                BackgroundColor="#1565C0"
+                                TextColor="White"
+                                CornerRadius="10"
+                                HeightRequest="46"
+                                FontAttributes="Bold"
+                                Clicked="OnWybierzPlikClicked"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Historia importów -->
+                <Label Text="Historia importów"
+                       FontSize="15" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"
+                       Margin="4,0"/>
+
+                <CollectionView x:Name="ImportyList" SelectionMode="Single"
+                                SelectionChanged="OnImportSelected">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,10">
+                                <Frame CornerRadius="14" Padding="14" HasShadow="True"
+                                       BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                                    <VerticalStackLayout Spacing="8">
+
+                                        <!-- Wiersz 1: Nazwa pliku + status -->
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <Label Grid.Column="0"
+                                                   Text="{Binding NazwaPliku}"
+                                                   FontSize="13" FontAttributes="Bold"
+                                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"
+                                                   LineBreakMode="TailTruncation"/>
+                                            <Frame Grid.Column="1"
+                                                   CornerRadius="6" Padding="8,3" HasShadow="False"
+                                                   BackgroundColor="{Binding StatusColor}">
+                                                <Label Text="{Binding StatusLabel}"
+                                                       FontSize="10" TextColor="White"/>
+                                            </Frame>
+                                        </Grid>
+
+                                        <!-- Wiersz 2: Statystyki -->
+                                        <Grid ColumnDefinitions="*,*,*">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                <Label Text="Operacje" FontSize="11"
+                                                       TextColor="{AppThemeBinding Light=#90A4AE, Dark=#607D8B}"/>
+                                                <Label Text="{Binding DopasowanieStr}"
+                                                       FontSize="14" FontAttributes="Bold"
+                                                       TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                                            </VerticalStackLayout>
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="Suma" FontSize="11"
+                                                       TextColor="{AppThemeBinding Light=#90A4AE, Dark=#607D8B}"/>
+                                                <Label Text="{Binding SumaStr}"
+                                                       FontSize="14" FontAttributes="Bold"
+                                                       TextColor="#1565C0"/>
+                                            </VerticalStackLayout>
+                                            <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                                <Label Text="Data importu" FontSize="11"
+                                                       TextColor="{AppThemeBinding Light=#90A4AE, Dark=#607D8B}"/>
+                                                <Label Text="{Binding DataStr}"
+                                                       FontSize="12"
+                                                       TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+
+                                        <!-- Błąd (jeśli jest) -->
+                                        <Frame CornerRadius="8" Padding="10,6" HasShadow="False"
+                                               BackgroundColor="#FFEBEE"
+                                               IsVisible="{Binding Blad, Converter={x:StaticResource NotNullConverter}}">
+                                            <Label Text="{Binding Blad}"
+                                                   FontSize="12" TextColor="#C62828"/>
+                                        </Frame>
+
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <ctrl:DrawerMenu Grid.Row="0" Grid.RowSpan="2"
+                         x:Name="Drawer" ZIndex="50"/>
+
+    </Grid>
+</ContentPage>

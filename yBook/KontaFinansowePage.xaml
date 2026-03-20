@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:yBook.Controls"
+             x:Class="yBook.Views.Finanse.KontaFinansowePage"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="60,*" BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+
+        <ctrl:PageHeader Grid.Row="0"
+                         Title="Konta finansowe"
+                         Icon="🏦"
+                         ShowBack="True"
+                         x:Name="Header"/>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="16">
+
+                <!-- Suma sald -->
+                <Frame CornerRadius="16" Padding="20" HasShadow="True"
+                       BackgroundColor="#1565C0">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Łączne saldo"
+                               FontSize="13" TextColor="#90CAF9"/>
+                        <Label x:Name="LblSaldoLaczne"
+                               Text="—"
+                               FontSize="32" FontAttributes="Bold" TextColor="White"/>
+                        <Label x:Name="LblLiczbaKont"
+                               Text="— aktywnych kont"
+                               FontSize="12" TextColor="#BBDEFB"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Lista kont -->
+                <Label Text="Twoje konta"
+                       FontSize="15" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"
+                       Margin="4,0"/>
+
+                <CollectionView x:Name="KontaList" SelectionMode="Single"
+                                SelectionChanged="OnKontoSelected">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,10">
+                                <Frame CornerRadius="14" Padding="16" HasShadow="True"
+                                       BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                                    <Grid ColumnDefinitions="52,*,Auto">
+
+                                        <!-- Ikona -->
+                                        <Frame Grid.Column="0"
+                                               CornerRadius="12" Padding="0" HasShadow="False"
+                                               BackgroundColor="#E3F2FD"
+                                               WidthRequest="44" HeightRequest="44"
+                                               VerticalOptions="Center">
+                                            <Label Text="{Binding TypEmoji}"
+                                                   FontSize="22"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"/>
+                                        </Frame>
+
+                                        <!-- Nazwa + numer -->
+                                        <VerticalStackLayout Grid.Column="1" Margin="12,0,0,0"
+                                                             VerticalOptions="Center" Spacing="3">
+                                            <Label Text="{Binding Nazwa}"
+                                                   FontSize="15" FontAttributes="Bold"
+                                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                                            <Label Text="{Binding Numer}"
+                                                   FontSize="11"
+                                                   TextColor="{AppThemeBinding Light=#90A4AE, Dark=#607D8B}"
+                                                   LineBreakMode="TailTruncation"/>
+                                        </VerticalStackLayout>
+
+                                        <!-- Saldo -->
+                                        <VerticalStackLayout Grid.Column="2"
+                                                             HorizontalOptions="End"
+                                                             VerticalOptions="Center"
+                                                             Spacing="2">
+                                            <Label Text="{Binding SaldoStr}"
+                                                   FontSize="16" FontAttributes="Bold"
+                                                   TextColor="{Binding SaldoColor}"
+                                                   HorizontalOptions="End"/>
+                                            <Label Text="saldo"
+                                                   FontSize="11"
+                                                   TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"
+                                                   HorizontalOptions="End"/>
+                                        </VerticalStackLayout>
+
+                                    </Grid>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Przycisk dodaj konto -->
+                <Button Text="+ Dodaj konto"
+                        BackgroundColor="#1565C0"
+                        TextColor="White"
+                        CornerRadius="12"
+                        HeightRequest="48"
+                        FontAttributes="Bold"
+                        Clicked="OnDodajKontoClicked"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <ctrl:DrawerMenu Grid.Row="0" Grid.RowSpan="2"
+                         x:Name="Drawer" ZIndex="50"/>
+
+    </Grid>
+</ContentPage>
