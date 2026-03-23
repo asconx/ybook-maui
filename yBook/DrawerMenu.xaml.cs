@@ -117,6 +117,10 @@ namespace yBook.Controls
                 case "Rabaty":
                     await Shell.Current.GoToAsync("RabatyPage");
                     break;
+                // —— Strona Blokady —————————————————————————————————————————————
+                case "Blokady":
+                    await Shell.Current.GoToAsync("BlokadyPage");
+                    break;
 
                 // ── Pulpit: wróć do roota ──────────────────────────────────────
                 case "Pulpit":

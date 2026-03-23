@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Blokady.BlokadyFormPage"
+             Title="Nowa blokada">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+
+            <!-- DATY -->
+            <Label Text="Data od"/>
+            <DatePicker x:Name="DataOdPicker"/>
+
+            <Label Text="Data do"/>
+            <DatePicker x:Name="DataDoPicker"/>
+
+            <!-- NAZWA -->
+            <Label Text="Nazwa"/>
+            <Entry x:Name="NazwaEntry"/>
+
+            <!-- NOTATKA -->
+            <Label Text="Notatka"/>
+            <Editor x:Name="NotatkaEditor" HeightRequest="100"/>
+
+            <!-- CHECKBOX -->
+            <HorizontalStackLayout>
+                <CheckBox x:Name="WszystkieCheck"/>
+                <Label Text="Zastosuj dla wszystkich"/>
+            </HorizontalStackLayout>
+
+            <!-- POKOJE -->
+            <Label Text="Wybierz pokoje"/>
+
+            <FlexLayout Wrap="Wrap" x:Name="PokojeContainer"/>
+
+            <!-- BUTTONY -->
+            <Button Text="Zapisz"
+                    BackgroundColor="#1565C0"
+                    TextColor="White"
+                    Clicked="OnSaveClicked"/>
+
+            <Button Text="Anuluj"
+                    Clicked="OnCancelClicked"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
