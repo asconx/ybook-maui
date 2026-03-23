@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:yBook.Controls"
+             x:Class="yBook.Views.Rabaty.RabatyPage"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="60,*">
+
+        <ctrl:PageHeader Grid.Row="0"
+                         Title="Rabaty"
+                         Icon="🏷️"
+                         ShowBack="True"/>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="16">
+
+                <CollectionView x:Name="RabatyList">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="16" Margin="0,0,0,10">
+
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnRabatTapped"/>
+                                </Frame.GestureRecognizers>
+
+                                <VerticalStackLayout>
+
+                                    <Label Text="{Binding Nazwa}" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Kod}" TextColor="#1565C0"/>
+                                    <Label Text="{Binding Opis}" FontSize="12"/>
+                                    <Label Text="{Binding ProcentStr}"/>
+                                    <Label Text="{Binding DataStr}" FontSize="11"/>
+
+                                    <!-- ONLINE -->
+                                    <Label Text="{Binding CzyOnline, StringFormat='Online: {0}'}"
+                                           FontSize="11"
+                                           TextColor="Green"/>
+
+                                </VerticalStackLayout>
+
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Button Text="+ Dodaj rabat"
+                        BackgroundColor="#1565C0"
+                        TextColor="White"
+                        CornerRadius="12"
+                        Clicked="OnDodajRabatClicked"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>
