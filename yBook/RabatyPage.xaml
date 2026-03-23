@@ -5,49 +5,37 @@
              x:Class="yBook.Views.Rabaty.RabatyPage"
              NavigationPage.HasNavigationBar="False">
 
-    <Grid RowDefinitions="60,*" BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+    <Grid RowDefinitions="60,*">
 
-        <!-- HEADER -->
         <ctrl:PageHeader Grid.Row="0"
                          Title="Rabaty"
                          Icon="🏷️"
                          ShowBack="True"/>
 
-        <!-- CONTENT -->
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="16" Spacing="16">
-
-                <Label Text="Twoje rabaty"
-                       FontSize="15" FontAttributes="Bold"/>
 
                 <CollectionView x:Name="RabatyList">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame CornerRadius="14" Padding="16" Margin="0,0,0,10"
-                                   BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                            <Frame Padding="16" Margin="0,0,0,10">
 
-                                <VerticalStackLayout Spacing="6">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnRabatTapped"/>
+                                </Frame.GestureRecognizers>
 
-                                    <Label Text="{Binding Nazwa}"
-                                           FontSize="16"
-                                           FontAttributes="Bold"/>
+                                <VerticalStackLayout>
 
-                                    <Label Text="{Binding Kod}"
-                                           FontSize="13"
-                                           TextColor="#1565C0"/>
+                                    <Label Text="{Binding Nazwa}" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Kod}" TextColor="#1565C0"/>
+                                    <Label Text="{Binding Opis}" FontSize="12"/>
+                                    <Label Text="{Binding ProcentStr}"/>
+                                    <Label Text="{Binding DataStr}" FontSize="11"/>
 
-                                    <Label Text="{Binding Opis}"
-                                           FontSize="12"
-                                           TextColor="Gray"/>
-
-                                    <HorizontalStackLayout Spacing="10">
-                                        <Label Text="{Binding ProcentStr}"
-                                               FontAttributes="Bold"
-                                               TextColor="Green"/>
-                                        <Label Text="{Binding DataStr}"
-                                               FontSize="11"
-                                               TextColor="Gray"/>
-                                    </HorizontalStackLayout>
+                                    <!-- ONLINE -->
+                                    <Label Text="{Binding CzyOnline, StringFormat='Online: {0}'}"
+                                           FontSize="11"
+                                           TextColor="Green"/>
 
                                 </VerticalStackLayout>
 
@@ -64,9 +52,6 @@
 
             </VerticalStackLayout>
         </ScrollView>
-
-        <ctrl:DrawerMenu Grid.Row="0" Grid.RowSpan="2"
-                         x:Name="Drawer" ZIndex="50"/>
 
     </Grid>
 </ContentPage>

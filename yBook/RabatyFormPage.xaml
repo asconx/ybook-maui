@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Rabaty.RabatyFormPage"
+             Title="Rabat">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+
+            <Label Text="Nazwa"/>
+            <Entry x:Name="NazwaEntry"/>
+
+            <Label Text="Kod"/>
+            <Entry x:Name="KodEntry"/>
+
+            <Label Text="Rabat (%)"/>
+            <Entry x:Name="ProcentEntry" Keyboard="Numeric"/>
+
+            <HorizontalStackLayout>
+                <CheckBox x:Name="OnlineCheck"/>
+                <Label Text="Dostępny online"/>
+            </HorizontalStackLayout>
+
+            <Label Text="Opis"/>
+            <Editor x:Name="OpisEditor" HeightRequest="100"/>
+
+            <Button Text="Zapisz"
+                    BackgroundColor="#1565C0"
+                    TextColor="White"
+                    Clicked="OnSaveClicked"/>
+
+            <Button Text="Anuluj"
+                    Clicked="OnCancelClicked"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
