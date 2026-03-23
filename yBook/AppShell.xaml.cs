@@ -1,4 +1,5 @@
 using yBook.Views.Finanse;
+using yBook.Views.Ceny;
 
 namespace yBook
 {
@@ -13,6 +14,7 @@ namespace yBook
             Routing.RegisterRoute("KontaFinansowe",   typeof(KontaFinansowePage));
             Routing.RegisterRoute("RejestrPlatnosci", typeof(RejestrPlatnosciPage));
             Routing.RegisterRoute("ImportMT940",      typeof(ImportMT940Page));
+            Routing.RegisterRoute("Cenniki", typeof(CennikPage));
 
             // ── Tu dodasz pozostałe trasy w kolejnych etapach ─────────────────
             // Routing.RegisterRoute("Recepcja",     typeof(RecepcjaPage));
