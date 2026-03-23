@@ -3,6 +3,7 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:yBook"
        xmlns:finanse="clr-namespace:yBook.Views.Finanse"
+       xmlns:rabaty="clr-namespace:yBook.Views.Rabaty"
        x:Class="yBook.AppShell"
        Shell.NavBarIsVisible="False"
        FlyoutBehavior="Disabled">

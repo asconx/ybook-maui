@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:yBook.Controls"
+             x:Class="yBook.Views.Rabaty.RabatyPage"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="60,*" BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+
+        <!-- HEADER -->
+        <ctrl:PageHeader Grid.Row="0"
+                         Title="Rabaty"
+                         Icon="🏷️"
+                         ShowBack="True"/>
+
+        <!-- CONTENT -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="16">
+
+                <Label Text="Twoje rabaty"
+                       FontSize="15" FontAttributes="Bold"/>
+
+                <CollectionView x:Name="RabatyList">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame CornerRadius="14" Padding="16" Margin="0,0,0,10"
+                                   BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+
+                                <VerticalStackLayout Spacing="6">
+
+                                    <Label Text="{Binding Nazwa}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"/>
+
+                                    <Label Text="{Binding Kod}"
+                                           FontSize="13"
+                                           TextColor="#1565C0"/>
+
+                                    <Label Text="{Binding Opis}"
+                                           FontSize="12"
+                                           TextColor="Gray"/>
+
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Label Text="{Binding ProcentStr}"
+                                               FontAttributes="Bold"
+                                               TextColor="Green"/>
+                                        <Label Text="{Binding DataStr}"
+                                               FontSize="11"
+                                               TextColor="Gray"/>
+                                    </HorizontalStackLayout>
+
+                                </VerticalStackLayout>
+
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Button Text="+ Dodaj rabat"
+                        BackgroundColor="#1565C0"
+                        TextColor="White"
+                        CornerRadius="12"
+                        Clicked="OnDodajRabatClicked"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <ctrl:DrawerMenu Grid.Row="0" Grid.RowSpan="2"
+                         x:Name="Drawer" ZIndex="50"/>
+
+    </Grid>
+</ContentPage>
