@@ -114,6 +114,10 @@ namespace yBook.Controls
                 case "ICalendar":
                     await Shell.Current.GoToAsync(page);
                     break;
+                // —— Strona Rabaty —————————————————————————————————————————————
+                case "Rabaty":
+                    await Shell.Current.GoToAsync("RabatyPage");
+                    break;
 
                 // ── Pulpit: wróć do roota ──────────────────────────────────────
                 case "Pulpit":
