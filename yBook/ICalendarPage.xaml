@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:yBook.Controls"
+             x:Class="yBook.Views.ICalendar.ICalendarPage"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="60,Auto,Auto,*"
+          BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+
+        <ctrl:PageHeader Grid.Row="0"
+                         Title="Rejestr płatności"
+                         Icon="💳"
+                         ShowBack="True"
+                         x:Name="Header"/>
+
+        <!-- Podsumowanie wpływów / wydatków -->
+        <Grid Grid.Row="1"
+              ColumnDefinitions="*,8,*"
+              Padding="12,10">
+
+            <Frame Grid.Column="0" CornerRadius="14" Padding="14" HasShadow="True"
+                   BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="⬇️  Wpływy" FontSize="12"
+                           TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"/>
+                    <Label x:Name="LblWplywy" Text="—"
+                           FontSize="20" FontAttributes="Bold" TextColor="#43A047"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame Grid.Column="2" CornerRadius="14" Padding="14" HasShadow="True"
+                   BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="⬆️  Wydatki" FontSize="12"
+                           TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"/>
+                    <Label x:Name="LblWydatki" Text="—"
+                           FontSize="20" FontAttributes="Bold" TextColor="#E53935"/>
+                </VerticalStackLayout>
+            </Frame>
+
+        </Grid>
+
+        <!-- Filtry -->
+        <ScrollView Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalScrollBarVisibility="Never"
+                    Padding="12,0,12,10"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+            <HorizontalStackLayout Spacing="8">
+                <Frame x:Name="FAll"      CornerRadius="20" Padding="14,6" HasShadow="False" BackgroundColor="#1565C0"><Frame.GestureRecognizers><TapGestureRecognizer Tapped="OnFilterTapped" CommandParameter="All"/></Frame.GestureRecognizers><Label Text="Wszystkie" FontSize="12" TextColor="White"/></Frame>
+                <Frame x:Name="FPrzychod" CornerRadius="20" Padding="14,6" HasShadow="False" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}"><Frame.GestureRecognizers><TapGestureRecognizer Tapped="OnFilterTapped" CommandParameter="Przychod"/></Frame.GestureRecognizers><Label Text="Wpływy" FontSize="12" TextColor="{AppThemeBinding Light=#555, Dark=#CCC}"/></Frame>
+                <Frame x:Name="FRozchod"  CornerRadius="20" Padding="14,6" HasShadow="False" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}"><Frame.GestureRecognizers><TapGestureRecognizer Tapped="OnFilterTapped" CommandParameter="Rozchod"/></Frame.GestureRecognizers><Label Text="Wydatki" FontSize="12" TextColor="{AppThemeBinding Light=#555, Dark=#CCC}"/></Frame>
+                <Frame x:Name="FKarta"    CornerRadius="20" Padding="14,6" HasShadow="False" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}"><Frame.GestureRecognizers><TapGestureRecognizer Tapped="OnFilterTapped" CommandParameter="Karta"/></Frame.GestureRecognizers><Label Text="Karta" FontSize="12" TextColor="{AppThemeBinding Light=#555, Dark=#CCC}"/></Frame>
+                <Frame x:Name="FGotowka"  CornerRadius="20" Padding="14,6" HasShadow="False" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}"><Frame.GestureRecognizers><TapGestureRecognizer Tapped="OnFilterTapped" CommandParameter="Gotowka"/></Frame.GestureRecognizers><Label Text="Gotówka" FontSize="12" TextColor="{AppThemeBinding Light=#555, Dark=#CCC}"/></Frame>
+            </HorizontalStackLayout>
+        </ScrollView>
+
+        <!-- Lista płatności -->
+        <CollectionView Grid.Row="3"
+                        x:Name="PlatnosciList"
+                        Margin="0,6,0,0"
+                        SelectionMode="Single"
+                        SelectionChanged="OnPlatnoscSelected">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="12,0,12,8">
+                        <Frame CornerRadius="12" Padding="14" HasShadow="True"
+                               BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                            <Grid ColumnDefinitions="44,*,Auto">
+
+                                <!-- Ikona typu -->
+                                <Label Grid.Column="0"
+                                       Text="{Binding TypEmoji}"
+                                       FontSize="26"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center"/>
+
+                                <!-- Tytuł + klient + konto -->
+                                <VerticalStackLayout Grid.Column="1" Margin="10,0,0,0"
+                                                     VerticalOptions="Center" Spacing="2">
+                                    <Label Text="{Binding Tytul}"
+                                           FontSize="14" FontAttributes="Bold"
+                                           TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                                    <Label Text="{Binding Klient}"
+                                           FontSize="12"
+                                           TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"/>
+                                    <Label Text="{Binding KontoNazwa}"
+                                           FontSize="11"
+                                           TextColor="{AppThemeBinding Light=#90A4AE, Dark=#546E7A}"/>
+                                </VerticalStackLayout>
+
+                                <!-- Kwota + data -->
+                                <VerticalStackLayout Grid.Column="2"
+                                                     HorizontalOptions="End"
+                                                     VerticalOptions="Center"
+                                                     Spacing="4">
+                                    <Label Text="{Binding KwotaStr}"
+                                           FontSize="15" FontAttributes="Bold"
+                                           TextColor="{Binding KwotaColor}"
+                                           HorizontalOptions="End"/>
+                                    <Label Text="{Binding DataStr}"
+                                           FontSize="11"
+                                           TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"
+                                           HorizontalOptions="End"/>
+                                </VerticalStackLayout>
+
+                            </Grid>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <ctrl:DrawerMenu Grid.Row="0" Grid.RowSpan="4"
+                         x:Name="Drawer" ZIndex="50"/>
+
+    </Grid>
+</ContentPage>
