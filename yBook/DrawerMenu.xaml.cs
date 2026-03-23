@@ -1,3 +1,5 @@
+using yBook.Views.Ceny;
+
 namespace yBook.Controls
 {
     public partial class DrawerMenu : ContentView
@@ -107,6 +109,7 @@ namespace yBook.Controls
             switch (page)
             {
                 // ── Strony finansów — gotowe ──────────────────────────────────
+                case "UslugiOplaty":
                 case "Dokumenty":
                 case "KontaFinansowe":
                 case "RejestrPlatnosci":
@@ -114,6 +117,8 @@ namespace yBook.Controls
                 case "ICalendar":
                     await Shell.Current.GoToAsync(page);
                     break;
+                case "Cenniki":
+                    await Shell.Current.GoToAsync(page);
                 // —— Strona Rabaty —————————————————————————————————————————————
                 case "Rabaty":
                     await Shell.Current.GoToAsync("RabatyPage");
