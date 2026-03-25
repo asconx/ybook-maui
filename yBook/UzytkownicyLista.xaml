@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Uzytkownicy.Uzytkownicy1Page"
+             Title="Użytkownicy">
+
+    <VerticalStackLayout Padding="16" Spacing="12">
+        <Button Text="Zaproś użytkownika"
+                x:Name="BtnInvite"
+                Clicked="OnInviteClicked"
+                BackgroundColor="#1565C0"
+                TextColor="White" />
+
+        <CollectionView x:Name="UsersList"
+                        SelectionMode="None"
+                        HeightRequest="400">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="0,6" HasShadow="False" BackgroundColor="#fff">
+                        <VerticalStackLayout Spacing="4">
+                            <HorizontalStackLayout Spacing="12">
+                                <Label Text="{Binding Name}" FontAttributes="Bold" VerticalOptions="Center" />
+                                <Label Text="{Binding Role}" TextColor="#666" VerticalOptions="Center" />
+                                <Label Text="{Binding Email}" TextColor="#888" VerticalOptions="Center" HorizontalOptions="EndAndExpand" />
+                            </HorizontalStackLayout>
+                            <!-- Nowość: lista wybranych uprawnień -->
+                            <Label Text="{Binding Permissions}"
+                                   FontSize="12"
+                                   TextColor="#666"
+                                   IsVisible="{Binding Permissions, Converter={StaticResource StringNotEmptyToBoolConverter}}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Label x:Name="EmptyLabel" Text="Brak zaproszonych użytkowników." IsVisible="False" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
+    </VerticalStackLayout>
+</ContentPage>
