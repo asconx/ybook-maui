@@ -36,25 +36,25 @@ namespace yBook.Views.Ceny
         {
             var query = SearchBar.Text?.Trim().ToLower() ?? "";
 
-            var result = _all.Where(d =>
-            {
-                bool statusOk = _activeFilter switch
-                {
-                    "Oplacony"   => d.Status == StatusDokumentu.Oplacony,
-                    "Oczekujacy" => d.Status == StatusDokumentu.Oczekujacy,
-                    "Wystawiony" => d.Status == StatusDokumentu.Wystawiony,
-                    "Anulowany"  => d.Status == StatusDokumentu.Anulowany,
-                    _            => true
-                };
+            //var result = _all.Where(d =>
+            //{
+            //    //bool statusOk = _activeFilter switch
+            //    //{
+            //    //    "Oplacony"   => d.Status == StatusDokumentu.Oplacony,
+            //    //    "Oczekujacy" => d.Status == StatusDokumentu.Oczekujacy,
+            //    //    "Wystawiony" => d.Status == StatusDokumentu.Wystawiony,
+            //    //    "Anulowany"  => d.Status == StatusDokumentu.Anulowany,
+            //    //    _            => true
+            //    //};
 
-                bool searchOk = string.IsNullOrEmpty(query) ||
-                                d.Numer.ToLower().Contains(query) ||
-                                d.Klient.ToLower().Contains(query);
+            //    //bool searchOk = string.IsNullOrEmpty(query) ||
+            //    //                d.Numer.ToLower().Contains(query) ||
+            //    //                d.Klient.ToLower().Contains(query);
 
-                return statusOk && searchOk;
-            }).ToList();
+            //    //return statusOk && searchOk;
+            //}).ToList();
 
-            DokumentyList.ItemsSource = result;
+            //DokumentyList.ItemsSource = result;
         }
 
         void UpdateFilterUI()
@@ -95,9 +95,9 @@ namespace yBook.Views.Ceny
             await DisplayAlert(
                 $"{dok.TypLabel} — {dok.Numer}",
                 $"Klient:  {dok.Klient}\n" +
-                $"Data:    {dok.DataStr}\n" +
-                $"Kwota:   {dok.KwotaStr}\n" +
-                $"Status:  {dok.StatusLabel}",
+                $"Data:    {dok.Klient}\n" +
+                $"Kwota:   {dok.Klient}\n" +
+                $"Status:  {dok.Klient}",
                 "Zamknij");
         }
     }
