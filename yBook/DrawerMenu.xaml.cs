@@ -138,11 +138,14 @@ namespace yBook.Controls
 
                 // ── Logout ────────────────────────────────────────────────────
                 case "Logout":
-                    var page_ = Shell.Current.CurrentPage;
-                    bool ok = await page_.DisplayAlert(
+                    bool ok = await Shell.Current.CurrentPage.DisplayAlert(
                         "Wylogowanie", "Czy na pewno chcesz się wylogować?", "Tak", "Anuluj");
-                    if (ok)
-                        await page_.DisplayAlert("yBook", "Wylogowano pomyślnie.", "OK");
+                    if (!ok) return;
+
+                    var auth = IPlatformApplication.Current!.Services
+                                   .GetRequiredService<yBook.Services.IAuthService>();
+                    await auth.LogoutAsync();
+                    await Shell.Current.GoToAsync("//LoginPage");
                     break;
 
                 // ── Pozostałe trasy — do podpięcia w kolejnych etapach ─────────
