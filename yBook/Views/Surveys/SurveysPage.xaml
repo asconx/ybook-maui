@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Surveys.SurveysPage"
+             Title="Ankiety"
+             BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+
+    <Grid RowDefinitions="Auto,*" Padding="0">
+
+        <!-- Header z przyciskiem Dodaj -->
+        <Grid ColumnDefinitions="*,Auto" Padding="16" RowSpacing="0" ColumnSpacing="12">
+            <Label Grid.Column="0"
+                   Text="Ankiety"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light=#1A237E, Dark=#90CAF9}"
+                   VerticalOptions="Center"/>
+            <Button Grid.Column="1"
+                    Text="➕ Dodaj"
+                    Command="{Binding AddSurveyCommand}"
+                    BackgroundColor="#1565C0"
+                    TextColor="White"
+                    Padding="16,8"
+                    CornerRadius="8"
+                    FontSize="12"/>
+        </Grid>
+
+        <!-- Lista ankiet lub komunikat -->
+        <VerticalStackLayout Grid.Row="1" Padding="16" Spacing="12">
+
+            <!-- Błąd -->
+            <Frame x:Name="ErrorFrame"
+                   IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyBoolConverter}}"
+                   CornerRadius="10"
+                   Padding="12"
+                   BackgroundColor="#FFEBEE">
+                <Label Text="{Binding ErrorMessage}"
+                       TextColor="#C62828"
+                       FontSize="12"/>
+            </Frame>
+
+            <!-- Loading -->
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="#1565C0"
+                               Scale="1.5"/>
+
+            <!-- Lista ankiet -->
+            <CollectionView ItemsSource="{Binding Surveys}"
+                            SelectionMode="Single"
+                            SelectionChangedCommand="{Binding EditSurveyCommand}"
+                            SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
+                            IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,4" CornerRadius="12" Padding="14" HasShadow="True"
+                               BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                            <Grid ColumnDefinitions="*,Auto" RowSpacing="4">
+                                <!-- Zawartość ankiety -->
+                                <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                    <Label Text="{Binding Title}"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                                    <Label Text="{Binding Description}"
+                                           FontSize="12"
+                                           TextColor="{AppThemeBinding Light=#78909C, Dark=#90A4AE}"
+                                           MaxLines="2"/>
+                                    <Label Text="{Binding CreatedAt, StringFormat='Utworzona: {0:g}'}"
+                                           FontSize="11"
+                                           TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+                                </VerticalStackLayout>
+
+                                <!-- Przycisk Usuń -->
+                                <Button Grid.Column="1"
+                                        Grid.Row="0"
+                                        Grid.RowSpan="3"
+                                        Text="🗑️"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteSurveyCommand}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="#FFEBEE"
+                                        TextColor="#C62828"
+                                        Padding="8"
+                                        CornerRadius="8"
+                                        FontSize="16"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Pusty stan -->
+            <VerticalStackLayout IsVisible="{Binding Surveys, Converter={StaticResource ListEmptyBoolConverter}}"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 Spacing="8">
+                <Label Text="📋"
+                       FontSize="48"
+                       HorizontalOptions="Center"/>
+                <Label Text="Brak ankiet"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"/>
+                <Label Text="Naciśnij 'Dodaj', aby utworzyć nową ankietę"
+                       FontSize="12"
+                       HorizontalOptions="Center"
+                       TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+
+    </Grid>
+
+</ContentPage>
