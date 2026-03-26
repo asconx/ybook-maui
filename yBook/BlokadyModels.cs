@@ -1,4 +1,4 @@
-namespace yBook.Models
+﻿namespace yBook.Models
 {
     public class Blokada
     {

@@ -128,7 +128,9 @@ namespace yBook.Controls
                 case "ZbiorczeBlokady":
                     await Shell.Current.GoToAsync("BlokadyPage");
                     break;
-
+                case "PrzyjazdWyjazd":
+                    await Shell.Current.GoToAsync("PrzyjazdWyjazdPage");
+                    break;
                 // ── Pulpit: wróć do roota ──────────────────────────────────────
                 case "Pulpit":
                     await Shell.Current.GoToAsync("//MainPage");
