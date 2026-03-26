@@ -1,104 +1,92 @@
+using System.Collections.ObjectModel;
 using yBook.Models;
 
-namespace yBook.Views.Ceny
+namespace yBook.Views.Ceny;
+
+public partial class UslugiOplaty : ContentPage
 {
-    public partial class UslugiOplaty : ContentPage
+    List<Usluga> _all = new();
+    string? _typ = null;
+
+    public UslugiOplaty()
     {
-        List<Dokument> _all = new();
-        string _activeFilter = "All";
-
-        public UslugiOplaty()
-        {
-            InitializeComponent();
-            Header.HamburgerClicked += (_, _) => Drawer.Open();
-        }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            _all = MockFinanse.Dokumenty();
-            ApplyFilter();
-        }
-
-        // ── Filtry ────────────────────────────────────────────────────────────
-
-        void OnFilterTapped(object? sender, TappedEventArgs e)
-        {
-            if (e.Parameter is not string filter) return;
-            _activeFilter = filter;
-            UpdateFilterUI();
-            ApplyFilter();
-        }
-
-        void OnSearchChanged(object? sender, TextChangedEventArgs e) => ApplyFilter();
-
-        void ApplyFilter()
-        {
-            var query = SearchBar.Text?.Trim().ToLower() ?? "";
-
-            //var result = _all.Where(d =>
-            //{
-            //    //bool statusOk = _activeFilter switch
-            //    //{
-            //    //    "Oplacony"   => d.Status == StatusDokumentu.Oplacony,
-            //    //    "Oczekujacy" => d.Status == StatusDokumentu.Oczekujacy,
-            //    //    "Wystawiony" => d.Status == StatusDokumentu.Wystawiony,
-            //    //    "Anulowany"  => d.Status == StatusDokumentu.Anulowany,
-            //    //    _            => true
-            //    //};
-
-            //    //bool searchOk = string.IsNullOrEmpty(query) ||
-            //    //                d.Numer.ToLower().Contains(query) ||
-            //    //                d.Klient.ToLower().Contains(query);
-
-            //    //return statusOk && searchOk;
-            //}).ToList();
-
-            //DokumentyList.ItemsSource = result;
-        }
-
-        void UpdateFilterUI()
-        {
-            var allFilters = new Dictionary<string, Frame>
-            {
-                { "All",        FilterAll       },
-                { "Oplacony",   FilterOplacony  },
-                { "Oczekujacy", FilterOczekujacy},
-                { "Wystawiony", FilterWystawiony},
-                { "Anulowany",  FilterAnulowany },
-            };
-
-            foreach (var (key, frame) in allFilters)
-            {
-                bool active = key == _activeFilter;
-                frame.BackgroundColor = active
-                    ? Color.FromArgb("#1565C0")
-                    : AppInfo.RequestedTheme == AppTheme.Dark
-                        ? Color.FromArgb("#2A2A2A")
-                        : Color.FromArgb("#F0F0F0");
-
-                if (frame.Content is Label lbl)
-                    lbl.TextColor = active ? Colors.White
-                        : AppInfo.RequestedTheme == AppTheme.Dark
-                            ? Color.FromArgb("#CCCCCC")
-                            : Color.FromArgb("#555555");
-            }
-        }
-
-        // ── Szczegóły dokumentu ───────────────────────────────────────────────
-
-        async void OnDokumentSelected(object? sender, SelectionChangedEventArgs e)
-        {
-            if (e.CurrentSelection.FirstOrDefault() is not Dokument dok) return;
-            DokumentyList.SelectedItem = null;
-
-            await DisplayAlert(
-                $"{dok.TypLabel} — {dok.Numer}",
-                $"Klient:  {dok.Klient}\n" +
-                $"Data:    {dok.Klient}\n" +
-                $"Kwota:   {dok.Klient}\n" +
-                $"Status:  {dok.Klient}",
-                "Zamknij");
-        }
+        InitializeComponent();
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        _all = MockData();
+        ApplyFilter();
+    }
+
+    void OnSearchChanged(object sender, TextChangedEventArgs e)
+        => ApplyFilter();
+
+    async void OnTypTapped(object sender, EventArgs e)
+    {
+        var options = new[] { "Wszystkie", "Opłata dzienna", "Jednorazowa" };
+        var res = await DisplayActionSheet("Typ", "Anuluj", null, options);
+
+        if (res == "Anuluj") return;
+
+        _typ = res == "Wszystkie" ? null : res;
+        LblTyp.Text = res;
+
+        ApplyFilter();
+    }
+
+    void ApplyFilter()
+    {
+        var q = Search.Text?.ToLower() ?? "";
+
+        var result = _all.Where(x =>
+            (_typ == null || x.Rodzaj == _typ) &&
+            (string.IsNullOrEmpty(q) || x.Name.ToLower().Contains(q))
+        ).ToList();
+
+        Lista.ItemsSource = result;
+        LblCount.Text = result.Count.ToString();
+    }
+
+    async void OnDodajClicked(object sender, EventArgs e)
+    {
+        await DisplayAlert("Info", "Dodawanie wkrótce", "OK");
+    }
+
+    // MOCK
+    List<Usluga> MockData()
+    {
+        return new List<Usluga>
+        {
+            new Usluga
+            {
+                Name="Dostawka",
+                Rodzaj="Opłata dzienna",
+                Typ="Dodatkowa usługa",
+                Ceny=new(){"100 zł"}
+            },
+            new Usluga
+            {
+                Name="Opłata miejscowa",
+                Rodzaj="Opłata dzienna",
+                Typ="Obowiązkowa opłata",
+                Ceny=new(){"3.22 zł dorosły","3.22 zł dziecko"},
+                DataOd="2024-01-01",
+                DataDo="2024-12-31"
+            }
+        };
+    }
+}
+
+public class Usluga
+{
+    public string Name { get; set; }
+    public string Rodzaj { get; set; }
+    public string Typ { get; set; }
+    public List<string> Ceny { get; set; } = new();
+    public string DataOd { get; set; }
+    public string DataDo { get; set; }
+    public string Opis { get; set; }
 }
