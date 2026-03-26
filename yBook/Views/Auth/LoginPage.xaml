@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:yBook.ViewModels"
+             x:Class="yBook.Views.Auth.LoginPage"
+             x:DataType="vm:LoginViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F5F7FA">
+
+    <Grid RowDefinitions="*, Auto, *">
+
+        <!-- Środkowa karta logowania -->
+        <VerticalStackLayout Grid.Row="1"
+                             Padding="32,0"
+                             Spacing="0">
+
+            <!-- Logo / nagłówek -->
+            <Label Text="yBook"
+                   FontSize="42"
+                   FontAttributes="Bold"
+                   TextColor="#1A1A2E"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,4"/>
+
+            <Label Text="System zarządzania obiektem"
+                   FontSize="13"
+                   TextColor="#6B7280"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,40"/>
+
+            <!-- Karta -->
+            <Border BackgroundColor="White"
+                    StrokeShape="RoundRectangle 16"
+                    Stroke="#E5E7EB"
+                    StrokeThickness="1"
+                    Padding="28,32">
+
+                <VerticalStackLayout Spacing="20">
+
+                    <!-- Email -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Adres e-mail"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#374151"/>
+                        <Border StrokeShape="RoundRectangle 10"
+                                Stroke="#D1D5DB"
+                                StrokeThickness="1"
+                                BackgroundColor="#F9FAFB"
+                                Padding="14,0"
+                                HeightRequest="48">
+                            <Entry Text="{Binding Email}"
+                                   Placeholder="jan@firma.pl"
+                                   Keyboard="Email"
+                                   ReturnType="Next"
+                                   PlaceholderColor="#9CA3AF"
+                                   TextColor="#111827"
+                                   BackgroundColor="Transparent"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Hasło -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Hasło"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#374151"/>
+                        <Border StrokeShape="RoundRectangle 10"
+                                Stroke="#D1D5DB"
+                                StrokeThickness="1"
+                                BackgroundColor="#F9FAFB"
+                                Padding="14,0"
+                                HeightRequest="48">
+                            <Entry Text="{Binding Password}"
+                                   IsPassword="True"
+                                   Placeholder="••••••••"
+                                   ReturnType="Done"
+                                   ReturnCommand="{Binding LoginCommand}"
+                                   PlaceholderColor="#9CA3AF"
+                                   TextColor="#111827"
+                                   BackgroundColor="Transparent"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Komunikat błędu -->
+                    <Border BackgroundColor="#FEF2F2"
+                            StrokeShape="RoundRectangle 8"
+                            Stroke="#FECACA"
+                            StrokeThickness="1"
+                            Padding="12,10"
+                            IsVisible="{Binding HasError}">
+                        <Label Text="{Binding ErrorMessage}"
+                               FontSize="13"
+                               TextColor="#DC2626"
+                               HorizontalOptions="Center"/>
+                    </Border>
+
+                    <!-- Przycisk Zaloguj -->
+                    <Button Text="Zaloguj się"
+                            Command="{Binding LoginCommand}"
+                            IsEnabled="{Binding IsNotLoading}"
+                            BackgroundColor="#2563EB"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            FontSize="15"
+                            CornerRadius="10"
+                            HeightRequest="50"/>
+
+                    <!-- Spinner ładowania -->
+                    <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                       IsVisible="{Binding IsLoading}"
+                                       Color="#2563EB"
+                                       HorizontalOptions="Center"/>
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+
+    </Grid>
+
+</ContentPage>
