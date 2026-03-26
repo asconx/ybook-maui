@@ -2,6 +2,8 @@ using Microsoft.Extensions.Logging;
 using yBook.Services;
 using yBook.ViewModels;
 using yBook.Views.Auth;
+using yBook.Views.Rabaty;
+using yBook.Views.Ustawienia;
 
 namespace yBook
 {
@@ -34,6 +36,8 @@ namespace yBook
             // ── Pages ─────────────────────────────────────────────────────────
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<RabatyPage>();
+            builder.Services.AddTransient<PokojePage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

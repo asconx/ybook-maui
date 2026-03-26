@@ -124,6 +124,10 @@ namespace yBook.Controls
                 case "Rabaty":
                     await Shell.Current.GoToAsync("RabatyPage");
                     break;
+                // —— Strona Pokoje —————————————————————————————————————————————
+                case "Pokoje":
+                    await Shell.Current.GoToAsync("PokojePage");
+                    break;
                 // —— Strona Blokady —————————————————————————————————————————————
                 case "ZbiorczeBlokady":
                     await Shell.Current.GoToAsync("BlokadyPage");
