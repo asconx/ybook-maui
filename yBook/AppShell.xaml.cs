@@ -1,6 +1,7 @@
 using yBook.Views.Finanse;
 using yBook.Views.Rabaty;
 using yBook.Views.Blokady;
+using yBook.Views.Przyjazdy;
 
 namespace yBook
 {
@@ -17,6 +18,7 @@ namespace yBook
             Routing.RegisterRoute("ImportMT940",      typeof(ImportMT940Page));
             Routing.RegisterRoute("RabatyPage", typeof(RabatyPage));
             Routing.RegisterRoute("BlokadyPage", typeof(BlokadyPage));
+            Routing.RegisterRoute("PrzyjazdWyjazdPage", typeof(PrzyjazdWyjazdPage));
 
             // ── Tu dodasz pozostałe trasy w kolejnych etapach ─────────────────
             // Routing.RegisterRoute("Recepcja",     typeof(RecepcjaPage));
