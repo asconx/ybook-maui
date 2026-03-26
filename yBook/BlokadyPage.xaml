@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:yBook.Controls"
+             x:Class="yBook.Views.Blokady.BlokadyPage">
+
+    <Grid RowDefinitions="60,*">
+
+        <ctrl:PageHeader Grid.Row="0"
+                         Title="Blokady"
+                         Icon="⛔"
+                         ShowBack="True"/>
+
+        <VerticalStackLayout Grid.Row="1" Padding="16">
+
+            <CollectionView x:Name="BlokadyList">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="16" Margin="0,0,0,10">
+
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnBlokadaTapped"/>
+                            </Frame.GestureRecognizers>
+
+                            <VerticalStackLayout>
+
+                                <Label Text="{Binding Nazwa}" FontAttributes="Bold"/>
+                                <Label Text="{Binding DataZakres}"/>
+                                <Label Text="{Binding PokojeStr}" FontSize="12"/>
+
+                            </VerticalStackLayout>
+
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Button Text="+ Dodaj blokadę"
+                    Clicked="OnDodajClicked"/>
+
+        </VerticalStackLayout>
+
+    </Grid>
+</ContentPage>

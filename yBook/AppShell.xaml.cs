@@ -2,6 +2,7 @@ using yBook.Views.Finanse;
 using yBook.Views.ICalendar;
 using yBook.Views.Ceny;
 using yBook.Views.Rabaty;
+using yBook.Views.Blokady;
 
 namespace yBook
 {
@@ -20,6 +21,7 @@ namespace yBook
             Routing.RegisterRoute("UslugiOplaty",     typeof(yBook.Views.Ceny.UslugiOplaty));
             Routing.RegisterRoute("Cenniki", typeof(CennikPage));
             Routing.RegisterRoute("RabatyPage", typeof(RabatyPage));
+            Routing.RegisterRoute("BlokadyPage", typeof(BlokadyPage));
 
             // ── Tu dodasz pozostałe trasy w kolejnych etapach ─────────────────
             // Routing.RegisterRoute("Recepcja",     typeof(RecepcjaPage));
