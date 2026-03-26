@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:yBook.Controls"
+             x:Class="yBook.Views.Przyjazdy.PrzyjazdWyjazdPage">
+
+    <Grid RowDefinitions="60,*">
+
+        <!-- HEADER -->
+        <ctrl:PageHeader Grid.Row="0"
+                         Title="Przyjazdy / Wyjazdy"
+                         Icon="📅"
+                         ShowBack="True"/>
+
+        <!-- ⚠️ ScrollView zostaje (dla UI), ale reszta zoptymalizowana -->
+        <ScrollView Grid.Row="1">
+
+            <VerticalStackLayout Padding="10" Spacing="12">
+
+                <!-- 🔽 WYBÓR DATY -->
+                <VerticalStackLayout Spacing="8">
+
+                    <!-- Rok -->
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+
+                        <Button Text="◀"
+                                Clicked="OnPrevYear"/>
+
+                        <Label x:Name="YearLabel"
+                               Grid.Column="1"
+                               HorizontalOptions="Center"
+                               FontAttributes="Bold"
+                               FontSize="16"/>
+
+                        <Button Text="▶"
+                                Grid.Column="2"
+                                Clicked="OnNextYear"/>
+
+                    </Grid>
+
+                    <!-- Slider -->
+                    <Slider x:Name="YearSlider"
+                            Minimum="2020"
+                            Maximum="2035"
+                            ValueChanged="OnYearSliderChanged"/>
+
+                    <!-- Miesiące -->
+                    <CollectionView x:Name="MonthsList"
+                                    ItemsLayout="HorizontalList"
+                                    HeightRequest="50"
+                                    SelectionMode="Single"
+                                    SelectionChanged="OnMonthSelected"
+                                    ItemsUpdatingScrollMode="KeepScrollOffset">
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="6"
+                                       Margin="2"
+                                       BackgroundColor="LightGray"
+                                       HasShadow="False">
+
+                                    <Label Text="{Binding}"
+                                           FontSize="12"/>
+
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+
+                    </CollectionView>
+
+                </VerticalStackLayout>
+
+                <!-- DNI -->
+                <CollectionView x:Name="DaysList"
+                                ItemsLayout="HorizontalList"
+                                HeightRequest="60"
+                                ItemsUpdatingScrollMode="KeepScrollOffset">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="6"
+                                   Margin="2"
+                                   HasShadow="False">
+
+                                <Label Text="{Binding ., StringFormat='{0:dd.MM}'}"
+                                       FontSize="12"/>
+
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+                <!-- POKOJE -->
+                <CollectionView x:Name="RoomsList"
+                                ItemSizingStrategy="MeasureFirstItem"
+                                ItemsUpdatingScrollMode="KeepScrollOffset">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+                            <VerticalStackLayout Spacing="6">
+
+                                <Label Text="{Binding Nazwa}"
+                                       FontAttributes="Bold"
+                                       FontSize="14"/>
+
+                                <!-- ⚠️ Zostawiamy CollectionView (dla UI), ale optymalizujemy -->
+                                <CollectionView ItemsSource="{Binding Dni}"
+                                                ItemsLayout="HorizontalList"
+                                                ItemsUpdatingScrollMode="KeepScrollOffset">
+
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+
+                                            <Frame Padding="6"
+                                                   Margin="2"
+                                                   HasShadow="False">
+
+                                                <VerticalStackLayout Spacing="2">
+
+                                                    <Label Text="P"
+                                                           FontSize="10"
+                                                           HorizontalOptions="Center"
+                                                           TextColor="{Binding PrzyjazdMozliwy, Converter={StaticResource BoolToColorConverter}}"/>
+
+                                                    <Label Text="W"
+                                                           FontSize="10"
+                                                           HorizontalOptions="Center"
+                                                           TextColor="{Binding WyjazdMozliwy, Converter={StaticResource BoolToColorConverter}}"/>
+
+                                                </VerticalStackLayout>
+
+                                                <Frame.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="OnCellTapped"/>
+                                                </Frame.GestureRecognizers>
+
+                                            </Frame>
+
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+
+                                </CollectionView>
+
+                            </VerticalStackLayout>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+            </VerticalStackLayout>
+
+        </ScrollView>
+
+    </Grid>
+</ContentPage>
