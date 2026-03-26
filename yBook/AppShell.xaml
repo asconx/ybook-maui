@@ -7,7 +7,7 @@
        xmlns:ICalendar="clr-namespace:yBook.Views.ICalendar"
        xmlns:rabaty="clr-namespace:yBook.Views.Rabaty"
        xmlns:blokady="clr-namespace:yBook.Views.Blokady"
-       xmlns:surveys="clr-namespace:yBook.Views.Surveys"
+       xmlns:ustawienia="clr-namespace:yBook.Views.Ustawienia"
        x:Class="yBook.AppShell"
        Shell.NavBarIsVisible="False"
        FlyoutBehavior="Disabled">
@@ -23,15 +23,14 @@
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage"/>
 
-    <!-- Surveys Routes -->
     <ShellContent
-        Title="Ankiety"
-        ContentTemplate="{DataTemplate surveys:SurveysPage}"
-        Route="surveys"/>
+        Title="Rabaty"
+        ContentTemplate="{DataTemplate rabaty:RabatyPage}"
+        Route="RabatyPage"/>
 
     <ShellContent
-        Title="Edytuj ankietę"
-        ContentTemplate="{DataTemplate surveys:EditSurveyPage}"
-        Route="edit-survey"/>
+        Title="Pokoje i apartamenty"
+        ContentTemplate="{DataTemplate ustawienia:PokojePage}"
+        Route="PokojePage"/>
 
 </Shell>
