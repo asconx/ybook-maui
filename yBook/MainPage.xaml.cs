@@ -37,6 +37,10 @@ namespace yBook
                     await Shell.Current.GoToAsync(page);
                     break;
 
+                case "Ankiety":
+                    await Shell.Current.GoToAsync("surveys");
+                    break;
+
                 default:
                     await DisplayAlert("yBook", $"Wkrótce: {page}", "OK");
                     break;

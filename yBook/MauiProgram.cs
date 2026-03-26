@@ -25,13 +25,15 @@ namespace yBook
 
             // ── Services (Singleton — żyją przez cały czas działania aplikacji)
             builder.Services.AddSingleton<IAuthService, AuthService>();
-
+            builder.Services.AddSingleton<ISurveyService, SurveyService>();
 
             // ── Dodaj tę linię:
             builder.Services.AddSingleton<AppShell>();
 
             // ── ViewModels (Transient — nowa instancja przy każdej nawigacji)
             builder.Services.AddTransient<LoginViewModel>();
+            builder.Services.AddTransient<SurveysViewModel>();
+            builder.Services.AddTransient<EditSurveyViewModel>();
 
             // ── Pages ─────────────────────────────────────────────────────────
             builder.Services.AddTransient<LoginPage>();
