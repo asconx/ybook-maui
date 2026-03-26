@@ -136,6 +136,10 @@ namespace yBook.Controls
                     await Shell.Current.GoToAsync("//MainPage");
                     break;
 
+                case "Uzytkownicy":
+                    await Shell.Current.GoToAsync("UzytkownicyLista");
+                    break;
+
                 // ── Logout ────────────────────────────────────────────────────
                 case "Logout":
                     bool ok = await Shell.Current.CurrentPage.DisplayAlert(

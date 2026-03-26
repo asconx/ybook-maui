@@ -43,5 +43,26 @@ namespace yBook.Views.Uzytkownicy
             var page = new UzytkownicyPage();
             await Navigation.PushModalAsync(page);
         }
+
+        // Edit existing user
+        async void OnEditClicked(object sender, EventArgs e)
+        {
+            if (sender is Button btn && btn.BindingContext is User user)
+            {
+                var page = new UzytkownicyPage(user);
+                await Navigation.PushModalAsync(page);
+            }
+        }
+
+        // Delete user from store with confirmation
+        async void OnDeleteClicked(object sender, EventArgs e)
+        {
+            if (sender is Button btn && btn.BindingContext is User user)
+            {
+                bool ok = await DisplayAlert("Usuñ u¿ytkownika", $"Czy na pewno chcesz usun¹æ {user.Name}?", "Tak", "Anuluj");
+                if (!ok) return;
+                UserStore.Users.Remove(user);
+            }
+        }
     }
 }
