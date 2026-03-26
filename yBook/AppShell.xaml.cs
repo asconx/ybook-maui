@@ -1,9 +1,10 @@
+using yBook.Views.Blokady;
+using yBook.Views.Ceny;
 using yBook.Views.Finanse;
 using yBook.Views.ICalendar;
-using yBook.Views.Ceny;
-using yBook.Views.Rabaty;
-using yBook.Views.Blokady;
+using yBook.Views.Klienci;
 using yBook.Views.Przyjazdy;
+using yBook.Views.Rabaty;
 
 namespace yBook
 {
@@ -14,7 +15,8 @@ namespace yBook
             InitializeComponent();
 
             // ── Rejestracja tras finansowych ──────────────────────────────────
-            Routing.RegisterRoute("Dokumenty",        typeof(DokumentyPage));
+            Routing.RegisterRoute("Dokumenty", typeof(DokumentyPage));
+            Routing.RegisterRoute("Klienci", typeof(KlienciPage));
             Routing.RegisterRoute("KontaFinansowe",   typeof(KontaFinansowePage));
             Routing.RegisterRoute("RejestrPlatnosci", typeof(RejestrPlatnosciPage));
             Routing.RegisterRoute("ImportMT940",      typeof(ImportMT940Page));
