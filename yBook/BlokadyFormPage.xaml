@@ -25,7 +25,7 @@
             <!-- CHECKBOX -->
             <HorizontalStackLayout>
                 <CheckBox x:Name="WszystkieCheck"/>
-                <Label Text="Zastosuj dla wszystkich"/>
+                <Label Text="Zastosuj dla wszystkich" VerticalOptions="Center"/>
             </HorizontalStackLayout>
 
             <!-- POKOJE -->
