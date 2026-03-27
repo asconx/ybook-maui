@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
-using yBook.Models;
 using yBook.Helpers;
+using yBook.Models;
 
 namespace yBook.Views.Przyjazdy;
 
@@ -24,8 +24,6 @@ public partial class PrzyjazdWyjazdPage : ContentPage
     int selectedYear = DateTime.Now.Year;
     int selectedMonth = DateTime.Now.Month;
 
-    bool isInitializing = false;
-
     public PrzyjazdWyjazdPage()
     {
         InitializeComponent();
@@ -35,11 +33,13 @@ public partial class PrzyjazdWyjazdPage : ContentPage
         YearSlider.Value = selectedYear;
         YearLabel.Text = selectedYear.ToString();
 
-        InitRoomsOnce();   // 🔥 tylko raz
-        UpdateDaysOnly();  // 🔥 potem tylko dni
+        InitRoomsOnce();
+        UpdateDaysOnly();
+
+        // 🔥 ustawienie wybranego miesiąca NA KOŃCU (bez błędów)
+        MonthsList.SelectedItem = miesiace[selectedMonth - 1];
     }
 
-    // 🔥 TWORZY POKOJE TYLKO RAZ
     void InitRoomsOnce()
     {
         pokoje.Clear();
@@ -55,7 +55,6 @@ public partial class PrzyjazdWyjazdPage : ContentPage
         RoomsList.ItemsSource = pokoje;
     }
 
-    // 🔥 TYLKO AKTUALIZUJE DNI (bez przebudowy UI)
     void UpdateDaysOnly()
     {
         dni.Clear();
@@ -77,30 +76,20 @@ public partial class PrzyjazdWyjazdPage : ContentPage
                 pokoj.Dni.Add(new PrzyjazdWyjazd
                 {
                     Pokoj = pokoj.Nazwa,
-                    Data = d
+                    Data = d,
+                    PrzyjazdMozliwy = true,
+                    WyjazdMozliwy = true
                 });
             }
         }
     }
 
-    // 🔥 DEBOUNCE SLIDERA (OGROMNY BOOST)
-    CancellationTokenSource sliderCts;
-
-    async void OnYearSliderChanged(object sender, ValueChangedEventArgs e)
+    void OnYearSliderChanged(object sender, ValueChangedEventArgs e)
     {
-        sliderCts?.Cancel();
-        sliderCts = new CancellationTokenSource();
+        selectedYear = (int)e.NewValue;
+        YearLabel.Text = selectedYear.ToString();
 
-        try
-        {
-            await Task.Delay(200, sliderCts.Token); // debounce
-
-            selectedYear = (int)e.NewValue;
-            YearLabel.Text = selectedYear.ToString();
-
-            UpdateDaysOnly();
-        }
-        catch { }
+        UpdateDaysOnly();
     }
 
     void OnPrevYear(object sender, EventArgs e)
@@ -125,7 +114,12 @@ public partial class PrzyjazdWyjazdPage : ContentPage
 
     void OnMonthSelected(object sender, SelectionChangedEventArgs e)
     {
-        if (e.CurrentSelection.FirstOrDefault() is not string selected)
+        if (e.CurrentSelection == null || e.CurrentSelection.Count == 0)
+            return;
+
+        var selected = e.CurrentSelection[0] as string;
+
+        if (string.IsNullOrEmpty(selected))
             return;
 
         selectedMonth = miesiace.IndexOf(selected) + 1;
@@ -133,23 +127,19 @@ public partial class PrzyjazdWyjazdPage : ContentPage
         UpdateDaysOnly();
     }
 
-    async void OnCellTapped(object sender, TappedEventArgs e)
+    void OnArrivalTapped(object sender, EventArgs e)
     {
-        var frame = sender as Frame;
-        var item = frame?.BindingContext as PrzyjazdWyjazd;
-        if (item == null) return;
-
-        string action = await DisplayActionSheet(
-            $"{item.Pokoj}\n{item.Data:dd.MM.yyyy}",
-            "Anuluj",
-            null,
-            "Przełącz przyjazd",
-            "Przełącz wyjazd");
-
-        if (action == "Przełącz przyjazd")
+        if (sender is Label lbl && lbl.BindingContext is PrzyjazdWyjazd item)
+        {
             item.PrzyjazdMozliwy = !item.PrzyjazdMozliwy;
+        }
+    }
 
-        if (action == "Przełącz wyjazd")
+    void OnDepartureTapped(object sender, EventArgs e)
+    {
+        if (sender is Label lbl && lbl.BindingContext is PrzyjazdWyjazd item)
+        {
             item.WyjazdMozliwy = !item.WyjazdMozliwy;
+        }
     }
 }
