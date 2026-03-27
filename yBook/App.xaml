@@ -12,7 +12,8 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
-
+            <converters:BoolToIconConverter x:Key="BoolToIconConverter"/>
+            <converters:BoolToIconColorConverter x:Key="BoolToIconColorConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
