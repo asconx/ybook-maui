@@ -6,6 +6,7 @@ using yBook.Views.ICalendar;
 using yBook.Views.Klienci;
 using yBook.Views.Przyjazdy;
 using yBook.Views.Uzytkownicy;
+using yBook.Views.Rabaty;
 
 namespace yBook
 {
