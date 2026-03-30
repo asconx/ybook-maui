@@ -124,19 +124,36 @@ namespace yBook.Controls
                 case "Rabaty":
                     await Shell.Current.GoToAsync("RabatyPage");
                     break;
-
+                // —— Strona Pokoje —————————————————————————————————————————————
+                case "Pokoje":
+                    await Shell.Current.GoToAsync("PokojePage");
+                    break;
+                // —— Strona Blokady —————————————————————————————————————————————
+                case "ZbiorczeBlokady":
+                    await Shell.Current.GoToAsync("BlokadyPage");
+                    break;
+                case "PrzyjazdWyjazd":
+                    await Shell.Current.GoToAsync("PrzyjazdWyjazdPage");
+                    break;
                 // ── Pulpit: wróć do roota ──────────────────────────────────────
                 case "Pulpit":
                     await Shell.Current.GoToAsync("//MainPage");
                     break;
 
+                case "Uzytkownicy":
+                    await Shell.Current.GoToAsync("UzytkownicyLista");
+                    break;
+
                 // ── Logout ────────────────────────────────────────────────────
                 case "Logout":
-                    var page_ = Shell.Current.CurrentPage;
-                    bool ok = await page_.DisplayAlert(
+                    bool ok = await Shell.Current.CurrentPage.DisplayAlert(
                         "Wylogowanie", "Czy na pewno chcesz się wylogować?", "Tak", "Anuluj");
-                    if (ok)
-                        await page_.DisplayAlert("yBook", "Wylogowano pomyślnie.", "OK");
+                    if (!ok) return;
+
+                    var auth = IPlatformApplication.Current!.Services
+                                   .GetRequiredService<yBook.Services.IAuthService>();
+                    await auth.LogoutAsync();
+                    await Shell.Current.GoToAsync("//LoginPage");
                     break;
 
                 // ── Pozostałe trasy — do podpięcia w kolejnych etapach ─────────

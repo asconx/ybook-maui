@@ -3,7 +3,14 @@ build_property.EnableAotAnalyzer =
 build_property.EnableSingleFileAnalyzer = 
 build_property.EnableTrimAnalyzer = false
 build_property.IncludeAllContentForSelfExtract = 
+build_property.MvvmToolkitEnableINotifyPropertyChangingSupport = true
+build_property._MvvmToolkitIsUsingWindowsRuntimePack = false
+build_property.CsWinRTComponent = 
+build_property.CsWinRTAotOptimizerEnabled = 
+build_property.CsWinRTAotWarningLevel = 
 build_property.TargetFramework = net9.0-maccatalyst
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v9.0
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = 
 build_property.ProjectTypeGuids = 
@@ -12,74 +19,146 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = yBook
-build_property.ProjectDir = C:\Users\admini\Documents\ybook-maui\yBook\
+build_property.ProjectDir = C:\Users\admin\Documents\ybook-maui\yBook\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/admini/Documents/ybook-maui/yBook/App.xaml]
+[C:/Users/admin/Documents/ybook-maui/yBook/App.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = yBook.App.xaml
 build_metadata.AdditionalFiles.TargetPath = App.xaml
 build_metadata.AdditionalFiles.RelativePath = App.xaml
 
-[C:/Users/admini/Documents/ybook-maui/yBook/AppShell.xaml]
+[C:/Users/admin/Documents/ybook-maui/yBook/AppShell.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = yBook.AppShell.xaml
 build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 
-[C:/Users/admini/Documents/ybook-maui/yBook/DokumentyPage.xaml]
+[C:/Users/admin/Documents/ybook-maui/yBook/BlokadyFormPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.BlokadyFormPage.xaml
+build_metadata.AdditionalFiles.TargetPath = BlokadyFormPage.xaml
+build_metadata.AdditionalFiles.RelativePath = BlokadyFormPage.xaml
+
+[C:/Users/admin/Documents/ybook-maui/yBook/BlokadyPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.BlokadyPage.xaml
+build_metadata.AdditionalFiles.TargetPath = BlokadyPage.xaml
+build_metadata.AdditionalFiles.RelativePath = BlokadyPage.xaml
+
+[C:/Users/admin/Documents/ybook-maui/yBook/CennikPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.CennikPage.xaml
+build_metadata.AdditionalFiles.TargetPath = CennikPage.xaml
+build_metadata.AdditionalFiles.RelativePath = CennikPage.xaml
+
+[C:/Users/admin/Documents/ybook-maui/yBook/DokumentyPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = yBook.DokumentyPage.xaml
 build_metadata.AdditionalFiles.TargetPath = DokumentyPage.xaml
 build_metadata.AdditionalFiles.RelativePath = DokumentyPage.xaml
 
-[C:/Users/admini/Documents/ybook-maui/yBook/DrawerMenu.xaml]
+[C:/Users/admin/Documents/ybook-maui/yBook/DrawerMenu.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = yBook.DrawerMenu.xaml
 build_metadata.AdditionalFiles.TargetPath = DrawerMenu.xaml
 build_metadata.AdditionalFiles.RelativePath = DrawerMenu.xaml
 
-[C:/Users/admini/Documents/ybook-maui/yBook/ImportMT940Page.xaml]
+[C:/Users/admin/Documents/ybook-maui/yBook/ICalendarPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.ICalendarPage.xaml
+build_metadata.AdditionalFiles.TargetPath = ICalendarPage.xaml
+build_metadata.AdditionalFiles.RelativePath = ICalendarPage.xaml
+
+[C:/Users/admin/Documents/ybook-maui/yBook/ImportMT940Page.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = yBook.ImportMT940Page.xaml
 build_metadata.AdditionalFiles.TargetPath = ImportMT940Page.xaml
 build_metadata.AdditionalFiles.RelativePath = ImportMT940Page.xaml
 
-[C:/Users/admini/Documents/ybook-maui/yBook/KontaFinansowePage.xaml]
+[C:/Users/admin/Documents/ybook-maui/yBook/KontaFinansowePage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = yBook.KontaFinansowePage.xaml
 build_metadata.AdditionalFiles.TargetPath = KontaFinansowePage.xaml
 build_metadata.AdditionalFiles.RelativePath = KontaFinansowePage.xaml
 
-[C:/Users/admini/Documents/ybook-maui/yBook/MainPage.xaml]
+[C:/Users/admin/Documents/ybook-maui/yBook/MainPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = yBook.MainPage.xaml
 build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
 build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
 
-[C:/Users/admini/Documents/ybook-maui/yBook/PageHeader.xaml]
+[C:/Users/admin/Documents/ybook-maui/yBook/PageHeader.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = yBook.PageHeader.xaml
 build_metadata.AdditionalFiles.TargetPath = PageHeader.xaml
 build_metadata.AdditionalFiles.RelativePath = PageHeader.xaml
 
-[C:/Users/admini/Documents/ybook-maui/yBook/RejestrPlatnosciPage.xaml]
+[C:/Users/admin/Documents/ybook-maui/yBook/PrzyjazdWyjazdPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.PrzyjazdWyjazdPage.xaml
+build_metadata.AdditionalFiles.TargetPath = PrzyjazdWyjazdPage.xaml
+build_metadata.AdditionalFiles.RelativePath = PrzyjazdWyjazdPage.xaml
+
+[C:/Users/admin/Documents/ybook-maui/yBook/RabatyFormPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.RabatyFormPage.xaml
+build_metadata.AdditionalFiles.TargetPath = RabatyFormPage.xaml
+build_metadata.AdditionalFiles.RelativePath = RabatyFormPage.xaml
+
+[C:/Users/admin/Documents/ybook-maui/yBook/RabatyPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.RabatyPage.xaml
+build_metadata.AdditionalFiles.TargetPath = RabatyPage.xaml
+build_metadata.AdditionalFiles.RelativePath = RabatyPage.xaml
+
+[C:/Users/admin/Documents/ybook-maui/yBook/RejestrPlatnosciPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = yBook.RejestrPlatnosciPage.xaml
 build_metadata.AdditionalFiles.TargetPath = RejestrPlatnosciPage.xaml
 build_metadata.AdditionalFiles.RelativePath = RejestrPlatnosciPage.xaml
 
-[C:/Users/admini/Documents/ybook-maui/yBook/Resources/Styles/Colors.xaml]
+[C:/Users/admin/Documents/ybook-maui/yBook/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = yBook.Resources.Styles.Colors.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
 
-[C:/Users/admini/Documents/ybook-maui/yBook/Resources/Styles/Styles.xaml]
+[C:/Users/admin/Documents/ybook-maui/yBook/Resources/Styles/Styles.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = yBook.Resources.Styles.Styles.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
+
+[C:/Users/admin/Documents/ybook-maui/yBook/UslugiOplaty.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.UslugiOplaty.xaml
+build_metadata.AdditionalFiles.TargetPath = UslugiOplaty.xaml
+build_metadata.AdditionalFiles.RelativePath = UslugiOplaty.xaml
+
+[C:/Users/admin/Documents/ybook-maui/yBook/Uzytkownicy.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.Uzytkownicy.xaml
+build_metadata.AdditionalFiles.TargetPath = Uzytkownicy.xaml
+build_metadata.AdditionalFiles.RelativePath = Uzytkownicy.xaml
+
+[C:/Users/admin/Documents/ybook-maui/yBook/UzytkownicyLista.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.UzytkownicyLista.xaml
+build_metadata.AdditionalFiles.TargetPath = UzytkownicyLista.xaml
+build_metadata.AdditionalFiles.RelativePath = UzytkownicyLista.xaml
+
+[C:/Users/admin/Documents/ybook-maui/yBook/Views/Auth/LoginPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.Views.Auth.LoginPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Auth\LoginPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Auth\LoginPage.xaml
+
+[C:/Users/admin/Documents/ybook-maui/yBook/Views/Ustawienia/PokojePage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = yBook.Views.Ustawienia.PokojePage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Ustawienia\PokojePage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Ustawienia\PokojePage.xaml

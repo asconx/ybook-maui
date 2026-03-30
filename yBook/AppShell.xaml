@@ -2,20 +2,35 @@
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:yBook"
+       xmlns:auth="clr-namespace:yBook.Views.Auth"
        xmlns:finanse="clr-namespace:yBook.Views.Finanse"
        xmlns:ICalendar="clr-namespace:yBook.Views.ICalendar"
        xmlns:rabaty="clr-namespace:yBook.Views.Rabaty"
-       xmlns:powiadomienia="clr-namespace:yBook.Views.Powiadomienia"
+       xmlns:blokady="clr-namespace:yBook.Views.Blokady"
+       xmlns:ustawienia="clr-namespace:yBook.Views.Ustawienia"
        x:Class="yBook.AppShell"
        Shell.NavBarIsVisible="False"
        FlyoutBehavior="Disabled">
 
-    <!-- Trasy są rejestrowane w AppShell.xaml.cs przez Routing.RegisterRoute -->
-    <!-- Shell.NavBarIsVisible="False" — używamy własnego headera w każdej stronie -->
+    <!-- Strona logowania jako domyślna (sprawdzanie sesji w AppShell.xaml.cs) -->
+    <ShellContent
+        Title="Logowanie"
+        ContentTemplate="{DataTemplate auth:LoginPage}"
+        Route="LoginPage"/>
 
     <ShellContent
         Title="Pulpit"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage"/>
+
+    <ShellContent
+        Title="Rabaty"
+        ContentTemplate="{DataTemplate rabaty:RabatyPage}"
+        Route="RabatyPage"/>
+
+    <ShellContent
+        Title="Pokoje i apartamenty"
+        ContentTemplate="{DataTemplate ustawienia:PokojePage}"
+        Route="PokojePage"/>
 
 </Shell>

@@ -1,4 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
+using yBook.Services;
+using yBook.ViewModels;
+using yBook.Views.Auth;
+using yBook.Views.Rabaty;
+using yBook.Views.Ustawienia;
 
 namespace yBook
 {
@@ -15,8 +20,29 @@ namespace yBook
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            // ── HTTP Client ───────────────────────────────────────────────────
+            builder.Services.AddSingleton<HttpClient>();
+
+            // ── Services (Singleton — żyją przez cały czas działania aplikacji)
+            builder.Services.AddSingleton<IAuthService, AuthService>();
+            builder.Services.AddSingleton<ISurveyService, SurveyService>();
+
+            // ── Dodaj tę linię:
+            builder.Services.AddSingleton<AppShell>();
+
+            // ── ViewModels (Transient — nowa instancja przy każdej nawigacji)
+            builder.Services.AddTransient<LoginViewModel>();
+            builder.Services.AddTransient<SurveysViewModel>();
+            builder.Services.AddTransient<EditSurveyViewModel>();
+
+            // ── Pages ─────────────────────────────────────────────────────────
+            builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<RabatyPage>();
+            builder.Services.AddTransient<PokojePage>();
+
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

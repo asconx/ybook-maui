@@ -1,129 +1,169 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:ctrl="clr-namespace:yBook.Controls"
              x:Class="yBook.Views.Ceny.UslugiOplaty"
              NavigationPage.HasNavigationBar="False">
 
-    <Grid RowDefinitions="60,Auto,*" BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+    <ContentPage.Resources>
 
-        <!-- Header z powrotem -->
-        <ctrl:PageHeader Grid.Row="0"
-                         Title="Usługi i opłaty dodatkowe (skopiowane z dokumenty i nie rozwinięte)"
-                         Icon="📄"
-                         ShowBack="True"
-                         x:Name="Header"/>
+        <Style x:Key="ColHeader" TargetType="Label">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+        </Style>
 
-        <!-- Pasek filtrów + wyszukiwarka -->
-        <VerticalStackLayout Grid.Row="1"
-                             BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
-                             Padding="12,10"
-                             Spacing="10">
+        <Style x:Key="ColCell" TargetType="Label">
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
 
-            <!-- Wyszukiwarka -->
-            <Border StrokeShape="RoundRectangle 10"
-                    Stroke="{AppThemeBinding Light=#E0E0E0, Dark=#333}"
-                    BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2A2A2A}"
-                    Padding="12,0"
-                    HeightRequest="42">
-                <SearchBar x:Name="SearchBar"
-                           Placeholder="Szukaj dokumentu, klienta..."
-                           BackgroundColor="Transparent"
-                           TextChanged="OnSearchChanged"
-                           FontSize="14"/>
-            </Border>
+    </ContentPage.Resources>
 
-            <!-- Filtry statusu -->
-            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
-                <HorizontalStackLayout Spacing="8" x:Name="FilterBar">
-                    <Frame x:Name="FilterAll"      CornerRadius="20" Padding="14,6" HasShadow="False" BackgroundColor="#1565C0"><Frame.GestureRecognizers><TapGestureRecognizer Tapped="OnFilterTapped" CommandParameter="All"/></Frame.GestureRecognizers><Label Text="Wszystkie" FontSize="12" TextColor="White"/></Frame>
-                    <Frame x:Name="FilterOplacony" CornerRadius="20" Padding="14,6" HasShadow="False" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}"><Frame.GestureRecognizers><TapGestureRecognizer Tapped="OnFilterTapped" CommandParameter="Oplacony"/></Frame.GestureRecognizers><Label Text="Opłacone" FontSize="12" TextColor="{AppThemeBinding Light=#555, Dark=#CCC}"/></Frame>
-                    <Frame x:Name="FilterOczekujacy" CornerRadius="20" Padding="14,6" HasShadow="False" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}"><Frame.GestureRecognizers><TapGestureRecognizer Tapped="OnFilterTapped" CommandParameter="Oczekujacy"/></Frame.GestureRecognizers><Label Text="Oczekujące" FontSize="12" TextColor="{AppThemeBinding Light=#555, Dark=#CCC}"/></Frame>
-                    <Frame x:Name="FilterWystawiony" CornerRadius="20" Padding="14,6" HasShadow="False" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}"><Frame.GestureRecognizers><TapGestureRecognizer Tapped="OnFilterTapped" CommandParameter="Wystawiony"/></Frame.GestureRecognizers><Label Text="Wystawione" FontSize="12" TextColor="{AppThemeBinding Light=#555, Dark=#CCC}"/></Frame>
-                    <Frame x:Name="FilterAnulowany" CornerRadius="20" Padding="14,6" HasShadow="False" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}"><Frame.GestureRecognizers><TapGestureRecognizer Tapped="OnFilterTapped" CommandParameter="Anulowany"/></Frame.GestureRecognizers><Label Text="Anulowane" FontSize="12" TextColor="{AppThemeBinding Light=#555, Dark=#CCC}"/></Frame>
+    <Grid RowDefinitions="60,Auto,*"
+          BackgroundColor="#F5F5F5">
+
+        <!-- HEADER -->
+        <Grid Grid.Row="0" Padding="12">
+            <Grid ColumnDefinitions="*,Auto">
+
+                <HorizontalStackLayout Spacing="8">
+                    <Label Text="Usługi i opłaty"
+                           FontSize="18"
+                           FontAttributes="Bold"/>
+
+                    <Border BackgroundColor="#F5A623"
+                            StrokeShape="RoundRectangle 10"
+                            Padding="6,2">
+                        <Label x:Name="LblCount"
+                               Text="0"
+                               FontSize="11"
+                               TextColor="White"/>
+                    </Border>
                 </HorizontalStackLayout>
+
+                <Border Grid.Column="1"
+                        BackgroundColor="#1A1A1A"
+                        StrokeShape="RoundRectangle 20"
+                        Padding="16,8">
+                    <Label Text="dodaj"
+                           TextColor="White"/>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDodajClicked"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+            </Grid>
+        </Grid>
+
+        <!-- FILTRY -->
+        <ScrollView Grid.Row="1" Orientation="Horizontal">
+            <HorizontalStackLayout Spacing="10" Padding="12">
+
+                <!-- TYP -->
+                <Border Stroke="#CCC"
+                        StrokeShape="RoundRectangle 20"
+                        Padding="14,8">
+                    <Label x:Name="LblTyp"
+                           Text="Typ"/>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnTypTapped"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- SEARCH -->
+                <Border Stroke="#CCC"
+                        StrokeShape="RoundRectangle 20"
+                        Padding="10,5"
+                        MinimumWidthRequest="150">
+                    <Entry x:Name="Search"
+                           Placeholder="Szukaj"
+                           TextChanged="OnSearchChanged"/>
+                </Border>
+
+            </HorizontalStackLayout>
+        </ScrollView>
+
+        <!-- TABELA -->
+        <Grid Grid.Row="2" RowDefinitions="Auto,*"
+              BackgroundColor="White">
+
+            <!-- HEADER -->
+            <ScrollView Orientation="Horizontal">
+                <Grid ColumnDefinitions="120,120,150,200,120,120,150"
+                      Padding="12,8">
+                    <Label Text="Nazwa" Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="1" Text="Rodzaj" Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="2" Text="Typ" Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="3" Text="Cena" Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="4" Text="Data od" Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="5" Text="Data do" Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="6" Text="Opis" Style="{StaticResource ColHeader}"/>
+                </Grid>
             </ScrollView>
 
-        </VerticalStackLayout>
+            <!-- LISTA -->
+            <CollectionView Grid.Row="1"
+                            x:Name="Lista">
 
-        <!-- Lista dokumentów -->
-        <CollectionView Grid.Row="2"
-                        x:Name="DokumentyList"
-                        Margin="0,8,0,0"
-                        SelectionMode="Single"
-                        SelectionChanged="OnDokumentSelected">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="12,0,12,8">
-                        <Frame CornerRadius="12" Padding="14" HasShadow="True"
-                               BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
-                            <Grid ColumnDefinitions="48,*,Auto" RowDefinitions="Auto,Auto">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid RowDefinitions="Auto,1">
 
-                                <!-- Badge typ -->
-                                <Frame Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
-                                       CornerRadius="8" Padding="0" HasShadow="False"
-                                       BackgroundColor="#E3F2FD"
-                                       WidthRequest="42" HeightRequest="42"
-                                       VerticalOptions="Center">
-                                    <Label Text="{Binding TypLabel}"
-                                           FontSize="11" FontAttributes="Bold"
-                                           TextColor="#1565C0"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center"/>
-                                </Frame>
+                            <ScrollView Orientation="Horizontal">
+                                <Grid ColumnDefinitions="120,120,150,200,120,120,150"
+                                      Padding="12">
 
-                                <!-- Numer + klient -->
-                                <Label Grid.Row="0" Grid.Column="1"
-                                       Text="{Binding Numer}"
-                                       FontSize="14" FontAttributes="Bold"
-                                       TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"
-                                       Margin="10,0,0,0"/>
-                                <Label Grid.Row="1" Grid.Column="1"
-                                       Text="{Binding Klient}"
-                                       FontSize="12"
-                                       TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"
-                                       Margin="10,2,0,0"/>
+                                    <Label Text="{Binding Name}" Style="{StaticResource ColCell}"/>
 
-                                <!-- Kwota + status + data -->
-                                <VerticalStackLayout Grid.Row="0" Grid.Column="2"
-                                                     Grid.RowSpan="2"
-                                                     HorizontalOptions="End"
-                                                     VerticalOptions="Center"
-                                                     Spacing="4">
-                                    <Label Text="{Binding KwotaStr}"
-                                           FontSize="14" FontAttributes="Bold"
-                                           TextColor="#1565C0"
-                                           HorizontalOptions="End"/>
-                                    <Frame CornerRadius="6" Padding="6,2" HasShadow="False"
-                                           BackgroundColor="{Binding StatusColor}">
-                                        <Label Text="{Binding StatusLabel}"
-                                               FontSize="10" TextColor="White"
-                                               HorizontalOptions="Center"/>
-                                    </Frame>
-                                    <Label Text="{Binding DataStr}"
-                                           FontSize="11"
-                                           TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"
-                                           HorizontalOptions="End"/>
-                                </VerticalStackLayout>
+                                    <!-- RODZAJ -->
+                                    <Border Grid.Column="1"
+                                            Stroke="#5FA8A8"
+                                            BackgroundColor="#EAF6F6"
+                                            StrokeShape="RoundRectangle 20"
+                                            Padding="8,4">
+                                        <Label Text="{Binding Rodzaj}" FontSize="11"/>
+                                    </Border>
 
-                            </Grid>
-                        </Frame>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-            <CollectionView.EmptyView>
-                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="8" Margin="0,60,0,0">
-                    <Label Text="📭" FontSize="48" HorizontalOptions="Center"/>
-                    <Label Text="Brak dokumentów" FontSize="16" TextColor="#9E9E9E" HorizontalOptions="Center"/>
-                </VerticalStackLayout>
-            </CollectionView.EmptyView>
-        </CollectionView>
+                                    <!-- TYP -->
+                                    <Border Grid.Column="2"
+                                            Stroke="#5FA8A8"
+                                            BackgroundColor="#EAF6F6"
+                                            StrokeShape="RoundRectangle 20"
+                                            Padding="8,4">
+                                        <Label Text="{Binding Typ}" FontSize="11"/>
+                                    </Border>
 
-        <!-- Drawer na wierzchu -->
-        <ctrl:DrawerMenu Grid.Row="0" Grid.RowSpan="3"
-                         x:Name="Drawer"
-                         ZIndex="50"/>
+                                    <!-- CENY -->
+                                    <FlexLayout Grid.Column="3" Wrap="Wrap">
+                                        <BindableLayout.ItemsSource>
+                                            <Binding Path="Ceny"/>
+                                        </BindableLayout.ItemsSource>
+
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Stroke="#5FA8A8"
+                                                        BackgroundColor="#EAF6F6"
+                                                        StrokeShape="RoundRectangle 20"
+                                                        Padding="8,4"
+                                                        Margin="2">
+                                                    <Label Text="{Binding}" FontSize="11"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </FlexLayout>
+
+                                    <Label Grid.Column="4" Text="{Binding DataOd}" Style="{StaticResource ColCell}"/>
+                                    <Label Grid.Column="5" Text="{Binding DataDo}" Style="{StaticResource ColCell}"/>
+                                    <Label Grid.Column="6" Text="{Binding Opis}" Style="{StaticResource ColCell}"/>
+
+                                </Grid>
+                            </ScrollView>
+
+                            <BoxView Grid.Row="1" HeightRequest="1" Color="#EEE"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+        </Grid>
 
     </Grid>
-
 </ContentPage>

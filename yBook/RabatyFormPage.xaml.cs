@@ -28,7 +28,7 @@ public partial class RabatyFormPage : ContentPage
         {
             Nazwa = NazwaEntry.Text,
             Kod = KodEntry.Text,
-            Procent = procent,
+            Procent = (int)procent,
             Opis = OpisEditor.Text,
             CzyOnline = OnlineCheck.IsChecked,
             DataWaznosci = DateTime.Now.AddDays(7)

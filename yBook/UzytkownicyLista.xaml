@@ -19,15 +19,22 @@
                     <Frame Padding="10" Margin="0,6" HasShadow="False" BackgroundColor="#fff">
                         <VerticalStackLayout Spacing="4">
                             <HorizontalStackLayout Spacing="12">
+                                <Button Text="✏️" Clicked="OnEditClicked" />
+                                <Button Text="🗑️" Clicked="OnDeleteClicked" />
                                 <Label Text="{Binding Name}" FontAttributes="Bold" VerticalOptions="Center" />
                                 <Label Text="{Binding Role}" TextColor="#666" VerticalOptions="Center" />
                                 <Label Text="{Binding Email}" TextColor="#888" VerticalOptions="Center" HorizontalOptions="EndAndExpand" />
-                            </HorizontalStackLayout>
+                            
+                            <!-- Numer telefonu -->
+                            <Label Text="{Binding Phone}"
+                                   FontSize="12"
+                                   TextColor="#888"
+                                   VerticalOptions="Center" />
                             <!-- Nowość: lista wybranych uprawnień -->
                             <Label Text="{Binding Permissions}"
                                    FontSize="12"
                                    TextColor="#666"
-                                   IsVisible="{Binding Permissions, Converter={StaticResource StringNotEmptyToBoolConverter}}"/>
+                                   IsVisible="{Binding Permissions, Converter={StaticResource StringNotEmptyToBoolConverter}}"/></HorizontalStackLayout>
                         </VerticalStackLayout>
                     </Frame>
                 </DataTemplate>
