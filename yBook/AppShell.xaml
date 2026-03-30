@@ -33,4 +33,9 @@
         ContentTemplate="{DataTemplate ustawienia:PokojePage}"
         Route="PokojePage"/>
 
+    <ShellContent
+        Title="Dane obiektu"
+        ContentTemplate="{DataTemplate ustawienia:DaneObiektuPage}"
+        Route="DaneObiektu"/>
+
 </Shell>
