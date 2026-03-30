@@ -30,9 +30,6 @@ namespace yBook
         {
             var isLoggedIn = await _auth.IsAuthenticatedAsync();
 
-            // ── Rejestracja tras finansowych ──────────────────────────────────
-            Routing.RegisterRoute("Dokumenty", typeof(DokumentyPage));
-            Routing.RegisterRoute("Klienci", typeof(KlienciPage));
             if (isLoggedIn)
                 await GoToAsync("//MainPage");
             else
@@ -47,29 +44,24 @@ namespace yBook
             Routing.RegisterRoute("LoginPage", typeof(Views.Auth.LoginPage));
 
             // Finanse
-            Routing.RegisterRoute("Dokumenty",        typeof(DokumentyPage));
-            Routing.RegisterRoute("KontaFinansowe",   typeof(KontaFinansowePage));
+            Routing.RegisterRoute("Dokumenty", typeof(DokumentyPage));
+            Routing.RegisterRoute("KontaFinansowe", typeof(KontaFinansowePage));
             Routing.RegisterRoute("RejestrPlatnosci", typeof(RejestrPlatnosciPage));
-            Routing.RegisterRoute("ImportMT940",      typeof(ImportMT940Page));
+            Routing.RegisterRoute("ImportMT940", typeof(ImportMT940Page));
 
             // Inne
-            Routing.RegisterRoute("ICalendar",    typeof(ICalendarPage));
+            Routing.RegisterRoute("ICalendar", typeof(ICalendarPage));
             Routing.RegisterRoute("UslugiOplaty", typeof(UslugiOplaty));
-            Routing.RegisterRoute("Cenniki",      typeof(CennikPage));
-            Routing.RegisterRoute("RabatyPage",   typeof(RabatyPage));
-            Routing.RegisterRoute("BlokadyPage",  typeof(BlokadyPage));
-            Routing.RegisterRoute("ICalendar",        typeof(ICalendarPage));
-            Routing.RegisterRoute("UslugiOplaty",     typeof(yBook.Views.Ceny.UslugiOplaty));
             Routing.RegisterRoute("Cenniki", typeof(CennikPage));
             Routing.RegisterRoute("RabatyPage", typeof(RabatyPage));
             Routing.RegisterRoute("BlokadyPage", typeof(BlokadyPage));
             Routing.RegisterRoute("PrzyjazdWyjazdPage", typeof(PrzyjazdWyjazdPage));
+
+            // Klienci — zarejestruj nazwę zgodną z nameof(KlienciPage) używanym w GoToAsync
+            Routing.RegisterRoute("KlienciPage", typeof(KlienciPage));
+
             // Użytkownicy
             Routing.RegisterRoute("UzytkownicyLista", typeof(Uzytkownicy1Page));
-
-            // ── Tu dodasz pozostałe trasy w kolejnych etapach ─────────────────
-            // Routing.RegisterRoute("Recepcja",     typeof(RecepcjaPage));
-            // Routing.RegisterRoute("Rezerwacje",   typeof(RezerwacjePage));
         }
     }
 }

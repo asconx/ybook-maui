@@ -1,4 +1,5 @@
 using yBook.Views.Ceny;
+using yBook.Views.Klienci;
 
 namespace yBook.Controls
 {
@@ -143,6 +144,11 @@ namespace yBook.Controls
                 case "Uzytkownicy":
                     await Shell.Current.GoToAsync("UzytkownicyLista");
                     break;
+                // —— Strona Klientow —————————————————————————————————————————————
+                case "Klienci":
+                    await Shell.Current.GoToAsync(nameof(KlienciPage));
+                    break;
+
 
                 // ── Logout ────────────────────────────────────────────────────
                 case "Logout":
