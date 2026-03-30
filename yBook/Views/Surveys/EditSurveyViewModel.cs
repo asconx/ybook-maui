@@ -35,7 +35,7 @@ public partial class EditSurveyViewModel : ObservableObject
         _surveyService = surveyService;
     }
 
-    public override async void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
+    protected override async void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
 

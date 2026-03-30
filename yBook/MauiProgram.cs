@@ -3,6 +3,7 @@ using yBook.Services;
 using yBook.ViewModels;
 using yBook.Views.Auth;
 using yBook.Views.Rabaty;
+using yBook.Views.Surveys;
 using yBook.Views.Ustawienia;
 
 namespace yBook

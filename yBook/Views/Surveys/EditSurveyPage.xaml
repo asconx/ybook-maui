@@ -33,8 +33,7 @@
                            BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
                            TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"
                            PlaceholderColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"
-                           Padding="12"
-                           CornerRadius="8"
+                          
                            FontSize="14"/>
                 </VerticalStackLayout>
 
@@ -49,9 +48,7 @@
                             BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2C2C2C}"
                             TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"
                             PlaceholderColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"
-                            Padding="12"
                             HeightRequest="120"
-                            CornerRadius="8"
                             FontSize="14"/>
                 </VerticalStackLayout>
 
