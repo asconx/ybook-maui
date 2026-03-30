@@ -67,6 +67,9 @@ namespace yBook
             // Użytkownicy
             Routing.RegisterRoute("UzytkownicyLista", typeof(Uzytkownicy1Page));
 
+            // Ustawienia
+            Routing.RegisterRoute("DaneObiektu", typeof(Views.Ustawienia.DaneObiektuPage));
+
             // ── Tu dodasz pozostałe trasy w kolejnych etapach ─────────────────
             // Routing.RegisterRoute("Recepcja",     typeof(RecepcjaPage));
             // Routing.RegisterRoute("Rezerwacje",   typeof(RezerwacjePage));
