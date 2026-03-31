@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using yBook.Models;
@@ -10,7 +11,7 @@ public partial class SurveysViewModel : ObservableObject
     private readonly ISurveyService _surveyService;
 
     [ObservableProperty]
-    private List<Survey> surveys = new();
+    private ObservableCollection<Survey> surveys = [];
 
     [ObservableProperty]
     private bool isLoading = false;
@@ -24,15 +25,15 @@ public partial class SurveysViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task LoadSurveys()
+    private async Task LoadSurveysAsync()
     {
         try
         {
-            IsLoading = true;
+            IsLoading    = true;
             ErrorMessage = string.Empty;
 
             var result = await _surveyService.GetSurveysAsync();
-            Surveys = result ?? new();
+            Surveys = new ObservableCollection<Survey>(result ?? []);
         }
         catch (Exception ex)
         {
@@ -46,19 +47,16 @@ public partial class SurveysViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task DeleteSurvey(Survey survey)
+    private async Task DeleteSurveyAsync(Survey survey)
     {
-        if (survey == null)
-            return;
+        if (survey == null) return;
 
         bool confirm = await Shell.Current.DisplayAlert(
             "Potwierdzenie",
             $"Czy naprawdę chcesz usunąć ankietę '{survey.Title}'?",
-            "Tak",
-            "Nie");
+            "Tak", "Nie");
 
-        if (!confirm)
-            return;
+        if (!confirm) return;
 
         try
         {
@@ -67,7 +65,7 @@ public partial class SurveysViewModel : ObservableObject
 
             if (success)
             {
-                await LoadSurveysCommand.ExecuteAsync(null);
+                Surveys.Remove(survey);
                 await Shell.Current.DisplayAlert("Sukces", "Ankieta usunięta pomyślnie", "OK");
             }
             else
@@ -86,17 +84,15 @@ public partial class SurveysViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task AddSurvey()
+    private async Task AddSurveyAsync()
     {
-        await Shell.Current.GoToAsync("edit-survey/new");
+        await Shell.Current.GoToAsync("EditSurveyPage");
     }
 
     [RelayCommand]
-    public async Task EditSurvey(Survey survey)
+    private async Task EditSurveyAsync(Survey survey)
     {
-        if (survey == null)
-            return;
-
-        await Shell.Current.GoToAsync($"edit-survey/{survey.Id}");
+        if (survey == null) return;
+        await Shell.Current.GoToAsync($"EditSurveyPage?id={survey.Id}");
     }
 }
