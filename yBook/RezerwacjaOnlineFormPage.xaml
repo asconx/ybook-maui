@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.RezerwacjeOnline.RezerwacjaOnlineFormPage"
+             Title="Rezerwacja online">
+
+    <Grid RowDefinitions="60,*">
+
+        <!-- MINI HEADER -->
+        <Grid Grid.Row="0"
+              BackgroundColor="#1565C0"
+              Padding="16,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="44"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="44"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Text="✕"
+                    TextColor="White"
+                    BackgroundColor="Transparent"
+                    FontSize="18"
+                    Clicked="OnAnulujClicked"/>
+
+            <Label Grid.Column="1"
+                   x:Name="TytulLabel"
+                   Text="Nowa rezerwacja"
+                   TextColor="White"
+                   FontSize="17"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+
+            <Button Grid.Column="2"
+                    Text="💾"
+                    TextColor="White"
+                    BackgroundColor="Transparent"
+                    FontSize="18"
+                    Clicked="OnZapiszClicked"/>
+        </Grid>
+
+        <!-- FORMULARZ -->
+        <ScrollView Grid.Row="1"
+                    BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+            <VerticalStackLayout Padding="16" Spacing="16">
+
+                <!-- ── SEKCJA: Dane gościa ── -->
+                <Frame CornerRadius="14" Padding="16" HasShadow="True"
+                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}">
+                    <VerticalStackLayout Spacing="12">
+
+                        <Label Text="👤  Dane gościa"
+                               FontSize="14" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"/>
+
+                        <BoxView HeightRequest="1"
+                                 BackgroundColor="{AppThemeBinding Light=#ECEFF1, Dark=#2C2C3E}"/>
+
+                        <!-- Imię -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Imię *"
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+                            <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                    StrokeShape="RoundRectangle 10"
+                                    Stroke="#E0E0E0"
+                                    Padding="12,0">
+                                <Entry x:Name="ImieEntry"
+                                       Placeholder="np. Jan"
+                                       FontSize="14"
+                                       BackgroundColor="Transparent"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Nazwisko -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Nazwisko *"
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+                            <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                    StrokeShape="RoundRectangle 10"
+                                    Stroke="#E0E0E0"
+                                    Padding="12,0">
+                                <Entry x:Name="NazwiskoEntry"
+                                       Placeholder="np. Kowalski"
+                                       FontSize="14"
+                                       BackgroundColor="Transparent"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Email -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="E-mail *"
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+                            <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                    StrokeShape="RoundRectangle 10"
+                                    Stroke="#E0E0E0"
+                                    Padding="12,0">
+                                <Entry x:Name="EmailEntry"
+                                       Placeholder="jan@example.com"
+                                       Keyboard="Email"
+                                       FontSize="14"
+                                       BackgroundColor="Transparent"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Telefon -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Telefon *"
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+                            <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                    StrokeShape="RoundRectangle 10"
+                                    Stroke="#E0E0E0"
+                                    Padding="12,0">
+                                <Entry x:Name="TelefonEntry"
+                                       Placeholder="+48 600 000 000"
+                                       Keyboard="Telephone"
+                                       FontSize="14"
+                                       BackgroundColor="Transparent"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- ── SEKCJA: Szczegóły pobytu ── -->
+                <Frame CornerRadius="14" Padding="16" HasShadow="True"
+                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}">
+                    <VerticalStackLayout Spacing="12">
+
+                        <Label Text="🛏️  Szczegóły pobytu"
+                               FontSize="14" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"/>
+
+                        <BoxView HeightRequest="1"
+                                 BackgroundColor="{AppThemeBinding Light=#ECEFF1, Dark=#2C2C3E}"/>
+
+                        <!-- Data przyjazdu -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Data przyjazdu *"
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+                            <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                    StrokeShape="RoundRectangle 10"
+                                    Stroke="#E0E0E0"
+                                    Padding="12,4">
+                                <DatePicker x:Name="DataPrzyjazduPicker"
+                                            Format="dd.MM.yyyy"
+                                            FontSize="14"
+                                            DateSelected="OnDateSelected"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Data wyjazdu -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Data wyjazdu *"
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+                            <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                    StrokeShape="RoundRectangle 10"
+                                    Stroke="#E0E0E0"
+                                    Padding="12,4">
+                                <DatePicker x:Name="DataWyjazdPicker"
+                                            Format="dd.MM.yyyy"
+                                            FontSize="14"
+                                            DateSelected="OnDateSelected"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Podsumowanie nocy -->
+                        <Frame x:Name="NoceSummary"
+                               BackgroundColor="#E3F2FD"
+                               CornerRadius="10"
+                               Padding="12,8"
+                               HasShadow="False">
+                            <Label x:Name="NoceLabel"
+                                   Text="🌙  — noce"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#1565C0"/>
+                        </Frame>
+
+                        <!-- Typ pokoju -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Typ / numer pokoju *"
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+                            <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                    StrokeShape="RoundRectangle 10"
+                                    Stroke="#E0E0E0"
+                                    Padding="8,0">
+                                <Picker x:Name="TypPokojuPicker"
+                                        Title="Wybierz pokój"
+                                        FontSize="14">
+                                    <Picker.Items>
+                                        <x:String>Pokój 101</x:String>
+                                        <x:String>Pokój 102</x:String>
+                                        <x:String>Pokój 103</x:String>
+                                        <x:String>Pokój 201</x:String>
+                                        <x:String>Pokój 202</x:String>
+                                        <x:String>Pokój 205</x:String>
+                                        <x:String>Apartament A</x:String>
+                                        <x:String>Apartament B</x:String>
+                                        <x:String>Apartament C</x:String>
+                                        <x:String>Pokój rodzinny</x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Liczba gości -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Liczba gości"
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+                            <Grid ColumnDefinitions="44,*,44" HeightRequest="44">
+                                <Button Grid.Column="0"
+                                        Text="−"
+                                        FontSize="18"
+                                        BackgroundColor="#E3F2FD"
+                                        TextColor="#1565C0"
+                                        CornerRadius="10"
+                                        Clicked="OnMinusGosc"/>
+                                <Border Grid.Column="1"
+                                        BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                        StrokeShape="RoundRectangle 10"
+                                        Stroke="#E0E0E0"
+                                        Margin="6,0">
+                                    <Label x:Name="LiczbaGosciLabel"
+                                           Text="1"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                </Border>
+                                <Button Grid.Column="2"
+                                        Text="＋"
+                                        FontSize="16"
+                                        BackgroundColor="#E3F2FD"
+                                        TextColor="#1565C0"
+                                        CornerRadius="10"
+                                        Clicked="OnPlusGosc"/>
+                            </Grid>
+                        </VerticalStackLayout>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- ── SEKCJA: Uwagi ── -->
+                <Frame CornerRadius="14" Padding="16" HasShadow="True"
+                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}">
+                    <VerticalStackLayout Spacing="12">
+
+                        <Label Text="📝  Uwagi / życzenia"
+                               FontSize="14" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"/>
+
+                        <BoxView HeightRequest="1"
+                                 BackgroundColor="{AppThemeBinding Light=#ECEFF1, Dark=#2C2C3E}"/>
+
+                        <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                StrokeShape="RoundRectangle 10"
+                                Stroke="#E0E0E0"
+                                Padding="12,8">
+                            <Editor x:Name="UwagiEditor"
+                                    Placeholder="Opcjonalne uwagi gościa, np. późny przyjazd, łóżeczko dla dziecka…"
+                                    FontSize="14"
+                                    HeightRequest="90"
+                                    BackgroundColor="Transparent"/>
+                        </Border>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Przycisk zapisu -->
+                <Button Text="💾  Zapisz rezerwację"
+                        BackgroundColor="#1565C0"
+                        TextColor="White"
+                        FontSize="15"
+                        FontAttributes="Bold"
+                        CornerRadius="14"
+                        HeightRequest="52"
+                        Margin="0,4,0,24"
+                        Clicked="OnZapiszClicked"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>
