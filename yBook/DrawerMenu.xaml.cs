@@ -1,4 +1,5 @@
 using yBook.Views.Ceny;
+using yBook.Views.RezerwacjeOnline;
 
 namespace yBook.Controls
 {
@@ -141,13 +142,13 @@ namespace yBook.Controls
                 case "PrzyjazdWyjazd":
                     await Shell.Current.GoToAsync("PrzyjazdWyjazdPage");
                     break;
+                // ── Rezerwacje Online ─────────────────────────────────────────
+                case "RezerwacjeOnline":
+                    await Shell.Current.Navigation.PushAsync(new RezerwacjeOnlinePage());
+                    break;
                 // ── Pulpit: wróć do roota ──────────────────────────────────────
                 case "Pulpit":
                     await Shell.Current.GoToAsync("//MainPage");
-                    break;
-
-                case "Uzytkownicy":
-                    await Shell.Current.GoToAsync("UzytkownicyLista");
                     break;
 
                 // ── Logout ────────────────────────────────────────────────────

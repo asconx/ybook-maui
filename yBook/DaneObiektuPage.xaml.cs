@@ -49,7 +49,6 @@ namespace yBook.Views.Ustawienia
         public DaneObiektuPage()
         {
             InitializeComponent();
-            Drawer.HamburgerClicked += (_, _) => Drawer.Open();
             BudujTaby();
             BudujAkcjeCheckIn();
         }
