@@ -1,5 +1,4 @@
 using yBook.Views.Ceny;
-using yBook.Views.RezerwacjeOnline;
 
 namespace yBook.Controls
 {
@@ -9,13 +8,13 @@ namespace yBook.Controls
         bool _isOpen = false;
 
         readonly Dictionary<string, bool> _groupState = new()
-            {
-                { "Ceny",       false },
-                { "Finanse",    false },
-                { "Raporty",    false },
-                { "Blokady",    false },
-                { "Ustawienia", false },
-            };
+        {
+            { "Ceny",       false },
+            { "Finanse",    false },
+            { "Raporty",    false },
+            { "Blokady",    false },
+            { "Ustawienia", false },
+        };
 
         public Action<object, object> HamburgerClicked { get; internal set; }
 
@@ -24,7 +23,7 @@ namespace yBook.Controls
             InitializeComponent();
         }
 
-        // ── Publiczne API ──────────────────────────────────────────────────────
+        // ?? Publiczne API ??????????????????????????????????????????????????????
 
         public void Open()
         {
@@ -56,11 +55,11 @@ namespace yBook.Controls
                         finished: (_, _) => DrawerRoot.IsVisible = false);
         }
 
-        // ── Overlay tap ───────────────────────────────────────────────────────
+        // ?? Overlay tap ???????????????????????????????????????????????????????
 
         void OnOverlayTapped(object? sender, TappedEventArgs e) => Close();
 
-        // ── Rozwijanie grup ───────────────────────────────────────────────────
+        // ?? Rozwijanie grup ???????????????????????????????????????????????????
 
         async void OnGroupToggle(object? sender, TappedEventArgs e)
         {
@@ -70,12 +69,12 @@ namespace yBook.Controls
 
             var (submenu, arrow) = group switch
             {
-                "Ceny" => (MenuCenyGroup, LblCenyArrow),
-                "Finanse" => (MenuFinanseGroup, LblFinanseArrow),
-                "Raporty" => (MenuRaportyGroup, LblRaportyArrow),
-                "Blokady" => (MenuBlokadyGroup, LblBlokadyArrow),
+                "Ceny"       => (MenuCenyGroup,      LblCenyArrow),
+                "Finanse"    => (MenuFinanseGroup,    LblFinanseArrow),
+                "Raporty"    => (MenuRaportyGroup,    LblRaportyArrow),
+                "Blokady"    => (MenuBlokadyGroup,    LblBlokadyArrow),
                 "Ustawienia" => (MenuUstawieniaGroup, LblUstawieniaArrow),
-                _ => (null, null)
+                _            => (null, null)
             };
             if (submenu is null || arrow is null) return;
 
@@ -84,7 +83,7 @@ namespace yBook.Controls
             if (open)
             {
                 submenu.IsVisible = true;
-                submenu.Opacity = 0;
+                submenu.Opacity   = 0;
                 await submenu.FadeTo(1, 160);
             }
             else
@@ -94,7 +93,7 @@ namespace yBook.Controls
             }
         }
 
-        // ── Nawigacja ─────────────────────────────────────────────────────────
+        // ?? Nawigacja ?????????????????????????????????????????????????????????
 
         async void OnItemTapped(object? sender, TappedEventArgs e)
         {
@@ -109,52 +108,59 @@ namespace yBook.Controls
             Close();
             await Task.Delay(230);
 
+            static string ToAbsolute(string route)
+            {
+                if (string.IsNullOrWhiteSpace(route)) return route;
+                if (route.StartsWith("//")) return route;
+                return "//" + route.TrimStart('/');
+            }
+
             switch (page)
             {
-                // ── Strony finansów — gotowe ──────────────────────────────────
                 case "UslugiOplaty":
                 case "Dokumenty":
                 case "KontaFinansowe":
                 case "RejestrPlatnosci":
                 case "ImportMT940":
                 case "ICalendar":
-                    await Shell.Current.GoToAsync(page);
-                    break;
-                case "Cenniki":
-                    await Shell.Current.GoToAsync(page);
-                    break;
-                // —— Strona Rabaty —————————————————————————————————————————————
-                case "Rabaty":
-                    await Shell.Current.GoToAsync("//RabatyPage");
-                    break;
-                case "DaneObiektu":
-                    await Shell.Current.GoToAsync("//DaneObiektu");
+                    await Shell.Current.GoToAsync(ToAbsolute(page));
                     break;
 
-                // —— Strona Pokoje —————————————————————————————————————————————
+                case "Cenniki":
+                    await Shell.Current.GoToAsync(ToAbsolute("Cenniki"));
+                    break;
+
+                case "Rabaty":
+                    await Shell.Current.GoToAsync(ToAbsolute("RabatyPage"));
+                    break;
+
+                case "DaneObiektu":
+                    await Shell.Current.GoToAsync(ToAbsolute("DaneObiektu"));
+                    break;
+
                 case "Pokoje":
-                    await Shell.Current.GoToAsync("//PokojePage");
+                    await Shell.Current.GoToAsync(ToAbsolute("PokojePage"));
                     break;
-                // —— Strona Blokady —————————————————————————————————————————————
+
                 case "ZbiorczeBlokady":
-                    await Shell.Current.GoToAsync("BlokadyPage");
+                    await Shell.Current.GoToAsync(ToAbsolute("BlokadyPage"));
                     break;
+
                 case "PrzyjazdWyjazd":
-                    await Shell.Current.GoToAsync("PrzyjazdWyjazdPage");
+                    await Shell.Current.GoToAsync(ToAbsolute("PrzyjazdWyjazdPage"));
                     break;
-                // ── Rezerwacje Online ─────────────────────────────────────────
-                case "RezerwacjeOnline":
-                    await Shell.Current.Navigation.PushAsync(new RezerwacjeOnlinePage());
-                    break;
-                // ── Pulpit: wróć do roota ──────────────────────────────────────
+
                 case "Pulpit":
                     await Shell.Current.GoToAsync("//MainPage");
                     break;
 
-                // ── Logout ────────────────────────────────────────────────────
+                case "Uzytkownicy":
+                    await Shell.Current.GoToAsync(ToAbsolute("UzytkownicyLista"));
+                    break;
+
                 case "Logout":
                     bool ok = await Shell.Current.CurrentPage.DisplayAlert(
-                        "Wylogowanie", "Czy na pewno chcesz się wylogować?", "Tak", "Anuluj");
+                        "Wylogowanie", "Czy na pewno chcesz si� wylogowa�?", "Tak", "Anuluj");
                     if (!ok) return;
 
                     var auth = IPlatformApplication.Current!.Services
@@ -163,10 +169,9 @@ namespace yBook.Controls
                     await Shell.Current.GoToAsync("//LoginPage");
                     break;
 
-                // ── Pozostałe trasy — do podpięcia w kolejnych etapach ─────────
                 default:
                     await Shell.Current.CurrentPage
-                               .DisplayAlert("yBook", $"Wkrótce: {page}", "OK");
+                               .DisplayAlert("yBook", $"Wkr�tce: {page}", "OK");
                     break;
             }
         }
