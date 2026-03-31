@@ -5,13 +5,16 @@ using yBook.Services;
 
 namespace yBook.Views.Surveys;
 
-[QueryProperty(nameof(SurveyId), "id")]
+[QueryProperty(nameof(SurveyIdRaw), "id")]
 public partial class EditSurveyViewModel : ObservableObject
 {
     private readonly ISurveyService _surveyService;
 
+    // QueryProperty musi byc string - MAUI nie konwertuje automatycznie na Guid
     [ObservableProperty]
-    private Guid surveyId = Guid.Empty;
+    private string surveyIdRaw = string.Empty;
+
+    private Guid _surveyId = Guid.Empty;
 
     [ObservableProperty]
     private string title = string.Empty;
@@ -26,7 +29,10 @@ public partial class EditSurveyViewModel : ObservableObject
     private bool isNewSurvey = true;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasError))]
     private string errorMessage = string.Empty;
+
+    public bool HasError => !string.IsNullOrEmpty(ErrorMessage);
 
     private Survey? _currentSurvey;
 
@@ -37,23 +43,27 @@ public partial class EditSurveyViewModel : ObservableObject
 
     protected override async void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
     {
-        base.OnPropertyChanged(e);
-
-        if (e.PropertyName == nameof(SurveyId) && SurveyId != Guid.Empty)
+        if (Guid.TryParse(value, out var guid) && guid != Guid.Empty)
         {
-            await LoadSurvey();
+            _surveyId = guid;
+            IsNewSurvey = false;
+            _ = LoadSurveyAsync();
+        }
+        else
+        {
+            _surveyId = Guid.Empty;
+            IsNewSurvey = true;
         }
     }
 
-    private async Task LoadSurvey()
+    private async Task LoadSurveyAsync()
     {
         try
         {
             IsLoading = true;
             ErrorMessage = string.Empty;
-            IsNewSurvey = false;
 
-            _currentSurvey = await _surveyService.GetSurveyByIdAsync(SurveyId);
+            _currentSurvey = await _surveyService.GetSurveyByIdAsync(_surveyId);
             if (_currentSurvey != null)
             {
                 Title = _currentSurvey.Title;
@@ -71,7 +81,7 @@ public partial class EditSurveyViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task SaveSurvey()
+    private async Task SaveSurveyAsync()
     {
         if (string.IsNullOrWhiteSpace(Title))
         {
@@ -86,24 +96,22 @@ public partial class EditSurveyViewModel : ObservableObject
 
             bool success;
 
-            if (IsNewSurvey || SurveyId == Guid.Empty)
+            if (IsNewSurvey || _surveyId == Guid.Empty)
             {
-                var newSurvey = new Survey
+                success = await _surveyService.AddSurveyAsync(new Survey
                 {
                     Title = Title,
                     Description = Description
-                };
-                success = await _surveyService.AddSurveyAsync(newSurvey);
+                });
             }
             else
             {
-                var updatedSurvey = new Survey
+                success = await _surveyService.UpdateSurveyAsync(new Survey
                 {
-                    Id = SurveyId,
+                    Id = _surveyId,
                     Title = Title,
                     Description = Description
-                };
-                success = await _surveyService.UpdateSurveyAsync(updatedSurvey);
+                });
             }
 
             if (success)
@@ -127,7 +135,7 @@ public partial class EditSurveyViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task Cancel()
+    private async Task CancelAsync()
     {
         await Shell.Current.GoToAsync("..");
     }

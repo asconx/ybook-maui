@@ -38,7 +38,7 @@ namespace yBook
                     break;
 
                 case "Ankiety":
-                    await Shell.Current.GoToAsync("surveys");
+                    await Shell.Current.GoToAsync("SurveysPage");
                     break;
 
                 default:
