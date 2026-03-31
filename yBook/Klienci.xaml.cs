@@ -1,7 +1,6 @@
-using System;
+Ôªøusing System;
+using System.Collections.Generic;
 using Microsoft.Maui.Controls;
-using yBook.Models;
-using yBook.Services;
 
 namespace yBook.Views.Klienci
 {
@@ -10,38 +9,102 @@ namespace yBook.Views.Klienci
         public KlienciPage()
         {
             InitializeComponent();
+            RefreshClientList();
         }
 
-        async void OnSaveClicked(object sender, EventArgs e)
-        {   
-            var user = new User
+        void OnAddClientClicked(object sender, EventArgs e)
+        {
+            ListaSection.IsVisible = false;
+            FormSection.IsVisible = true;
+        }
+
+        void OnMoreDataChecked(object sender, CheckedChangedEventArgs e)
+        {
+            MoreDataSection.IsVisible = e.Value;
+
+            MoreDataLabel.Text = e.Value
+                ? "Poka≈º mniej"
+                : "Wiƒôcej danych klienta";
+        }
+
+        void OnMoreDataLabelTapped(object sender, EventArgs e)
+        {
+            CbWiecejDanych.IsChecked = !CbWiecejDanych.IsChecked;
+        }
+
+        void OnSaveClicked(object sender, EventArgs e)
+        {
+            var client = new Client
             {
-                Name = NazwaEntry.Text?.Trim(),
-                Role = RolaPicker.SelectedItem?.ToString(),
-                Email = EmailEntry.Text?.Trim(),
-                Phone = TelefonEntry.Text?.Trim(),
-                NowaPlatnosc = CbNowaPlatnosc.IsChecked,
-                WyslijPowiadomienieKlient = CbWyslijPowiadomienieKlient.IsChecked,
-                AnulowanieRezerwacji = CbAnulowanieRezerwacji.IsChecked,
-                NowaRezerwacjaOnline = CbNowaRezerwacjaOnline.IsChecked,
-                SynchronizacjaRezerwacji = CbSynchronizacjaRezerwacji.IsChecked,
-                UtworzenieNowejRezerwacji = CbUtworzenieNowejRezerwacji.IsChecked
+                Name = NazwaEntry.Text,
+                Email = EmailEntry.Text,
+                Phone = TelefonEntry.Text,
+                Nip = NipEntry.Text,
+                Notes = UwagiEntry.Text,
+                Discount = int.TryParse(RabatEntry.Text, out var r) ? r : 0,
+                IsRegularClient = RbStalyKlient.IsChecked
             };
 
-            if (string.IsNullOrWhiteSpace(user.Name) || string.IsNullOrWhiteSpace(user.Email))
-            {
-                await DisplayAlert("B≥πd", "Podaj imiÍ i e-mail.", "OK");
-                return;
-            }
+            ClientStore.Add(client);
 
-            UserStore.Add(user);
+            ClearForm();
 
-            await Shell.Current.GoToAsync("..");
+            FormSection.IsVisible = false;
+            ListaSection.IsVisible = true;
+
+            RefreshClientList();
         }
 
-        async void OnCancelClicked(object sender, EventArgs e)
+        void OnCancelClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("..");
+            FormSection.IsVisible = false;
+            ListaSection.IsVisible = true;
+        }
+
+        void RefreshClientList()
+        {
+            ClientsList.ItemsSource = null;
+            ClientsList.ItemsSource = ClientStore.Clients;
+        }
+
+        void ClearForm()
+        {
+            NazwaEntry.Text = "";
+            EmailEntry.Text = "";
+            TelefonEntry.Text = "";
+            RabatEntry.Text = "0";
+            NipEntry.Text = "";
+            UwagiEntry.Text = "";
+
+            CbWiecejDanych.IsChecked = false;
+            MoreDataSection.IsVisible = false;
+            MoreDataLabel.Text = "Wiƒôcej danych klienta";
+        }
+    }
+
+    // MODEL
+    public class Client
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string Nip { get; set; }
+        public string Notes { get; set; }
+        public int Discount { get; set; }
+
+        public bool IsRegularClient { get; set; }
+
+        public string TypeText => IsRegularClient ? "Sta≈Çy" : "Niechciany";
+    }
+
+    // STORE
+    public static class ClientStore
+    {
+        public static List<Client> Clients { get; set; } = new List<Client>();
+
+        public static void Add(Client client)
+        {
+            Clients.Add(client);
         }
     }
 }
