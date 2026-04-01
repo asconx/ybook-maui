@@ -51,15 +51,18 @@ public partial class RezerwacjaOnlineFormPage : ContentPage
     void OnDateSelected(object sender, DateChangedEventArgs e)
     {
         // Wymuś: wyjazd >= przyjazd + 1 dzień
-        if (DataWyjazdPicker.Date <= DataPrzyjazduPicker.Date)
-            DataWyjazdPicker.Date = DataPrzyjazduPicker.Date.AddDays(1);
+        var przyjazd = DataPrzyjazduPicker.Date ?? DateTime.Today;
+        if (!DataWyjazdPicker.Date.HasValue || DataWyjazdPicker.Date.Value <= przyjazd)
+            DataWyjazdPicker.Date = przyjazd.AddDays(1);
 
         AktualizujNoce();
     }
 
     void AktualizujNoce()
     {
-        int noce = Math.Max(0, (DataWyjazdPicker.Date - DataPrzyjazduPicker.Date).Days);
+        var przyjazd = DataPrzyjazduPicker.Date ?? DateTime.Today;
+        var wyjazd = DataWyjazdPicker.Date ?? przyjazd.AddDays(1);
+        int noce = Math.Max(0, (wyjazd - przyjazd).Days);
         NoceLabel.Text = noce switch
         {
             0 => "🌙  —",
@@ -104,7 +107,7 @@ public partial class RezerwacjaOnlineFormPage : ContentPage
         if (TypPokojuPicker.SelectedIndex < 0)
         { await WyswietlBlad("Wybierz typ / numer pokoju."); return; }
 
-        if (DataWyjazdPicker.Date <= DataPrzyjazduPicker.Date)
+        if (DataWyjazdPicker.Date.GetValueOrDefault() <= DataPrzyjazduPicker.Date.GetValueOrDefault())
         { await WyswietlBlad("Data wyjazdu musi być późniejsza niż data przyjazdu."); return; }
 
         // Buduj obiekt (zachowaj ID i datę złożenia przy edycji)
@@ -118,8 +121,8 @@ public partial class RezerwacjaOnlineFormPage : ContentPage
             Nazwisko       = NazwiskoEntry.Text.Trim(),
             Email          = EmailEntry.Text.Trim(),
             Telefon        = TelefonEntry.Text.Trim(),
-            DataPrzyjazdu  = DataPrzyjazduPicker.Date,
-            DataWyjazdu    = DataWyjazdPicker.Date,
+            DataPrzyjazdu  = DataPrzyjazduPicker.Date ?? DateTime.Today.AddDays(1),
+            DataWyjazdu    = DataWyjazdPicker.Date ?? DateTime.Today.AddDays(2),
             TypPokoju      = TypPokojuPicker.SelectedItem?.ToString() ?? string.Empty,
             LiczbaGosci    = _liczbaGosci,
             Uwagi          = UwagiEditor.Text?.Trim() ?? string.Empty

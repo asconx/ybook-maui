@@ -69,8 +69,8 @@ public partial class BlokadyFormPage : ContentPage
         {
             Nazwa = NazwaEntry.Text,
             Notatka = NotatkaEditor.Text,
-            DataOd = DataOdPicker.Date,
-            DataDo = DataDoPicker.Date,
+            DataOd = DataOdPicker.Date ?? DateTime.Now,
+            DataDo = DataDoPicker.Date ?? DateTime.Now.AddDays(1),
             DlaWszystkich = WszystkieCheck.IsChecked,
             Pokoje = wybrane
         };

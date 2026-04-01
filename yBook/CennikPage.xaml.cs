@@ -77,8 +77,8 @@ namespace yBook.Views.Ceny
             EntNazwa.Text      = item.Nazwa;
             EntCena.Text       = item.Cena.ToString("0.##");
             EntPriorytet.Text  = item.Priorytet.ToString();
-            DpOd.Date          = item.Od;
-            DpDo.Date          = item.Do;
+            DpOd.Date          = item.Od; // DateTime -> DateTime? assignment OK
+            DpDo.Date          = item.Do; // DateTime -> DateTime? assignment OK
             EdtPokoje.Text     = string.Join(", ", item.Pokoje);
 
             OtworzModal();
@@ -126,7 +126,8 @@ namespace yBook.Views.Ceny
                 PokazBlad("Priorytet musi być liczbą >= 1.");
                 return;
             }
-            if (DpDo.Date < DpOd.Date)
+            // Use null-coalescing to compare non-nullable values safely
+            if ((DpDo.Date ?? DateTime.MinValue) < (DpOd.Date ?? DateTime.MinValue))
             {
                 PokazBlad("Data do nie może być wcześniejsza niż data od.");
                 return;
@@ -152,8 +153,8 @@ namespace yBook.Views.Ceny
                     Nazwa     = EntNazwa.Text.Trim(),
                     Cena      = cena,
                     Priorytet = priorytet,
-                    Od        = DpOd.Date,
-                    Do        = DpDo.Date,
+                    Od        = DpOd.Date ?? DateTime.Today,
+                    Do        = DpDo.Date ?? DateTime.Today,
                     Pokoje    = pokoje
                 });
             }
@@ -168,8 +169,8 @@ namespace yBook.Views.Ceny
                         Nazwa     = EntNazwa.Text.Trim(),
                         Cena      = cena,
                         Priorytet = priorytet,
-                        Od        = DpOd.Date,
-                        Do        = DpDo.Date,
+                        Od        = DpOd.Date ?? _all[idx].Od,
+                        Do        = DpDo.Date ?? _all[idx].Do,
                         Pokoje    = pokoje
                     };
                 }
