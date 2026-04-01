@@ -1,18 +1,44 @@
-﻿namespace yBook.Models
-{
-    public class PrzyjazdWyjazd
-    {
-        public string Pokoj { get; set; }
+﻿using System.ComponentModel;
 
+namespace yBook.Models
+{
+    public class PrzyjazdWyjazd : INotifyPropertyChanged
+    {
+        public int PokojId { get; set; }
+        public string Pokoj { get; set; }
         public DateTime Data { get; set; }
 
-        public bool PrzyjazdMozliwy { get; set; } = true;
-        public bool WyjazdMozliwy { get; set; } = true;
+        bool przyjazdMozliwy = true;
+        public bool PrzyjazdMozliwy
+        {
+            get => przyjazdMozliwy;
+            set
+            {
+                if (przyjazdMozliwy != value)
+                {
+                    przyjazdMozliwy = value;
+                    OnPropertyChanged(nameof(PrzyjazdMozliwy));
+                }
+            }
+        }
 
-        public string DataStr => Data.ToString("dd.MM.yyyy");
+        bool wyjazdMozliwy = true;
+        public bool WyjazdMozliwy
+        {
+            get => wyjazdMozliwy;
+            set
+            {
+                if (wyjazdMozliwy != value)
+                {
+                    wyjazdMozliwy = value;
+                    OnPropertyChanged(nameof(WyjazdMozliwy));
+                }
+            }
+        }
 
-        public string Status =>
-            $"{(PrzyjazdMozliwy ? "✔ Przyjazd" : "✖ Przyjazd")} | " +
-            $"{(WyjazdMozliwy ? "✔ Wyjazd" : "✖ Wyjazd")}";
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void OnPropertyChanged(string name)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }
