@@ -68,16 +68,21 @@ public partial class EditSurveyViewModel : ObservableObject
 
     partial void OnSurveyIdRawChanged(string value)
     {
-        if (int.TryParse(value, out var id) && id > 0)
+        base.OnPropertyChanged(e);
+
+        if (e.PropertyName == nameof(SurveyIdRaw))
         {
-            _surveyId = id;
-            IsNewSurvey = false;
-            _ = LoadSurveyAsync();
-        }
-        else
-        {
-            _surveyId = 0;
-            IsNewSurvey = true;
+            if (int.TryParse(SurveyIdRaw, out var id) && id > 0)
+            {
+                _surveyId = id;
+                IsNewSurvey = false;
+                _ = LoadSurveyAsync();
+            }
+            else
+            {
+                _surveyId = 0;
+                IsNewSurvey = true;
+            }
         }
     }
 

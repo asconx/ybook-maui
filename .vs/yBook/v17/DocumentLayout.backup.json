@@ -1,13 +1,29 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\admini\\Documents\\ybook-maui\\",
+  "WorkspaceRootPath": "C:\\Users\\4TP Haidaichuk\\Documents\\ybook-maui\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{644895FA-EEA7-4A2A-9953-1B8D33C1D43A}|yBook\\yBook.csproj|c:\\users\\admini\\documents\\ybook-maui\\ybook\\importmt940page.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{644895FA-EEA7-4A2A-9953-1B8D33C1D43A}|yBook\\yBook.csproj|solutionrelative:ybook\\importmt940page.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{644895FA-EEA7-4A2A-9953-1B8D33C1D43A}|yBook\\yBook.csproj|c:\\users\\4tp haidaichuk\\documents\\ybook-maui\\ybook\\daneobiektupage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{644895FA-EEA7-4A2A-9953-1B8D33C1D43A}|yBook\\yBook.csproj|solutionrelative:ybook\\daneobiektupage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{644895FA-EEA7-4A2A-9953-1B8D33C1D43A}|yBook\\yBook.csproj|c:\\users\\admini\\documents\\ybook-maui\\ybook\\mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{644895FA-EEA7-4A2A-9953-1B8D33C1D43A}|yBook\\yBook.csproj|c:\\users\\4tp haidaichuk\\documents\\ybook-maui\\ybook\\ybook.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{644895FA-EEA7-4A2A-9953-1B8D33C1D43A}|yBook\\yBook.csproj|solutionrelative:ybook\\ybook.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\9.0.312\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\9.0.312\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.FrameworkReferenceResolution.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.FrameworkReferenceResolution.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{644895FA-EEA7-4A2A-9953-1B8D33C1D43A}|yBook\\yBook.csproj|c:\\users\\4tp haidaichuk\\documents\\ybook-maui\\ybook\\mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{644895FA-EEA7-4A2A-9953-1B8D33C1D43A}|yBook\\yBook.csproj|solutionrelative:ybook\\mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
@@ -23,28 +39,90 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ImportMT940Page.xaml",
-              "DocumentMoniker": "C:\\Users\\admini\\Documents\\ybook-maui\\yBook\\ImportMT940Page.xaml",
-              "RelativeDocumentMoniker": "yBook\\ImportMT940Page.xaml",
-              "ToolTip": "C:\\Users\\admini\\Documents\\ybook-maui\\yBook\\ImportMT940Page.xaml",
-              "RelativeToolTip": "yBook\\ImportMT940Page.xaml",
-              "ViewState": "AgIAABYAAAAAAAAAAAAgwCIAAAAfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-03-20T08:20:46.381Z",
+              "Title": "DaneObiektuPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\4TP Haidaichuk\\Documents\\ybook-maui\\yBook\\DaneObiektuPage.xaml.cs",
+              "RelativeDocumentMoniker": "yBook\\DaneObiektuPage.xaml.cs",
+              "ToolTip": "C:\\Users\\4TP Haidaichuk\\Documents\\ybook-maui\\yBook\\DaneObiektuPage.xaml.cs",
+              "RelativeToolTip": "yBook\\DaneObiektuPage.xaml.cs",
+              "ViewState": "AgIAAIUAAAAAAAAAAAArwI8AAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-01T06:50:08.711Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
+              "Title": "Microsoft.NET.Sdk.FrameworkReferenceResolution.targets",
+              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\9.0.312\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.FrameworkReferenceResolution.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.312\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.FrameworkReferenceResolution.targets",
+              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\9.0.312\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.FrameworkReferenceResolution.targets",
+              "RelativeToolTip": "..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.312\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.FrameworkReferenceResolution.targets",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAjwGoAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2026-04-01T06:11:46.17Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Microsoft.NET.TargetFrameworkInference.targets",
+              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\9.0.312\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.312\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\9.0.312\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+              "RelativeToolTip": "..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.312\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAALoAAABQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2026-04-01T06:11:36.612Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "MainPage.xaml",
-              "DocumentMoniker": "C:\\Users\\admini\\Documents\\ybook-maui\\yBook\\MainPage.xaml",
+              "DocumentMoniker": "C:\\Users\\4TP Haidaichuk\\Documents\\ybook-maui\\yBook\\MainPage.xaml",
               "RelativeDocumentMoniker": "yBook\\MainPage.xaml",
-              "ToolTip": "C:\\Users\\admini\\Documents\\ybook-maui\\yBook\\MainPage.xaml",
+              "ToolTip": "C:\\Users\\4TP Haidaichuk\\Documents\\ybook-maui\\yBook\\MainPage.xaml",
               "RelativeToolTip": "yBook\\MainPage.xaml",
-              "ViewState": "AgIAAF8AAAAAAAAAAAAgwGsAAAA6AAAAAAAAAA==",
+              "ViewState": "AgIAAF8AAAAAAAAAAAAgwHsAAABQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-03-20T08:20:42.909Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-20T08:20:42.909Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Microsoft.NET.Sdk.FrameworkReferenceResolution.targets",
+              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.FrameworkReferenceResolution.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.FrameworkReferenceResolution.targets",
+              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.FrameworkReferenceResolution.targets",
+              "RelativeToolTip": "..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.FrameworkReferenceResolution.targets",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAjwGoAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2026-03-31T07:19:22.154Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Microsoft.NET.TargetFrameworkInference.targets",
+              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+              "RelativeToolTip": "..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.TargetFrameworkInference.targets",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2026-03-31T07:18:46.682Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "yBook.csproj",
+              "DocumentMoniker": "C:\\Users\\4TP Haidaichuk\\Documents\\ybook-maui\\yBook\\yBook.csproj",
+              "RelativeDocumentMoniker": "yBook\\yBook.csproj",
+              "ToolTip": "C:\\Users\\4TP Haidaichuk\\Documents\\ybook-maui\\yBook\\yBook.csproj",
+              "RelativeToolTip": "yBook\\yBook.csproj",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAADEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-03-31T06:52:50.955Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             }
           ]
         }
