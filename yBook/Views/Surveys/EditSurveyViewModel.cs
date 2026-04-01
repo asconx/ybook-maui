@@ -10,12 +10,12 @@ public partial class EditSurveyViewModel : ObservableObject
 {
     private readonly ISurveyService _surveyService;
 
-    // QueryProperty musi byc string - MAUI nie konwertuje automatycznie
     [ObservableProperty]
     private string surveyIdRaw = string.Empty;
 
     private int _surveyId = 0;
 
+    // Aspecty
     [ObservableProperty]
     private string aspect1 = string.Empty;
 
@@ -32,7 +32,20 @@ public partial class EditSurveyViewModel : ObservableObject
     private string aspect5 = string.Empty;
 
     [ObservableProperty]
+    private string aspect6 = string.Empty;
+
+    [ObservableProperty]
+    private string aspect7 = string.Empty;
+
+    // Pytania
+    [ObservableProperty]
     private string question1 = string.Empty;
+
+    [ObservableProperty]
+    private string question2 = string.Empty;
+
+    [ObservableProperty]
+    private string question3 = string.Empty;
 
     [ObservableProperty]
     private bool isLoading = false;
@@ -53,7 +66,7 @@ public partial class EditSurveyViewModel : ObservableObject
         _surveyService = surveyService;
     }
 
-    protected override async void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
+    partial void OnSurveyIdRawChanged(string value)
     {
         if (int.TryParse(value, out var id) && id > 0)
         {
@@ -83,7 +96,11 @@ public partial class EditSurveyViewModel : ObservableObject
                 Aspect3 = _currentSurvey.Aspect3;
                 Aspect4 = _currentSurvey.Aspect4;
                 Aspect5 = _currentSurvey.Aspect5;
+                Aspect6 = _currentSurvey.Aspect6;
+                Aspect7 = _currentSurvey.Aspect7;
                 Question1 = _currentSurvey.Question1;
+                Question2 = _currentSurvey.Question2;
+                Question3 = _currentSurvey.Question3;
             }
         }
         catch (Exception ex)
@@ -101,7 +118,7 @@ public partial class EditSurveyViewModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(Aspect1))
         {
-            ErrorMessage = "Aspecty ankiety są wymagane";
+            ErrorMessage = "Aspect 1 jest wymagany";
             return;
         }
 
@@ -121,7 +138,11 @@ public partial class EditSurveyViewModel : ObservableObject
                     Aspect3 = Aspect3,
                     Aspect4 = Aspect4,
                     Aspect5 = Aspect5,
-                    Question1 = Question1
+                    Aspect6 = Aspect6,
+                    Aspect7 = Aspect7,
+                    Question1 = Question1,
+                    Question2 = Question2,
+                    Question3 = Question3
                 });
             }
             else
@@ -134,7 +155,11 @@ public partial class EditSurveyViewModel : ObservableObject
                     Aspect3 = Aspect3,
                     Aspect4 = Aspect4,
                     Aspect5 = Aspect5,
-                    Question1 = Question1
+                    Aspect6 = Aspect6,
+                    Aspect7 = Aspect7,
+                    Question1 = Question1,
+                    Question2 = Question2,
+                    Question3 = Question3
                 });
             }
 
