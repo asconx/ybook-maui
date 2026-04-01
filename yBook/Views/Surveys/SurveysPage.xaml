@@ -60,17 +60,32 @@
                                     Padding="14">
                                 <Grid ColumnDefinitions="*,Auto">
                                     <VerticalStackLayout Grid.Column="0" Spacing="4">
-                                        <Label Text="{Binding Title}"
+                                        <Label Text="{Binding Aspect1, StringFormat='📋 {0}'}"
                                                FontSize="15"
                                                FontAttributes="Bold"
                                                TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
-                                        <Label Text="{Binding Description}"
+                                        <Label Text="{Binding Question1}"
                                                FontSize="12"
                                                TextColor="{AppThemeBinding Light=#78909C, Dark=#90A4AE}"
                                                MaxLines="2"/>
-                                        <Label Text="{Binding CreatedAt, StringFormat='Utworzona: {0:g}'}"
-                                               FontSize="11"
-                                               TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+                                        <VerticalStackLayout Spacing="2" Margin="0,4,0,0">
+                                            <Label Text="{Binding Aspect2, StringFormat='• {0}'}"
+                                                   FontSize="11"
+                                                   TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+                                            <Label Text="{Binding Aspect3, StringFormat='• {0}'}"
+                                                   FontSize="11"
+                                                   TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+                                            <Label Text="{Binding Aspect4, StringFormat='• {0}'}"
+                                                   FontSize="11"
+                                                   TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+                                            <Label Text="{Binding Aspect5, StringFormat='• {0}'}"
+                                                   FontSize="11"
+                                                   TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+                                        </VerticalStackLayout>
+                                        <Label Text="{Binding DateModified, StringFormat='Zmieniono: {0}'}"
+                                               FontSize="10"
+                                               TextColor="{AppThemeBinding Light=#BDBDBD, Dark=#424242}"
+                                               Margin="0,4,0,0"/>
                                     </VerticalStackLayout>
 
                                     <!-- Przyciski Edytuj / Usuń -->

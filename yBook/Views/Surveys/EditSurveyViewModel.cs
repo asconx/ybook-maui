@@ -10,17 +10,29 @@ public partial class EditSurveyViewModel : ObservableObject
 {
     private readonly ISurveyService _surveyService;
 
-    // QueryProperty musi byc string - MAUI nie konwertuje automatycznie na Guid
+    // QueryProperty musi byc string - MAUI nie konwertuje automatycznie
     [ObservableProperty]
     private string surveyIdRaw = string.Empty;
 
-    private Guid _surveyId = Guid.Empty;
+    private int _surveyId = 0;
 
     [ObservableProperty]
-    private string title = string.Empty;
+    private string aspect1 = string.Empty;
 
     [ObservableProperty]
-    private string description = string.Empty;
+    private string aspect2 = string.Empty;
+
+    [ObservableProperty]
+    private string aspect3 = string.Empty;
+
+    [ObservableProperty]
+    private string aspect4 = string.Empty;
+
+    [ObservableProperty]
+    private string aspect5 = string.Empty;
+
+    [ObservableProperty]
+    private string question1 = string.Empty;
 
     [ObservableProperty]
     private bool isLoading = false;
@@ -44,15 +56,15 @@ public partial class EditSurveyViewModel : ObservableObject
     // Odpala sie gdy Shell ustawi SurveyIdRaw z query stringa
     partial void OnSurveyIdRawChanged(string value)
     {
-        if (Guid.TryParse(value, out var guid) && guid != Guid.Empty)
+        if (int.TryParse(value, out var id) && id > 0)
         {
-            _surveyId = guid;
+            _surveyId = id;
             IsNewSurvey = false;
             _ = LoadSurveyAsync();
         }
         else
         {
-            _surveyId = Guid.Empty;
+            _surveyId = 0;
             IsNewSurvey = true;
         }
     }
@@ -67,8 +79,12 @@ public partial class EditSurveyViewModel : ObservableObject
             _currentSurvey = await _surveyService.GetSurveyByIdAsync(_surveyId);
             if (_currentSurvey != null)
             {
-                Title = _currentSurvey.Title;
-                Description = _currentSurvey.Description;
+                Aspect1 = _currentSurvey.Aspect1;
+                Aspect2 = _currentSurvey.Aspect2;
+                Aspect3 = _currentSurvey.Aspect3;
+                Aspect4 = _currentSurvey.Aspect4;
+                Aspect5 = _currentSurvey.Aspect5;
+                Question1 = _currentSurvey.Question1;
             }
         }
         catch (Exception ex)
@@ -84,9 +100,9 @@ public partial class EditSurveyViewModel : ObservableObject
     [RelayCommand]
     private async Task SaveSurveyAsync()
     {
-        if (string.IsNullOrWhiteSpace(Title))
+        if (string.IsNullOrWhiteSpace(Aspect1))
         {
-            ErrorMessage = "Tytuł ankiety jest wymagany";
+            ErrorMessage = "Aspecty ankiety są wymagane";
             return;
         }
 
@@ -97,12 +113,16 @@ public partial class EditSurveyViewModel : ObservableObject
 
             bool success;
 
-            if (IsNewSurvey || _surveyId == Guid.Empty)
+            if (IsNewSurvey || _surveyId == 0)
             {
                 success = await _surveyService.AddSurveyAsync(new Survey
                 {
-                    Title = Title,
-                    Description = Description
+                    Aspect1 = Aspect1,
+                    Aspect2 = Aspect2,
+                    Aspect3 = Aspect3,
+                    Aspect4 = Aspect4,
+                    Aspect5 = Aspect5,
+                    Question1 = Question1
                 });
             }
             else
@@ -110,8 +130,12 @@ public partial class EditSurveyViewModel : ObservableObject
                 success = await _surveyService.UpdateSurveyAsync(new Survey
                 {
                     Id = _surveyId,
-                    Title = Title,
-                    Description = Description
+                    Aspect1 = Aspect1,
+                    Aspect2 = Aspect2,
+                    Aspect3 = Aspect3,
+                    Aspect4 = Aspect4,
+                    Aspect5 = Aspect5,
+                    Question1 = Question1
                 });
             }
 
