@@ -17,6 +17,8 @@ namespace yBook.Controls
             { "Ustawienia", false },
         };
 
+        public Action<object, object> HamburgerClicked { get; internal set; }
+
         public DrawerMenu()
         {
             InitializeComponent();
