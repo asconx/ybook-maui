@@ -129,7 +129,11 @@ public partial class PrzyjazdWyjazdPage : ContentPage
             selectedYear = (int)e.NewValue;
             YearLabel.Text = selectedYear.ToString();
 
-        UpdateDaysOnly();
+            UpdateDaysOnly();
+        } catch
+        {
+
+        }
     }
 
     void OnPrevYear(object sender, EventArgs e)
