@@ -15,43 +15,22 @@ public partial class EditSurveyViewModel : ObservableObject
 
     private int _surveyId = 0;
 
-    // Aspecty
-    [ObservableProperty]
-    private string aspect1 = string.Empty;
-
-    [ObservableProperty]
-    private string aspect2 = string.Empty;
-
-    [ObservableProperty]
-    private string aspect3 = string.Empty;
-
-    [ObservableProperty]
-    private string aspect4 = string.Empty;
-
-    [ObservableProperty]
-    private string aspect5 = string.Empty;
-
-    [ObservableProperty]
-    private string aspect6 = string.Empty;
-
-    [ObservableProperty]
-    private string aspect7 = string.Empty;
+    // Aspekty
+    [ObservableProperty] private string aspect1 = string.Empty;
+    [ObservableProperty] private string aspect2 = string.Empty;
+    [ObservableProperty] private string aspect3 = string.Empty;
+    [ObservableProperty] private string aspect4 = string.Empty;
+    [ObservableProperty] private string aspect5 = string.Empty;
+    [ObservableProperty] private string aspect6 = string.Empty;
+    [ObservableProperty] private string aspect7 = string.Empty;
 
     // Pytania
-    [ObservableProperty]
-    private string question1 = string.Empty;
+    [ObservableProperty] private string question1 = string.Empty;
+    [ObservableProperty] private string question2 = string.Empty;
+    [ObservableProperty] private string question3 = string.Empty;
 
-    [ObservableProperty]
-    private string question2 = string.Empty;
-
-    [ObservableProperty]
-    private string question3 = string.Empty;
-
-    [ObservableProperty]
-    private bool isLoading = false;
-
-    [ObservableProperty]
-    private bool isNewSurvey = true;
+    [ObservableProperty] private bool isLoading = false;
+    [ObservableProperty] private bool isNewSurvey = true;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasError))]
@@ -68,21 +47,16 @@ public partial class EditSurveyViewModel : ObservableObject
 
     partial void OnSurveyIdRawChanged(string value)
     {
-        base.OnPropertyChanged(e);
-
-        if (e.PropertyName == nameof(SurveyIdRaw))
+        if (int.TryParse(value, out var id) && id > 0)
         {
-            if (int.TryParse(SurveyIdRaw, out var id) && id > 0)
-            {
-                _surveyId = id;
-                IsNewSurvey = false;
-                _ = LoadSurveyAsync();
-            }
-            else
-            {
-                _surveyId = 0;
-                IsNewSurvey = true;
-            }
+            _surveyId = id;
+            IsNewSurvey = false;
+            _ = LoadSurveyAsync();
+        }
+        else
+        {
+            _surveyId = 0;
+            IsNewSurvey = true;
         }
     }
 
