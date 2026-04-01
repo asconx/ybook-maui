@@ -7,7 +7,7 @@ namespace yBook.Controls
     {
         const double DrawerWidth = 290;
         bool _isOpen = false;
-
+        internal Action<object, object> HamburgerClicked;
         readonly Dictionary<string, bool> _groupState = new()
             {
                 { "Ceny",       false },
@@ -16,6 +16,8 @@ namespace yBook.Controls
                 { "Blokady",    false },
                 { "Ustawienia", false },
             };
+
+        public Action<object, object> HamburgerClicked { get; internal set; }
 
         public Action<object, object> HamburgerClicked { get; internal set; }
 
@@ -135,6 +137,11 @@ namespace yBook.Controls
                 case "Pokoje":
                     await Shell.Current.GoToAsync("//PokojePage");
                     break;
+
+                case "Uzytkownicy":
+                    await Shell.Current.GoToAsync("UzytkownicyLista");
+                    break;
+
                 // —— Strona Blokady —————————————————————————————————————————————
                 case "ZbiorczeBlokady":
                     await Shell.Current.GoToAsync("BlokadyPage");
