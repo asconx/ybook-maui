@@ -8,12 +8,15 @@ public partial class PrzyjazdWyjazdPage : ContentPage
 {
     public class PokojGrid
     {
+        public int Id { get; set; }
         public string Nazwa { get; set; }
         public ObservableCollection<PrzyjazdWyjazd> Dni { get; set; } = new();
     }
 
     ObservableCollection<DateTime> dni = new();
     ObservableCollection<PokojGrid> pokoje = new();
+
+    Dictionary<string, List<PokojGrid>> cache = new();
 
     ObservableCollection<string> miesiace = new()
     {
@@ -23,6 +26,8 @@ public partial class PrzyjazdWyjazdPage : ContentPage
 
     int selectedYear = DateTime.Now.Year;
     int selectedMonth = DateTime.Now.Month;
+
+    CancellationTokenSource sliderCts;
 
     public PrzyjazdWyjazdPage()
     {
@@ -35,10 +40,9 @@ public partial class PrzyjazdWyjazdPage : ContentPage
 
         InitRoomsOnce();
         UpdateDaysOnly();
-
-        // 🔥 ustawienie wybranego miesiąca NA KOŃCU (bez błędów)
-        MonthsList.SelectedItem = miesiace[selectedMonth - 1];
     }
+
+    string GetKey() => $"{selectedYear}-{selectedMonth}";
 
     void InitRoomsOnce()
     {
@@ -48,7 +52,8 @@ public partial class PrzyjazdWyjazdPage : ContentPage
         {
             pokoje.Add(new PokojGrid
             {
-                Nazwa = p
+                Id = p.Id,
+                Nazwa = p.Nazwa
             });
         }
 
@@ -67,27 +72,62 @@ public partial class PrzyjazdWyjazdPage : ContentPage
 
         DaysList.ItemsSource = dni;
 
-        foreach (var pokoj in pokoje)
+        string key = GetKey();
+
+        // 🔥 jeśli mamy zapis → użyj
+        if (cache.ContainsKey(key))
         {
-            pokoj.Dni.Clear();
+            pokoje.Clear();
+            foreach (var p in cache[key])
+                pokoje.Add(p);
+
+            return;
+        }
+
+        // 🔥 jeśli nie → generuj nowe
+        var newData = new List<PokojGrid>();
+
+        foreach (var pokoj in PokojeRepo.Lista)
+        {
+            var grid = new PokojGrid
+            {
+                Id = pokoj.Id,
+                Nazwa = pokoj.Nazwa
+            };
 
             foreach (var d in dni)
             {
-                pokoj.Dni.Add(new PrzyjazdWyjazd
+                grid.Dni.Add(new PrzyjazdWyjazd
                 {
+                    PokojId = pokoj.Id,
                     Pokoj = pokoj.Nazwa,
                     Data = d,
                     PrzyjazdMozliwy = true,
                     WyjazdMozliwy = true
                 });
             }
+
+            newData.Add(grid);
         }
+
+        cache[key] = newData;
+
+        pokoje.Clear();
+        foreach (var p in newData)
+            pokoje.Add(p);
     }
 
-    void OnYearSliderChanged(object sender, ValueChangedEventArgs e)
+    async void OnYearSliderChanged(object sender, ValueChangedEventArgs e)
     {
-        selectedYear = (int)e.NewValue;
-        YearLabel.Text = selectedYear.ToString();
+        sliderCts?.Cancel();
+        sliderCts = new CancellationTokenSource();
+
+        try
+        {
+            await Task.Delay(200, sliderCts.Token);
+
+            selectedYear = (int)e.NewValue;
+            YearLabel.Text = selectedYear.ToString();
 
         UpdateDaysOnly();
     }
