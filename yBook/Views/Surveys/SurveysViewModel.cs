@@ -25,20 +25,24 @@ public partial class SurveysViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task LoadSurveysAsync()
+    private async Task FetchSurveysFromApiAsync()
     {
         try
         {
             IsLoading    = true;
             ErrorMessage = string.Empty;
 
+            // Pobierz ankiety z API
+            await _surveyService.FetchSurveysFromApiAsync();
+
+            // Następnie wczytaj z pamięci lokalnej
             var result = await _surveyService.GetSurveysAsync();
             Surveys = new ObservableCollection<Survey>(result ?? []);
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"Błąd: {ex.Message}";
-            System.Diagnostics.Debug.WriteLine($"[SurveysViewModel] LoadSurveys error: {ex.Message}");
+            ErrorMessage = $"Błąd przy pobieraniu ankiet: {ex.Message}";
+            System.Diagnostics.Debug.WriteLine($"[SurveysViewModel] FetchSurveysFromApi error: {ex.Message}");
         }
         finally
         {
@@ -53,7 +57,7 @@ public partial class SurveysViewModel : ObservableObject
 
         bool confirm = await Shell.Current.DisplayAlert(
             "Potwierdzenie",
-            $"Czy naprawdę chcesz usunąć ankietę '{survey.Title}'?",
+            $"Czy naprawdę chcesz usunąć ankietę?",
             "Tak", "Nie");
 
         if (!confirm) return;
