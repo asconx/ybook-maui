@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:yBook.Views.Surveys"
+             x:Class="yBook.Views.Surveys.EditSurveyPage"
+             x:DataType="vm:EditSurveyViewModel"
+             Title="Edytuj ankietę"
+             BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+
+    <Grid RowDefinitions="*,Auto" Padding="16" RowSpacing="16">
+
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Spacing="14">
+
+                <!-- Loading -->
+                <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                   IsVisible="{Binding IsLoading}"
+                                   Color="#1565C0"/>
+
+                <!-- Błąd -->
+                <Border IsVisible="{Binding HasError}"
+                        BackgroundColor="#FFEBEE"
+                        StrokeShape="RoundRectangle 10"
+                        StrokeThickness="0"
+                        Padding="12">
+                    <Label Text="{Binding ErrorMessage}"
+                           TextColor="#C62828"
+                           FontSize="12"/>
+                </Border>
+
+                <!-- === ASPECTY === -->
+                <Label Text="ASPECTY ANKIETY"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=#1A237E, Dark=#90CAF9}"/>
+
+                <VerticalStackLayout Spacing="10">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="1. Aspect 1 *" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        <Entry Placeholder="np. Lokalizacja" Text="{Binding Aspect1}"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="2. Aspect 2" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        <Entry Placeholder="np. Obsługa" Text="{Binding Aspect2}"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="3. Aspect 3" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        <Entry Placeholder="np. Czystość" Text="{Binding Aspect3}"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="4. Aspect 4" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        <Entry Placeholder="np. Wyposażenie" Text="{Binding Aspect4}"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="5. Aspect 5" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        <Entry Placeholder="np. Jakość jedzenia" Text="{Binding Aspect5}"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="6. Aspect 6 (opcjonalnie)" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        <Entry Placeholder="Dodatkowy aspekt" Text="{Binding Aspect6}"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="7. Aspect 7 (opcjonalnie)" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        <Entry Placeholder="Dodatkowy aspekt" Text="{Binding Aspect7}"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+                <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding Light=#E0E0E0, Dark=#444}"/>
+
+                <!-- === PYTANIA === -->
+                <Label Text="PYTANIA"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=#1A237E, Dark=#90CAF9}"/>
+
+                <VerticalStackLayout Spacing="10">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Pytanie 1" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        <Editor Placeholder="np. Czy masz jakieś uwagi?" Text="{Binding Question1}" HeightRequest="70"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Pytanie 2 (opcjonalnie)" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        <Editor Placeholder="Pytanie opcjonalne" Text="{Binding Question2}" HeightRequest="70"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Pytanie 3 (opcjonalnie)" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        <Editor Placeholder="Pytanie opcjonalne" Text="{Binding Question3}" HeightRequest="70"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- Info -->
+                <Border BackgroundColor="#E3F2FD"
+                        StrokeShape="RoundRectangle 10"
+                        StrokeThickness="0"
+                        Padding="12">
+                    <Label Text="Pola oznaczone * są wymagane"
+                           FontSize="12"
+                           TextColor="#1565C0"/>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Przyciski -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,8,*">
+            <Button Grid.Column="0"
+                    Text="Anuluj"
+                    Command="{Binding CancelCommand}"
+                    BackgroundColor="#E0E0E0"
+                    TextColor="#424242"
+                    FontSize="14"
+                    FontAttributes="Bold"/>
+            <Button Grid.Column="2"
+                    Text="Zapisz"
+                    Command="{Binding SaveSurveyCommand}"
+                    BackgroundColor="#1565C0"
+                    TextColor="White"
+                    FontSize="14"
+                    FontAttributes="Bold"/>
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

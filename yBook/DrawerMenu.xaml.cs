@@ -1,18 +1,22 @@
+using yBook.Views.Ceny;
+using yBook.Views.RezerwacjeOnline;
+
 namespace yBook.Controls
 {
     public partial class DrawerMenu : ContentView
     {
         const double DrawerWidth = 290;
         bool _isOpen = false;
-
         readonly Dictionary<string, bool> _groupState = new()
-        {
-            { "Ceny",       false },
-            { "Finanse",    false },
-            { "Raporty",    false },
-            { "Blokady",    false },
-            { "Ustawienia", false },
-        };
+            {
+                { "Ceny",       false },
+                { "Finanse",    false },
+                { "Raporty",    false },
+                { "Blokady",    false },
+                { "Ustawienia", false },
+            };
+
+        public Action<object, object> HamburgerClicked { get; internal set; }
 
         public DrawerMenu()
         {
@@ -65,12 +69,12 @@ namespace yBook.Controls
 
             var (submenu, arrow) = group switch
             {
-                "Ceny"       => (MenuCenyGroup,      LblCenyArrow),
-                "Finanse"    => (MenuFinanseGroup,    LblFinanseArrow),
-                "Raporty"    => (MenuRaportyGroup,    LblRaportyArrow),
-                "Blokady"    => (MenuBlokadyGroup,    LblBlokadyArrow),
+                "Ceny" => (MenuCenyGroup, LblCenyArrow),
+                "Finanse" => (MenuFinanseGroup, LblFinanseArrow),
+                "Raporty" => (MenuRaportyGroup, LblRaportyArrow),
+                "Blokady" => (MenuBlokadyGroup, LblBlokadyArrow),
                 "Ustawienia" => (MenuUstawieniaGroup, LblUstawieniaArrow),
-                _            => (null, null)
+                _ => (null, null)
             };
             if (submenu is null || arrow is null) return;
 
@@ -79,7 +83,7 @@ namespace yBook.Controls
             if (open)
             {
                 submenu.IsVisible = true;
-                submenu.Opacity   = 0;
+                submenu.Opacity = 0;
                 await submenu.FadeTo(1, 160);
             }
             else
@@ -107,22 +111,44 @@ namespace yBook.Controls
             switch (page)
             {
                 // ── Strony finansów — gotowe ──────────────────────────────────
+                case "UslugiOplaty":
                 case "Dokumenty":
                 case "KontaFinansowe":
                 case "RejestrPlatnosci":
                 case "ImportMT940":
+                case "ICalendar":
+                    await Shell.Current.GoToAsync(page);
+                    break;
+                case "Cenniki":
                     await Shell.Current.GoToAsync(page);
                     break;
                 // —— Strona Rabaty —————————————————————————————————————————————
                 case "Rabaty":
-                    await Shell.Current.GoToAsync("RabatyPage");
+                    await Shell.Current.GoToAsync("//RabatyPage");
                     break;
+                case "DaneObiektu":
+                    await Shell.Current.GoToAsync("//DaneObiektu");
+                    break;
+
+                // —— Strona Pokoje —————————————————————————————————————————————
+                case "Pokoje":
+                    await Shell.Current.GoToAsync("//PokojePage");
+                    break;
+
+                case "Uzytkownicy":
+                    await Shell.Current.GoToAsync("UzytkownicyLista");
+                    break;
+
                 // —— Strona Blokady —————————————————————————————————————————————
                 case "ZbiorczeBlokady":
                     await Shell.Current.GoToAsync("BlokadyPage");
                     break;
                 case "PrzyjazdWyjazd":
                     await Shell.Current.GoToAsync("PrzyjazdWyjazdPage");
+                    break;
+                // ── Rezerwacje Online ─────────────────────────────────────────
+                case "RezerwacjeOnline":
+                    await Shell.Current.Navigation.PushAsync(new RezerwacjeOnlinePage());
                     break;
                 // ── Pulpit: wróć do roota ──────────────────────────────────────
                 case "Pulpit":
@@ -131,11 +157,14 @@ namespace yBook.Controls
 
                 // ── Logout ────────────────────────────────────────────────────
                 case "Logout":
-                    var page_ = Shell.Current.CurrentPage;
-                    bool ok = await page_.DisplayAlert(
+                    bool ok = await Shell.Current.CurrentPage.DisplayAlert(
                         "Wylogowanie", "Czy na pewno chcesz się wylogować?", "Tak", "Anuluj");
-                    if (ok)
-                        await page_.DisplayAlert("yBook", "Wylogowano pomyślnie.", "OK");
+                    if (!ok) return;
+
+                    var auth = IPlatformApplication.Current!.Services
+                                   .GetRequiredService<yBook.Services.IAuthService>();
+                    await auth.LogoutAsync();
+                    await Shell.Current.GoToAsync("//LoginPage");
                     break;
 
                 // ── Pozostałe trasy — do podpięcia w kolejnych etapach ─────────

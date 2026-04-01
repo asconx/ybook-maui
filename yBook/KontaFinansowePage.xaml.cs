@@ -4,6 +4,11 @@ namespace yBook.Views.Finanse
 {
     public partial class KontaFinansowePage : ContentPage
     {
+        List<KontoFinansowe> _all = new();
+        TypKonta? _filterTyp = null;
+
+        static readonly double[] ColWidths = { 180, 120, 200, 130 };
+
         public KontaFinansowePage()
         {
             InitializeComponent();
@@ -13,34 +18,51 @@ namespace yBook.Views.Finanse
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            var konta = MockFinanse.Konta();
-            KontaList.ItemsSource = konta;
-
-            var aktywne     = konta.Where(k => k.Aktywne).ToList();
-            var saldoLaczne = aktywne.Sum(k => k.Saldo);
-
-            LblSaldoLaczne.Text = $"{saldoLaczne:N2} PLN";
-            LblLiczbaKont.Text  = $"{aktywne.Count} aktywnych kont";
-            LblSaldoLaczne.TextColor = saldoLaczne >= 0 ? Colors.White : Color.FromArgb("#EF9A9A");
+            _all = MockFinanse.Konta();
+            ApplyFilter();
         }
 
-        async void OnKontoSelected(object? sender, SelectionChangedEventArgs e)
+        async void OnTypDropdownTapped(object? sender, TappedEventArgs e)
         {
-            if (e.CurrentSelection.FirstOrDefault() is not KontoFinansowe konto) return;
-            KontaList.SelectedItem = null;
+            var typy = new[] { "Wszystkie", "Bankowe", "Gotówkowe", "Karta", "Inne" };
+            var wynik = await DisplayActionSheet("Typ konta", "Anuluj", null, typy);
 
-            await DisplayAlert(
-                $"{konto.TypEmoji} {konto.Nazwa}",
-                $"Numer:  {konto.Numer}\n" +
-                $"Saldo:  {konto.SaldoStr}\n" +
-                $"Waluta: {konto.Waluta}\n" +
-                $"Status: {(konto.Aktywne ? "Aktywne" : "Nieaktywne")}",
-                "Zamknij");
+            if (wynik is null || wynik == "Anuluj") return;
+
+            if (wynik == "Wszystkie")
+            {
+                _filterTyp = null;
+                LblTypFilter.Text = "Wszystkie typy";
+            }
+            else
+            {
+                _filterTyp = wynik switch
+                {
+                    "Bankowe"    => TypKonta.Bankowe,
+                    "Gotówkowe"  => TypKonta.Gotowkowe,
+                    "Karta"      => TypKonta.Karta,
+                    _            => TypKonta.Inne
+                };
+                LblTypFilter.Text = wynik;
+            }
+            ApplyFilter();
         }
 
-        async void OnDodajKontoClicked(object? sender, EventArgs e)
+        void ApplyFilter()
         {
-            await DisplayAlert("Konta finansowe", "Formularz dodawania konta – wkrótce.", "OK");
+            var result = _all
+                .Where(k => _filterTyp is null || k.Typ == _filterTyp)
+                .ToList();
+
+            KontaList.ItemsSource = result;
+            LblCount.Text = result.Count.ToString();
         }
+
+        async void OnDodajKontoClicked(object? sender, TappedEventArgs e)
+        {
+            await DisplayAlert("Konta finansowe", "Formularz dodawania konta — wkrótce.", "OK");
+        }
+
+        void OnRowScrolled(object? sender, ScrolledEventArgs e) { /* reserved */ }
     }
 }

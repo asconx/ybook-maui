@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:yBook.Controls"
+             x:Class="yBook.Views.Ustawienia.PokojePage"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="60,*">
+
+        <ctrl:PageHeader Grid.Row="0"
+                         Title="Pokoje i Apartamenty"
+                         Icon="🏠"
+                         ShowBack="True"/>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="16">
+
+                <CollectionView x:Name="PokojList">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="16" Margin="0,0,0,10" BorderColor="#E0E0E0">
+
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPokojTapped"/>
+                                </Frame.GestureRecognizers>
+
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+
+                                    <!-- Left: Room number -->
+                                    <Label Grid.Column="0" 
+                                           Text="{Binding ShortName}"
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="#1565C0"
+                                           VerticalOptions="Center"/>
+
+                                    <!-- Middle: Room info -->
+                                    <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                        <Label Text="{Binding Nazwa}" FontAttributes="Bold" FontSize="14"/>
+                                        <Label Text="{Binding DetailStr}" FontSize="12" TextColor="#666"/>
+                                        <Label Text="{Binding Opis}" FontSize="11" TextColor="#999" LineBreakMode="TailTruncation" MaxLines="2"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Right: Status -->
+                                    <Label Grid.Column="2"
+                                           Text="{Binding StatusStr}"
+                                           FontSize="11"
+                                           VerticalOptions="Start"
+                                           HorizontalTextAlignment="End"/>
+
+                                </Grid>
+
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

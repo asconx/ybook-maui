@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Uzytkownicy.UzytkownicyPage"
+             Title="Użytkownicy">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+
+            <Label Text="Imię i nazwisko"/>
+            <Entry x:Name="NazwaEntry"/>
+
+            <Label Text="Rola"/>
+            <Picker x:Name="RolaPicker">
+                <Picker.Items>
+                    <x:String>Administrator</x:String>
+                    <x:String>Manager</x:String>
+                    <x:String>Pracownik</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <Label Text="E-mail"/>
+            <Entry x:Name="EmailEntry" Keyboard="Email"/>
+
+            <Label Text="Powiadomienia"/>
+            <HorizontalStackLayout>
+                <CheckBox x:Name="CbNowaPlatnosc"/>
+                <Label Text="Nowa płatność online" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <CheckBox x:Name="CbWyslijPowiadomienieKlient"/>
+                <Label Text="Wysłanie powiadomienia dla klienta" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <CheckBox x:Name="CbAnulowanieRezerwacji"/>
+                <Label Text="Anulowanie rezerwacji" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <CheckBox x:Name="CbNowaRezerwacjaOnline"/>
+                <Label Text="Nowa rezerwacja online" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <CheckBox x:Name="CbSynchronizacjaRezerwacji"/>
+                <Label Text="Synchronizacja rezerwacji" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <CheckBox x:Name="CbUtworzenieNowejRezerwacji"/>
+                <Label Text="Utworzenie nowej rezerwacji" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <Label Text="Telefon"/>
+            <Entry x:Name="TelefonEntry" Keyboard="Telephone"/>
+
+            <Button Text="Zapisz"
+                    BackgroundColor="#1565C0"
+                    TextColor="White"
+                    Clicked="OnSaveClicked"/>
+
+            <Button Text="Anuluj"
+                    Clicked="OnCancelClicked"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

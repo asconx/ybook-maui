@@ -1,0 +1,169 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Ceny.UslugiOplaty"
+             NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.Resources>
+
+        <Style x:Key="ColHeader" TargetType="Label">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="ColCell" TargetType="Label">
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="60,Auto,*"
+          BackgroundColor="#F5F5F5">
+
+        <!-- HEADER -->
+        <Grid Grid.Row="0" Padding="12">
+            <Grid ColumnDefinitions="*,Auto">
+
+                <HorizontalStackLayout Spacing="8">
+                    <Label Text="Usługi i opłaty"
+                           FontSize="18"
+                           FontAttributes="Bold"/>
+
+                    <Border BackgroundColor="#F5A623"
+                            StrokeShape="RoundRectangle 10"
+                            Padding="6,2">
+                        <Label x:Name="LblCount"
+                               Text="0"
+                               FontSize="11"
+                               TextColor="White"/>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <Border Grid.Column="1"
+                        BackgroundColor="#1A1A1A"
+                        StrokeShape="RoundRectangle 20"
+                        Padding="16,8">
+                    <Label Text="dodaj"
+                           TextColor="White"/>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDodajClicked"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+            </Grid>
+        </Grid>
+
+        <!-- FILTRY -->
+        <ScrollView Grid.Row="1" Orientation="Horizontal">
+            <HorizontalStackLayout Spacing="10" Padding="12">
+
+                <!-- TYP -->
+                <Border Stroke="#CCC"
+                        StrokeShape="RoundRectangle 20"
+                        Padding="14,8">
+                    <Label x:Name="LblTyp"
+                           Text="Typ"/>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnTypTapped"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- SEARCH -->
+                <Border Stroke="#CCC"
+                        StrokeShape="RoundRectangle 20"
+                        Padding="10,5"
+                        MinimumWidthRequest="150">
+                    <Entry x:Name="Search"
+                           Placeholder="Szukaj"
+                           TextChanged="OnSearchChanged"/>
+                </Border>
+
+            </HorizontalStackLayout>
+        </ScrollView>
+
+        <!-- TABELA -->
+        <Grid Grid.Row="2" RowDefinitions="Auto,*"
+              BackgroundColor="White">
+
+            <!-- HEADER -->
+            <ScrollView Orientation="Horizontal">
+                <Grid ColumnDefinitions="120,120,150,200,120,120,150"
+                      Padding="12,8">
+                    <Label Text="Nazwa" Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="1" Text="Rodzaj" Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="2" Text="Typ" Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="3" Text="Cena" Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="4" Text="Data od" Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="5" Text="Data do" Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="6" Text="Opis" Style="{StaticResource ColHeader}"/>
+                </Grid>
+            </ScrollView>
+
+            <!-- LISTA -->
+            <CollectionView Grid.Row="1"
+                            x:Name="Lista">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid RowDefinitions="Auto,1">
+
+                            <ScrollView Orientation="Horizontal">
+                                <Grid ColumnDefinitions="120,120,150,200,120,120,150"
+                                      Padding="12">
+
+                                    <Label Text="{Binding Name}" Style="{StaticResource ColCell}"/>
+
+                                    <!-- RODZAJ -->
+                                    <Border Grid.Column="1"
+                                            Stroke="#5FA8A8"
+                                            BackgroundColor="#EAF6F6"
+                                            StrokeShape="RoundRectangle 20"
+                                            Padding="8,4">
+                                        <Label Text="{Binding Rodzaj}" FontSize="11"/>
+                                    </Border>
+
+                                    <!-- TYP -->
+                                    <Border Grid.Column="2"
+                                            Stroke="#5FA8A8"
+                                            BackgroundColor="#EAF6F6"
+                                            StrokeShape="RoundRectangle 20"
+                                            Padding="8,4">
+                                        <Label Text="{Binding Typ}" FontSize="11"/>
+                                    </Border>
+
+                                    <!-- CENY -->
+                                    <FlexLayout Grid.Column="3" Wrap="Wrap">
+                                        <BindableLayout.ItemsSource>
+                                            <Binding Path="Ceny"/>
+                                        </BindableLayout.ItemsSource>
+
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Stroke="#5FA8A8"
+                                                        BackgroundColor="#EAF6F6"
+                                                        StrokeShape="RoundRectangle 20"
+                                                        Padding="8,4"
+                                                        Margin="2">
+                                                    <Label Text="{Binding}" FontSize="11"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </FlexLayout>
+
+                                    <Label Grid.Column="4" Text="{Binding DataOd}" Style="{StaticResource ColCell}"/>
+                                    <Label Grid.Column="5" Text="{Binding DataDo}" Style="{StaticResource ColCell}"/>
+                                    <Label Grid.Column="6" Text="{Binding Opis}" Style="{StaticResource ColCell}"/>
+
+                                </Grid>
+                            </ScrollView>
+
+                            <BoxView Grid.Row="1" HeightRequest="1" Color="#EEE"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+        </Grid>
+
+    </Grid>
+</ContentPage>

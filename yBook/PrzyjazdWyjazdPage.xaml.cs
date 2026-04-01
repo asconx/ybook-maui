@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
-using yBook.Models;
 using yBook.Helpers;
+using yBook.Models;
 
 namespace yBook.Views.Przyjazdy;
 
@@ -129,9 +129,7 @@ public partial class PrzyjazdWyjazdPage : ContentPage
             selectedYear = (int)e.NewValue;
             YearLabel.Text = selectedYear.ToString();
 
-            UpdateDaysOnly();
-        }
-        catch { }
+        UpdateDaysOnly();
     }
 
     void OnPrevYear(object sender, EventArgs e)
@@ -156,7 +154,12 @@ public partial class PrzyjazdWyjazdPage : ContentPage
 
     void OnMonthSelected(object sender, SelectionChangedEventArgs e)
     {
-        if (e.CurrentSelection.FirstOrDefault() is not string selected)
+        if (e.CurrentSelection == null || e.CurrentSelection.Count == 0)
+            return;
+
+        var selected = e.CurrentSelection[0] as string;
+
+        if (string.IsNullOrEmpty(selected))
             return;
 
         selectedMonth = miesiace.IndexOf(selected) + 1;
@@ -164,23 +167,19 @@ public partial class PrzyjazdWyjazdPage : ContentPage
         UpdateDaysOnly();
     }
 
-    async void OnCellTapped(object sender, TappedEventArgs e)
+    void OnArrivalTapped(object sender, EventArgs e)
     {
-        var frame = sender as Frame;
-        var item = frame?.BindingContext as PrzyjazdWyjazd;
-        if (item == null) return;
-
-        string action = await DisplayActionSheet(
-            $"{item.Pokoj}\n{item.Data:dd.MM.yyyy}",
-            "Anuluj",
-            null,
-            "Przełącz przyjazd",
-            "Przełącz wyjazd");
-
-        if (action == "Przełącz przyjazd")
+        if (sender is Label lbl && lbl.BindingContext is PrzyjazdWyjazd item)
+        {
             item.PrzyjazdMozliwy = !item.PrzyjazdMozliwy;
+        }
+    }
 
-        if (action == "Przełącz wyjazd")
+    void OnDepartureTapped(object sender, EventArgs e)
+    {
+        if (sender is Label lbl && lbl.BindingContext is PrzyjazdWyjazd item)
+        {
             item.WyjazdMozliwy = !item.WyjazdMozliwy;
+        }
     }
 }

@@ -5,8 +5,30 @@
              x:Class="yBook.Views.Finanse.RejestrPlatnosciPage"
              NavigationPage.HasNavigationBar="False">
 
-    <Grid RowDefinitions="60,Auto,Auto,*"
-          BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+    <ContentPage.Resources>
+        <Style x:Key="ColHeader" TargetType="Label">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="TextColor" Value="{AppThemeBinding Light=#555555, Dark=#90A4AE}"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="LineBreakMode" Value="TailTruncation"/>
+        </Style>
+        <Style x:Key="ColCell" TargetType="Label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="TextColor" Value="{AppThemeBinding Light=#1A1A1A, Dark=#ECEFF1}"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="LineBreakMode" Value="TailTruncation"/>
+        </Style>
+        <Style x:Key="ColCellBold" TargetType="Label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="LineBreakMode" Value="TailTruncation"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="60, Auto, *"
+          BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#121212}">
 
         <ctrl:PageHeader Grid.Row="0"
                          Title="Rejestr płatności"
@@ -14,106 +36,182 @@
                          ShowBack="True"
                          x:Name="Header"/>
 
-        <!-- Podsumowanie wpływów / wydatków -->
-        <Grid Grid.Row="1"
-              ColumnDefinitions="*,8,*"
-              Padding="12,10">
-
-            <Frame Grid.Column="0" CornerRadius="14" Padding="14" HasShadow="True"
-                   BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
-                <VerticalStackLayout Spacing="2">
-                    <Label Text="⬇️  Wpływy" FontSize="12"
-                           TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"/>
-                    <Label x:Name="LblWplywy" Text="—"
-                           FontSize="20" FontAttributes="Bold" TextColor="#43A047"/>
-                </VerticalStackLayout>
-            </Frame>
-
-            <Frame Grid.Column="2" CornerRadius="14" Padding="14" HasShadow="True"
-                   BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
-                <VerticalStackLayout Spacing="2">
-                    <Label Text="⬆️  Wydatki" FontSize="12"
-                           TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"/>
-                    <Label x:Name="LblWydatki" Text="—"
-                           FontSize="20" FontAttributes="Bold" TextColor="#E53935"/>
-                </VerticalStackLayout>
-            </Frame>
-
-        </Grid>
-
-        <!-- Filtry -->
-        <ScrollView Grid.Row="2"
+        <ScrollView Grid.Row="1"
                     Orientation="Horizontal"
                     HorizontalScrollBarVisibility="Never"
-                    Padding="12,0,12,10"
-                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
-            <HorizontalStackLayout Spacing="8">
-                <Frame x:Name="FAll"      CornerRadius="20" Padding="14,6" HasShadow="False" BackgroundColor="#1565C0"><Frame.GestureRecognizers><TapGestureRecognizer Tapped="OnFilterTapped" CommandParameter="All"/></Frame.GestureRecognizers><Label Text="Wszystkie" FontSize="12" TextColor="White"/></Frame>
-                <Frame x:Name="FPrzychod" CornerRadius="20" Padding="14,6" HasShadow="False" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}"><Frame.GestureRecognizers><TapGestureRecognizer Tapped="OnFilterTapped" CommandParameter="Przychod"/></Frame.GestureRecognizers><Label Text="Wpływy" FontSize="12" TextColor="{AppThemeBinding Light=#555, Dark=#CCC}"/></Frame>
-                <Frame x:Name="FRozchod"  CornerRadius="20" Padding="14,6" HasShadow="False" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}"><Frame.GestureRecognizers><TapGestureRecognizer Tapped="OnFilterTapped" CommandParameter="Rozchod"/></Frame.GestureRecognizers><Label Text="Wydatki" FontSize="12" TextColor="{AppThemeBinding Light=#555, Dark=#CCC}"/></Frame>
-                <Frame x:Name="FKarta"    CornerRadius="20" Padding="14,6" HasShadow="False" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}"><Frame.GestureRecognizers><TapGestureRecognizer Tapped="OnFilterTapped" CommandParameter="Karta"/></Frame.GestureRecognizers><Label Text="Karta" FontSize="12" TextColor="{AppThemeBinding Light=#555, Dark=#CCC}"/></Frame>
-                <Frame x:Name="FGotowka"  CornerRadius="20" Padding="14,6" HasShadow="False" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}"><Frame.GestureRecognizers><TapGestureRecognizer Tapped="OnFilterTapped" CommandParameter="Gotowka"/></Frame.GestureRecognizers><Label Text="Gotówka" FontSize="12" TextColor="{AppThemeBinding Light=#555, Dark=#CCC}"/></Frame>
+                    VerticalScrollBarVisibility="Never">
+
+            <HorizontalStackLayout Spacing="12"
+                                   Padding="12,10"
+                                   VerticalOptions="Center">
+
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Label Text="Rejestr płatności"
+                           FontSize="15"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center"
+                           TextColor="{AppThemeBinding Light=#1A1A1A, Dark=#ECEFF1}"/>
+                    <Border StrokeShape="RoundRectangle 10"
+                            BackgroundColor="#F5A623"
+                            Stroke="Transparent"
+                            Padding="6,2"
+                            VerticalOptions="Center">
+                        <Label x:Name="LblCount"
+                               Text="0"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalOptions="Center"/>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <Border StrokeShape="RoundRectangle 20"
+                        BackgroundColor="{AppThemeBinding Light=#1A1A1A, Dark=#ECEFF1}"
+                        Stroke="Transparent"
+                        Padding="18,8"
+                        VerticalOptions="Center">
+                    <Label Text="dodaj"
+                           FontSize="13"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=White, Dark=#1A1A1A}"/>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDodajClicked"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <BoxView Color="Transparent"
+                         HorizontalOptions="FillAndExpand"
+                         VerticalOptions="Center"/>
+
+                <Border StrokeShape="RoundRectangle 20"
+                        Stroke="{AppThemeBinding Light=#CCCCCC, Dark=#444}"
+                        BackgroundColor="Transparent"
+                        Padding="14,8"
+                        VerticalOptions="Center">
+                    <Grid ColumnDefinitions="*,20">
+                        <Label x:Name="LblDataOd" Grid.Column="0"
+                               Text="Data od"
+                               FontSize="12"
+                               TextColor="{AppThemeBinding Light=#555, Dark=#AAA}"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="📅"
+                               FontSize="13"
+                               VerticalOptions="Center"
+                               Margin="6,0,0,0"/>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDataOdTapped"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <Border StrokeShape="RoundRectangle 20"
+                        Stroke="{AppThemeBinding Light=#CCCCCC, Dark=#444}"
+                        BackgroundColor="Transparent"
+                        Padding="14,8"
+                        VerticalOptions="Center">
+                    <Grid ColumnDefinitions="*,20">
+                        <Label x:Name="LblDataDo" Grid.Column="0"
+                               Text="Data do"
+                               FontSize="12"
+                               TextColor="{AppThemeBinding Light=#555, Dark=#AAA}"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="📅"
+                               FontSize="13"
+                               VerticalOptions="Center"
+                               Margin="6,0,0,0"/>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDataDoTapped"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
             </HorizontalStackLayout>
         </ScrollView>
 
-        <!-- Lista płatności -->
-        <CollectionView Grid.Row="3"
-                        x:Name="PlatnosciList"
-                        Margin="0,6,0,0"
-                        SelectionMode="Single"
-                        SelectionChanged="OnPlatnoscSelected">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="12,0,12,8">
-                        <Frame CornerRadius="12" Padding="14" HasShadow="True"
-                               BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
-                            <Grid ColumnDefinitions="44,*,Auto">
+        <!-- Sekcja listy płatności -->
+        <Grid Grid.Row="2"
+              RowDefinitions="Auto,Auto,*"
+              BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1C1C1C}">
 
-                                <!-- Ikona typu -->
-                                <Label Grid.Column="0"
-                                       Text="{Binding TypEmoji}"
-                                       FontSize="26"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"/>
+            <ScrollView Grid.Row="1"
+                        x:Name="HeaderScroll"
+                        Orientation="Horizontal"
+                        HorizontalScrollBarVisibility="Never">
+                <Grid ColumnDefinitions="100,130,130,120,100,100,120,130"
+                      Padding="12,8">
+                    <Label Grid.Column="0" Text="Data"             Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="1" Text="Numer rezerwacji" Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="2" Text="Klient"           Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="3" Text="Typ transakcji"   Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="4" Text="Przychód"         Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="5" Text="Rozchód"          Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="6" Text="Opis"             Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="7" Text="Balans"           Style="{StaticResource ColHeader}"/>
+                </Grid>
+            </ScrollView>
 
-                                <!-- Tytuł + klient + konto -->
-                                <VerticalStackLayout Grid.Column="1" Margin="10,0,0,0"
-                                                     VerticalOptions="Center" Spacing="2">
-                                    <Label Text="{Binding Tytul}"
-                                           FontSize="14" FontAttributes="Bold"
-                                           TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
-                                    <Label Text="{Binding Klient}"
-                                           FontSize="12"
-                                           TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"/>
-                                    <Label Text="{Binding KontoNazwa}"
-                                           FontSize="11"
-                                           TextColor="{AppThemeBinding Light=#90A4AE, Dark=#546E7A}"/>
-                                </VerticalStackLayout>
+            <BoxView Grid.Row="1"
+                     VerticalOptions="End"
+                     HeightRequest="1"
+                     Color="{AppThemeBinding Light=#E0E0E0, Dark=#2A2A2A}"/>
 
-                                <!-- Kwota + data -->
-                                <VerticalStackLayout Grid.Column="2"
-                                                     HorizontalOptions="End"
-                                                     VerticalOptions="Center"
-                                                     Spacing="4">
-                                    <Label Text="{Binding KwotaStr}"
-                                           FontSize="15" FontAttributes="Bold"
-                                           TextColor="{Binding KwotaColor}"
-                                           HorizontalOptions="End"/>
-                                    <Label Text="{Binding DataStr}"
-                                           FontSize="11"
-                                           TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"
-                                           HorizontalOptions="End"/>
-                                </VerticalStackLayout>
+            <CollectionView Grid.Row="2"
+                            x:Name="PlatnosciList"
+                            BackgroundColor="Transparent"
+                            VerticalScrollBarVisibility="Always">
 
-                            </Grid>
-                        </Frame>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid RowDefinitions="Auto,1">
+                            <ScrollView Orientation="Horizontal"
+                                        HorizontalScrollBarVisibility="Never"
+                                        Scrolled="OnRowScrolled">
+                                <Grid ColumnDefinitions="100,130,130,120,100,100,120,130"
+                                      Padding="12,12"
+                                      BackgroundColor="Transparent">
+                                    <Label Grid.Column="0" Text="{Binding DataStr}"        Style="{StaticResource ColCell}"/>
+                                    <Label Grid.Column="1" Text="{Binding NumerRezerwacji}" Style="{StaticResource ColCell}"/>
+                                    <Label Grid.Column="2" Text="{Binding Klient}"          Style="{StaticResource ColCell}"/>
+                                    <HorizontalStackLayout Grid.Column="3" Spacing="6" VerticalOptions="Center">
+                                        <Label Text="{Binding TypEmoji}" FontSize="14" VerticalOptions="Center"/>
+                                        <Label Text="{Binding Typ}"      Style="{StaticResource ColCell}"/>
+                                    </HorizontalStackLayout>
+                                    <Label Grid.Column="4" Text="{Binding PrzychodStr}"
+                                           Style="{StaticResource ColCellBold}" TextColor="#43A047"/>
+                                    <Label Grid.Column="5" Text="{Binding RozchodStr}"
+                                           Style="{StaticResource ColCellBold}" TextColor="#E53935"/>
+                                    <Label Grid.Column="6" Text="{Binding Tytul}"   Style="{StaticResource ColCell}"/>
+                                    <Label Grid.Column="7" Text="{Binding KwotaStr}"
+                                           Style="{StaticResource ColCellBold}"
+                                           TextColor="{Binding KwotaColor}"/>
+                                </Grid>
+                            </ScrollView>
+                            <BoxView Grid.Row="1"
+                                     Color="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}"
+                                     HeightRequest="1"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.EmptyView>
+                    <Grid Padding="20">
+                        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Label Text="⚠️" FontSize="18" VerticalOptions="Center"/>
+                            <Label Text="Brak dostępnych danych"
+                                   FontSize="15"
+                                   TextColor="{AppThemeBinding Light=#555555, Dark=#90A4AE}"
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
                     </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </Grid>
 
-        <ctrl:DrawerMenu Grid.Row="0" Grid.RowSpan="4"
-                         x:Name="Drawer" ZIndex="50"/>
+        <ctrl:DrawerMenu Grid.Row="0"
+                         Grid.RowSpan="3"
+                         x:Name="Drawer"
+                         ZIndex="50"/>
 
     </Grid>
+
 </ContentPage>

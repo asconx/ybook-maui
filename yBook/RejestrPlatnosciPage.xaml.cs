@@ -5,7 +5,10 @@ namespace yBook.Views.Finanse
     public partial class RejestrPlatnosciPage : ContentPage
     {
         List<Platnosc> _all = new();
-        string _activeFilter = "All";
+        DateTime? _dataOd = null;
+        DateTime? _dataDo = null;
+
+        static readonly double[] ColWidths = { 100, 130, 130, 120, 100, 100, 120, 130 };
 
         public RejestrPlatnosciPage()
         {
@@ -17,73 +20,75 @@ namespace yBook.Views.Finanse
         {
             base.OnAppearing();
             _all = MockFinanse.Platnosci();
-
-            LblWplywy.Text  = $"+{_all.Where(p => p.Przychod).Sum(p => p.Kwota):N2} zł";
-            LblWydatki.Text = $"-{_all.Where(p => !p.Przychod).Sum(p => p.Kwota):N2} zł";
-
             ApplyFilter();
         }
 
-        void OnFilterTapped(object? sender, TappedEventArgs e)
+        async void OnDataOdTapped(object? sender, TappedEventArgs e)
         {
-            if (e.Parameter is not string f) return;
-            _activeFilter = f;
-            UpdateFilterUI();
+            var result = await DisplayPromptAsync(
+                "Data od", "Podaj datę (dd.MM.yyyy):",
+                placeholder: "np. 01.03.2024",
+                initialValue: _dataOd?.ToString("dd.MM.yyyy") ?? "");
+
+            if (result is null) return;
+
+            if (DateTime.TryParseExact(result, "dd.MM.yyyy",
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.None, out var dt))
+            {
+                _dataOd = dt;
+                LblDataOd.Text = $"Od: {result}";
+            }
+            else if (string.IsNullOrWhiteSpace(result))
+            {
+                _dataOd = null;
+                LblDataOd.Text = "Data od";
+            }
+            ApplyFilter();
+        }
+
+        async void OnDataDoTapped(object? sender, TappedEventArgs e)
+        {
+            var result = await DisplayPromptAsync(
+                "Data do", "Podaj datę (dd.MM.yyyy):",
+                placeholder: "np. 31.03.2024",
+                initialValue: _dataDo?.ToString("dd.MM.yyyy") ?? "");
+
+            if (result is null) return;
+
+            if (DateTime.TryParseExact(result, "dd.MM.yyyy",
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.None, out var dt))
+            {
+                _dataDo = dt;
+                LblDataDo.Text = $"Do: {result}";
+            }
+            else if (string.IsNullOrWhiteSpace(result))
+            {
+                _dataDo = null;
+                LblDataDo.Text = "Data do";
+            }
             ApplyFilter();
         }
 
         void ApplyFilter()
         {
-            var result = _all.Where(p => _activeFilter switch
+            var result = _all.Where(p =>
             {
-                "Przychod" => p.Przychod,
-                "Rozchod"  => !p.Przychod,
-                "Karta"    => p.Typ == TypPlatnosci.Karta,
-                "Gotowka"  => p.Typ == TypPlatnosci.Gotowka,
-                _          => true
+                bool dataOdOk = _dataOd is null || p.Data.Date >= _dataOd.Value.Date;
+                bool dataDoOk = _dataDo is null || p.Data.Date <= _dataDo.Value.Date;
+                return dataOdOk && dataDoOk;
             }).OrderByDescending(p => p.Data).ToList();
 
             PlatnosciList.ItemsSource = result;
+            LblCount.Text = result.Count.ToString();
         }
 
-        void UpdateFilterUI()
+        async void OnDodajClicked(object? sender, TappedEventArgs e)
         {
-            var map = new Dictionary<string, Frame>
-            {
-                { "All",      FAll      },
-                { "Przychod", FPrzychod },
-                { "Rozchod",  FRozchod  },
-                { "Karta",    FKarta    },
-                { "Gotowka",  FGotowka  },
-            };
-
-            foreach (var (key, frame) in map)
-            {
-                bool active = key == _activeFilter;
-                frame.BackgroundColor = active ? Color.FromArgb("#1565C0")
-                    : AppInfo.RequestedTheme == AppTheme.Dark
-                        ? Color.FromArgb("#2A2A2A") : Color.FromArgb("#F0F0F0");
-
-                if (frame.Content is Label lbl)
-                    lbl.TextColor = active ? Colors.White
-                        : AppInfo.RequestedTheme == AppTheme.Dark
-                            ? Color.FromArgb("#CCCCCC") : Color.FromArgb("#555555");
-            }
+            await DisplayAlert("Rejestr płatności", "Formularz nowej płatności — wkrótce.", "OK");
         }
 
-        async void OnPlatnoscSelected(object? sender, SelectionChangedEventArgs e)
-        {
-            if (e.CurrentSelection.FirstOrDefault() is not Platnosc p) return;
-            PlatnosciList.SelectedItem = null;
-
-            await DisplayAlert(
-                $"{p.TypEmoji} {p.Tytul}",
-                $"Klient:  {p.Klient}\n" +
-                $"Konto:   {p.KontoNazwa}\n" +
-                $"Kwota:   {p.KwotaStr}\n" +
-                $"Data:    {p.DataStr}\n" +
-                $"Kierunek: {(p.Przychod ? "Wpływ ⬇️" : "Wypływ ⬆️")}",
-                "Zamknij");
-        }
+        void OnRowScrolled(object? sender, ScrolledEventArgs e) { /* reserved */ }
     }
 }
