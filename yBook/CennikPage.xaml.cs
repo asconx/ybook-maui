@@ -1,4 +1,5 @@
 using yBook.Models;
+using yBook.Services;
 
 namespace yBook.Views.Ceny
 {
@@ -8,17 +9,37 @@ namespace yBook.Views.Ceny
         List<CennikItem> _all  = new();
         bool             _sortAsc   = true;
         string?          _editId    = null;   // null = tryb dodawania
+        private readonly IPriceService _priceService;
 
-        public CennikPage()
+        public CennikPage(IPriceService priceService)
         {
             InitializeComponent();
             Header.HamburgerClicked += (_, _) => Drawer.Open();
+            _priceService = priceService;
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
-            _all = MockCennik.Cenniki();
+
+            // Try fetch from API, otherwise use mock data
+            try
+            {
+                var items = await _priceService.FetchPriceModifiersAsync();
+                if (items != null && items.Count > 0)
+                {
+                    _all = items;
+                }
+                else
+                {
+                    _all = MockCennik.Cenniki();
+                }
+            }
+            catch
+            {
+                _all = MockCennik.Cenniki();
+            }
+
             OdswiezListe();
         }
 

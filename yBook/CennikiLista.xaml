@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Ceny.CennikiListaPage"
+             Title="Cenniki">
+
+    <VerticalStackLayout Padding="16" Spacing="12">
+        <Button Text="Dodaj cennik"
+                x:Name="BtnDodaj"
+                Clicked="OnDodajClicked"
+                BackgroundColor="#1565C0"
+                TextColor="White" />
+
+        <CollectionView x:Name="CennikiList"
+                        SelectionMode="None"
+                        HeightRequest="400">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="0,6" HasShadow="False" BackgroundColor="#fff">
+                        <VerticalStackLayout Spacing="4">
+                            <HorizontalStackLayout Spacing="12">
+                                <Button Text="✏️" Clicked="OnEditClicked" />
+                                <Button Text="🗑️" Clicked="OnDeleteClicked" />
+                                <Label Text="{Binding Nazwa}" FontAttributes="Bold" VerticalOptions="Center" />
+                                <Label Text="{Binding CenaStr}" TextColor="#666" VerticalOptions="Center" />
+                                <Label Text="{Binding Priorytet}" TextColor="#888" VerticalOptions="Center" HorizontalOptions="EndAndExpand" />
+                            </HorizontalStackLayout>
+
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="{Binding ZakresStr}" FontSize="12" TextColor="#666" />
+                                <Label Text="{Binding PierwszyPokoj}" FontSize="12" TextColor="#666" />
+                                <Label Text="{Binding DodatkowePokjeStr}" FontSize="12" TextColor="#888" IsVisible="{Binding MaWiecejPokoi}" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center"
+                                     Spacing="8" Margin="0,60,0,0">
+                    <Label Text="📋" FontSize="48" HorizontalOptions="Center"/>
+                    <Label Text="Brak cenników" FontSize="16"
+                           TextColor="#9E9E9E" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+        </CollectionView>
+
+        <Label x:Name="EmptyLabel" Text="Brak cenników." IsVisible="False" HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
+    </VerticalStackLayout>
+</ContentPage>

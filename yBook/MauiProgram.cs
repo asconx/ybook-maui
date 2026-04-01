@@ -5,6 +5,7 @@ using yBook.Views.Auth;
 using yBook.Views.Rabaty;
 using yBook.Views.Surveys;
 using yBook.Views.Ustawienia;
+using yBook.Views.Ceny;
 
 namespace yBook
 {
@@ -22,11 +23,24 @@ namespace yBook
                 });
 
             // ── HTTP Client ───────────────────────────────────────────────────
+            // General HttpClient for other services
             builder.Services.AddSingleton<HttpClient>();
+
+            // Register IPriceService with its own HttpClient instance (avoid relying on AddHttpClient extension)
+            builder.Services.AddSingleton<IPriceService>(sp =>
+            {
+                var client = new HttpClient
+                {
+                    BaseAddress = new Uri("https://api.ybook.pl"),
+                    Timeout = TimeSpan.FromSeconds(30)
+                };
+                return new PriceService(client);
+            });
 
             // ── Services ─────────────────────────────────────────────────────
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<ISurveyService, SurveyService>();
+            // IPriceService registered above
 
             // ── Shell ─────────────────────────────────────────────────────────
             builder.Services.AddSingleton<AppShell>();
@@ -43,6 +57,7 @@ namespace yBook
             builder.Services.AddTransient<PokojePage>();
             builder.Services.AddTransient<SurveysPage>();
             builder.Services.AddTransient<EditSurveyPage>();
+            builder.Services.AddTransient<CennikiListaPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
