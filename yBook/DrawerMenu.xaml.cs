@@ -1,5 +1,6 @@
 using yBook.Views.Ceny;
 using yBook.Views.Klienci;
+using yBook.Views.RezerwacjeOnline;
 
 namespace yBook.Controls
 {
@@ -7,15 +8,16 @@ namespace yBook.Controls
     {
         const double DrawerWidth = 290;
         bool _isOpen = false;
-
         readonly Dictionary<string, bool> _groupState = new()
-        {
-            { "Ceny",       false },
-            { "Finanse",    false },
-            { "Raporty",    false },
-            { "Blokady",    false },
-            { "Ustawienia", false },
-        };
+            {
+                { "Ceny",       false },
+                { "Finanse",    false },
+                { "Raporty",    false },
+                { "Blokady",    false },
+                { "Ustawienia", false },
+            };
+
+        public Action<object, object> HamburgerClicked { get; internal set; }
 
         public Action<object, object> HamburgerClicked { get; internal set; }
 
@@ -70,12 +72,12 @@ namespace yBook.Controls
 
             var (submenu, arrow) = group switch
             {
-                "Ceny"       => (MenuCenyGroup,      LblCenyArrow),
-                "Finanse"    => (MenuFinanseGroup,    LblFinanseArrow),
-                "Raporty"    => (MenuRaportyGroup,    LblRaportyArrow),
-                "Blokady"    => (MenuBlokadyGroup,    LblBlokadyArrow),
+                "Ceny" => (MenuCenyGroup, LblCenyArrow),
+                "Finanse" => (MenuFinanseGroup, LblFinanseArrow),
+                "Raporty" => (MenuRaportyGroup, LblRaportyArrow),
+                "Blokady" => (MenuBlokadyGroup, LblBlokadyArrow),
                 "Ustawienia" => (MenuUstawieniaGroup, LblUstawieniaArrow),
-                _            => (null, null)
+                _ => (null, null)
             };
             if (submenu is null || arrow is null) return;
 
@@ -84,7 +86,7 @@ namespace yBook.Controls
             if (open)
             {
                 submenu.IsVisible = true;
-                submenu.Opacity   = 0;
+                submenu.Opacity = 0;
                 await submenu.FadeTo(1, 160);
             }
             else
@@ -125,22 +127,31 @@ namespace yBook.Controls
                     break;
                 // —— Strona Rabaty —————————————————————————————————————————————
                 case "Rabaty":
-                    await Shell.Current.GoToAsync("RabatyPage");
+                    await Shell.Current.GoToAsync("//RabatyPage");
                     break;
                 case "DaneObiektu":
-                    await Shell.Current.GoToAsync("DaneObiektu");
+                    await Shell.Current.GoToAsync("//DaneObiektu");
                     break;
 
                 // —— Strona Pokoje —————————————————————————————————————————————
                 case "Pokoje":
-                    await Shell.Current.GoToAsync("PokojePage");
+                    await Shell.Current.GoToAsync("//PokojePage");
                     break;
+
+                case "Uzytkownicy":
+                    await Shell.Current.GoToAsync("UzytkownicyLista");
+                    break;
+
                 // —— Strona Blokady —————————————————————————————————————————————
                 case "ZbiorczeBlokady":
                     await Shell.Current.GoToAsync("BlokadyPage");
                     break;
                 case "PrzyjazdWyjazd":
                     await Shell.Current.GoToAsync("PrzyjazdWyjazdPage");
+                    break;
+                // ── Rezerwacje Online ─────────────────────────────────────────
+                case "RezerwacjeOnline":
+                    await Shell.Current.Navigation.PushAsync(new RezerwacjeOnlinePage());
                     break;
                 // ── Pulpit: wróć do roota ──────────────────────────────────────
                 case "Pulpit":
