@@ -43,6 +43,7 @@ namespace yBook
             builder.Services.AddTransient<PokojePage>();
             builder.Services.AddTransient<SurveysPage>();
             builder.Services.AddTransient<EditSurveyPage>();
+            builder.Services.AddTransient<yBook.Views.Kalendarz.KalendarzPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
