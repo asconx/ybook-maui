@@ -116,6 +116,10 @@ namespace yBook.Controls
                 case "KontaFinansowe":
                 case "RejestrPlatnosci":
                 case "ImportMT940":
+                case "Kalendarz":
+                    await Shell.Current.GoToAsync("KalendarzPage");
+                    break;
+
                 case "ICalendar":
                     await Shell.Current.GoToAsync(page);
                     break;
