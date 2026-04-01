@@ -41,8 +41,7 @@ public partial class EditSurveyViewModel : ObservableObject
         _surveyService = surveyService;
     }
 
-    // Odpala sie gdy Shell ustawi SurveyIdRaw z query stringa
-    partial void OnSurveyIdRawChanged(string value)
+    protected override async void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (Guid.TryParse(value, out var guid) && guid != Guid.Empty)
         {

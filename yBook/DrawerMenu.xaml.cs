@@ -19,6 +19,8 @@ namespace yBook.Controls
 
         public Action<object, object> HamburgerClicked { get; internal set; }
 
+        public Action<object, object> HamburgerClicked { get; internal set; }
+
         public DrawerMenu()
         {
             InitializeComponent();
