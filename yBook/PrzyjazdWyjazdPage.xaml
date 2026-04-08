@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:yBook.Controls"
+             x:Class="yBook.Views.Przyjazdy.PrzyjazdWyjazdPage">
+
+    <Grid RowDefinitions="60,*">
+
+        <!-- HEADER -->
+        <ctrl:PageHeader Grid.Row="0"
+                         Title="Przyjazdy / Wyjazdy"
+                         Icon="📅"
+                         ShowBack="True"/>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="10" Spacing="12">
+
+                <!-- ROK -->
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Button Text="◀" Clicked="OnPrevYear"/>
+                    <Label x:Name="YearLabel"
+                           Grid.Column="1"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold"
+                           FontSize="16"/>
+                    <Button Text="▶"
+                            Grid.Column="2"
+                            Clicked="OnNextYear"/>
+                </Grid>
+
+                <Slider x:Name="YearSlider"
+                        Minimum="2020"
+                        Maximum="2035"
+                        ValueChanged="OnYearSliderChanged"/>
+
+                <!-- MIESIĄCE -->
+                <Frame Padding="8"
+                       CornerRadius="20"
+                       BackgroundColor="#E6F0F0"
+                       HasShadow="False">
+
+                    <CollectionView x:Name="MonthsList"
+                                    ItemsLayout="HorizontalList"
+                                    SelectionMode="Single"
+                                    SelectionChanged="OnMonthSelected">
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="6"
+                                       Margin="2"
+                                       CornerRadius="10"
+                                       HasShadow="False">
+
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup Name="CommonStates">
+                                            <VisualState Name="Normal">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="#D0E4E4"/>
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState Name="Selected">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="#4DB6AC"/>
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+
+                                    <Label Text="{Binding}"
+                                           FontSize="12"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+
+                    </CollectionView>
+                </Frame>
+
+                <!-- DNI -->
+                <CollectionView x:Name="DaysList"
+                                ItemsLayout="HorizontalList"
+                                HeightRequest="50">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame WidthRequest="40"
+                                   HeightRequest="40"
+                                   Padding="2"
+                                   Margin="1"
+                                   HasShadow="False"
+                                   BackgroundColor="#F2E7E1">
+
+                                <VerticalStackLayout Spacing="0">
+                                    <Label Text="{Binding ., StringFormat='{0:ddd}'}"
+                                           FontSize="10"
+                                           HorizontalOptions="Center"/>
+
+                                    <Label Text="{Binding ., StringFormat='{0:dd}'}"
+                                           FontSize="12"
+                                           HorizontalOptions="Center"
+                                           FontAttributes="Bold"/>
+                                </VerticalStackLayout>
+
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+                <!-- POKOJE -->
+                <CollectionView x:Name="RoomsList">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+                            <VerticalStackLayout Spacing="4">
+
+                                <Label Text="{Binding Nazwa}"
+                                       FontAttributes="Bold"
+                                       FontSize="14"/>
+
+                                <!-- GRID: dni + prawa legenda -->
+                                <Grid ColumnDefinitions="*,120">
+
+                                    <!-- DNI -->
+                                    <CollectionView Grid.Column="0"
+                                                    ItemsSource="{Binding Dni}"
+                                                    ItemsLayout="HorizontalList">
+
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+
+                                                <Frame Padding="4"
+                                                       Margin="1"
+                                                       WidthRequest="40"
+                                                       HeightRequest="50"
+                                                       HasShadow="False"
+                                                       BorderColor="#E0E0E0"
+                                                       BackgroundColor="#FAFAFA">
+
+                                                    <Grid RowDefinitions="*,*">
+
+                                                        <!-- PRZYJAZD -->
+                                                        <Label Text="{Binding PrzyjazdMozliwy, Converter={StaticResource BoolToIconConverter}}"
+                                                               FontSize="16"
+                                                               HorizontalOptions="Center"
+                                                               VerticalOptions="Center"
+                                                               TextColor="{Binding PrzyjazdMozliwy, Converter={StaticResource BoolToIconColorConverter}}">
+                                                            <Label.GestureRecognizers>
+                                                                <TapGestureRecognizer Tapped="OnArrivalTapped"/>
+                                                            </Label.GestureRecognizers>
+                                                        </Label>
+
+                                                        <!-- WYJAZD -->
+                                                        <Label Grid.Row="1"
+                                                               Text="{Binding WyjazdMozliwy, Converter={StaticResource BoolToIconConverter}}"
+                                                               FontSize="16"
+                                                               HorizontalOptions="Center"
+                                                               VerticalOptions="Center"
+                                                               TextColor="{Binding WyjazdMozliwy, Converter={StaticResource BoolToIconColorConverter}}">
+                                                            <Label.GestureRecognizers>
+                                                                <TapGestureRecognizer Tapped="OnDepartureTapped"/>
+                                                            </Label.GestureRecognizers>
+                                                        </Label>
+
+                                                    </Grid>
+
+                                                </Frame>
+
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+
+                                    </CollectionView>
+
+                                    <!-- PRAWA STRONA (LEGENDA) -->
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="0"
+                                                         VerticalOptions="Center"
+                                                         Padding="5">
+
+                                        <Label Text="Przyjazd możliwy"
+                                               FontSize="12"
+                                               TextColor="Gray"/>
+
+                                        <Label Text="Wyjazd możliwy"
+                                               FontSize="12"
+                                               TextColor="Gray"/>
+
+                                    </VerticalStackLayout>
+
+                                </Grid>
+
+                            </VerticalStackLayout>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

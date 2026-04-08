@@ -11,14 +11,10 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyMetadataAttribute("Microsoft.Maui.ApplicationModel.AppInfo.PackageName", "com.companyname.ybook")]
-[assembly: System.Reflection.AssemblyMetadataAttribute("Microsoft.Maui.ApplicationModel.AppInfo.PublisherName", "User Name")]
-[assembly: System.Reflection.AssemblyMetadataAttribute("Microsoft.Maui.ApplicationModel.AppInfo.Name", "yBook")]
-[assembly: System.Reflection.AssemblyMetadataAttribute("Microsoft.Maui.ApplicationModel.AppInfo.Version", "1.0.0.1")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("yBook")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+6956fd86551ccde118f06754f969c47f5326001e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ed1d87c5ec948ab078a93aeda88fa9e023abea7d")]
 [assembly: System.Reflection.AssemblyProductAttribute("yBook")]
 [assembly: System.Reflection.AssemblyTitleAttribute("yBook")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

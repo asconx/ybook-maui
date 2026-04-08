@@ -14,11 +14,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("yBook")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+6956fd86551ccde118f06754f969c47f5326001e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+ed1d87c5ec948ab078a93aeda88fa9e023abea7d")]
 [assembly: System.Reflection.AssemblyProductAttribute("yBook")]
 [assembly: System.Reflection.AssemblyTitleAttribute("yBook")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
-[assembly: System.Runtime.Versioning.TargetPlatformAttribute("iOS18.5")]
+[assembly: System.Runtime.Versioning.TargetPlatformAttribute("iOS26.0")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("iOS15.0")]
 
 // Wygenerowane przez klasę WriteCodeFragment programu MSBuild.
