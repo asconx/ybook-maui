@@ -1,5 +1,6 @@
 using yBook.Views.Ceny;
 using yBook.Views.RezerwacjeOnline;
+using yBook;
 
 namespace yBook.Controls
 {
@@ -149,6 +150,10 @@ namespace yBook.Controls
                     break;
                 case "PrzyjazdWyjazd":
                     await Shell.Current.GoToAsync("PrzyjazdWyjazdPage");
+                    break;
+                case "Kasa":
+                    // Otwórz stronę Kasa
+                    await Shell.Current.Navigation.PushAsync(new Kasa());
                     break;
                 // ── Rezerwacje Online ─────────────────────────────────────────
                 case "RezerwacjeOnline":
