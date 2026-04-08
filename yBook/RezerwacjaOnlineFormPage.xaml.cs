@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using yBook.Models;
 
 namespace yBook.Views.Blokady;
@@ -7,7 +8,7 @@ public partial class RezerwacjaOnlineFormPage : ContentPage
     public RezerwacjaOnline? Wynik { get; private set; }
 
     readonly RezerwacjaOnline? _edytowana;
-    readonly TaskCompletionSource _tcs = new();
+    readonly TaskCompletionSource<object?> _tcs = new();
     public Task WaitForResultAsync() => _tcs.Task;
 
     int _aktywnyszablon = 1;
@@ -27,7 +28,7 @@ public partial class RezerwacjaOnlineFormPage : ContentPage
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        _tcs.TrySetResult();
+        _tcs.TrySetResult(null);
     }
 
     public RezerwacjaOnlineFormPage(RezerwacjaOnline? rez = null)
@@ -57,25 +58,27 @@ public partial class RezerwacjaOnlineFormPage : ContentPage
 
         int ri = RozliczeniePicker.Items.IndexOf(rez.Rozliczenie);
         if (ri >= 0) RozliczeniePicker.SelectedIndex = ri;
+    }
+
     void OnDateSelected(object sender, DateChangedEventArgs e)
     {
         // Wymuś: wyjazd >= przyjazd + 1 dzień
-        var przyjazd = DataPrzyjazduPicker.Date ?? DateTime.Today;
-        if (!DataWyjazdPicker.Date.HasValue || DataWyjazdPicker.Date.Value <= przyjazd)
-            DataWyjazdPicker.Date = przyjazd.AddDays(1);
+        var przyjazd = TerminOdPicker.Date ?? DateTime.Today;
+        var wyjazd = TerminDoPicker.Date ?? przyjazd.AddDays(1);
+        if (wyjazd <= przyjazd)
+            TerminDoPicker.Date = przyjazd.AddDays(1);
 
-        AktualizujSkrypt(rez.Slug);
+        AktualizujSkrypt(SlugEntry?.Text ?? string.Empty);
     }
 
     // ── Checkboxy pokoi ───────────────────────────────────────────────────────
 
     void GenerujPokoje()
     {
+        if (PokojeContainer == null) return;
+
+        PokojeContainer.Children.Clear();
         foreach (var pokoj in Pokoje)
-        var przyjazd = DataPrzyjazduPicker.Date ?? DateTime.Today;
-        var wyjazd = DataWyjazdPicker.Date ?? przyjazd.AddDays(1);
-        int noce = Math.Max(0, (wyjazd - przyjazd).Days);
-        NoceLabel.Text = noce switch
         {
             var row = new HorizontalStackLayout { Spacing = 8, Margin = new Thickness(0, 2) };
             var cb  = new CheckBox();
@@ -158,8 +161,11 @@ public partial class RezerwacjaOnlineFormPage : ContentPage
         }
 
         var slug = SlugEntry.Text.Trim().ToLower();
-        if (DataWyjazdPicker.Date.GetValueOrDefault() <= DataPrzyjazduPicker.Date.GetValueOrDefault())
-        { await WyswietlBlad("Data wyjazdu musi być późniejsza niż data przyjazdu."); return; }
+        if (TerminDoPicker.Date <= TerminOdPicker.Date)
+        {
+            await Shell.Current.DisplayAlert("Błąd", "Data do musi być późniejsza niż data od.", "OK");
+            return;
+        }
 
         Wynik = new RezerwacjaOnline
         {
@@ -176,19 +182,17 @@ public partial class RezerwacjaOnlineFormPage : ContentPage
             OpcjaFaktury       = OpcjaFakturySwitch.IsToggled,
             PoczatkowyTerminOd = TerminOdPicker.Date,
             PoczatkowyTerminDo = TerminDoPicker.Date,
-            Id             = _edytowana?.Id             ?? Guid.NewGuid().ToString("N")[..8].ToUpper(),
-            DataZlozenia   = _edytowana?.DataZlozenia   ?? DateTime.Now,
-            Status         = _edytowana?.Status         ?? StatusRezerwacji.Oczekujaca,
 
-            Imie           = ImieEntry.Text.Trim(),
-            Nazwisko       = NazwiskoEntry.Text.Trim(),
-            Email          = EmailEntry.Text.Trim(),
-            Telefon        = TelefonEntry.Text.Trim(),
-            DataPrzyjazdu  = DataPrzyjazduPicker.Date ?? DateTime.Today.AddDays(1),
-            DataWyjazdu    = DataWyjazdPicker.Date ?? DateTime.Today.AddDays(2),
-            TypPokoju      = TypPokojuPicker.SelectedItem?.ToString() ?? string.Empty,
-            LiczbaGosci    = _liczbaGosci,
-            Uwagi          = UwagiEditor.Text?.Trim() ?? string.Empty
+            // Guest/pobyt fields - use available controls if present, otherwise defaults
+            Imie           = (this.FindByName<Entry>("ImieEntry")?.Text ?? string.Empty).Trim(),
+            Nazwisko       = (this.FindByName<Entry>("NazwiskoEntry")?.Text ?? string.Empty).Trim(),
+            Email          = (this.FindByName<Entry>("EmailEntry")?.Text ?? string.Empty).Trim(),
+            Telefon        = (this.FindByName<Entry>("TelefonEntry")?.Text ?? string.Empty).Trim(),
+            DataPrzyjazdu  = this.FindByName<DatePicker>("DataPrzyjazduPicker")?.Date ?? DateTime.Today.AddDays(1),
+            DataWyjazdu    = this.FindByName<DatePicker>("DataWyjazdPicker")?.Date ?? DateTime.Today.AddDays(2),
+            TypPokoju      = this.FindByName<Picker>("TypPokojuPicker")?.SelectedItem?.ToString() ?? string.Empty,
+            LiczbaGosci    = 1,
+            Uwagi          = (this.FindByName<Editor>("UwagiEditor")?.Text ?? string.Empty).Trim()
         };
 
         AktualizujSkrypt(slug);
