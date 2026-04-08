@@ -1,5 +1,6 @@
 using yBook.Views.Ceny;
 using yBook.Views.RezerwacjeOnline;
+using yBook.Views.Ustawienia;
 
 namespace yBook.Controls
 {
@@ -134,6 +135,10 @@ namespace yBook.Controls
                 // —— Strona Pokoje —————————————————————————————————————————————
                 case "Pokoje":
                     await Shell.Current.GoToAsync("//PokojePage");
+                    break;
+                // —— Strona Powiadomienia —————————————————————————————————————————————
+                case "Powiadomienia":
+                    await Shell.Current.GoToAsync(nameof(PowiadomieniaPage));
                     break;
                 // —— Strona Blokady —————————————————————————————————————————————
                 case "ZbiorczeBlokady":
