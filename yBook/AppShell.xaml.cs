@@ -60,6 +60,7 @@ namespace yBook
             Routing.RegisterRoute("RabatyPage", typeof(RabatyPage));
             Routing.RegisterRoute("BlokadyPage", typeof(BlokadyPage));
             Routing.RegisterRoute("PrzyjazdWyjazdPage", typeof(PrzyjazdWyjazdPage));
+            Routing.RegisterRoute("GrupoweSms", typeof(GrupoweSmsPage));
 
             //Powiadomienia
             Routing.RegisterRoute(nameof(PowiadomieniaPage), typeof(PowiadomieniaPage));
@@ -78,6 +79,7 @@ namespace yBook
             // Surveys
             Routing.RegisterRoute("SurveysPage",    typeof(SurveysPage));
             Routing.RegisterRoute("EditSurveyPage", typeof(EditSurveyPage));
+
         }
     }
 }
