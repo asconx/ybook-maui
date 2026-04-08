@@ -1,6 +1,3 @@
-using yBook.Views.Ceny;
-using yBook.Views.RezerwacjeOnline;
-
 namespace yBook.Controls
 {
     public partial class DrawerMenu : ContentView
@@ -134,7 +131,7 @@ namespace yBook.Controls
                     break;
                 // ── Rezerwacje Online ─────────────────────────────────────────
                 case "RezerwacjeOnline":
-                    await Shell.Current.Navigation.PushAsync(new RezerwacjeOnlinePage());
+                    await Shell.Current.Navigation.PushAsync(new Views.Blokady.RezerwacjeOnlinePage());
                     break;
                 // ── Pulpit: wróć do roota ──────────────────────────────────────
                 case "Pulpit":
