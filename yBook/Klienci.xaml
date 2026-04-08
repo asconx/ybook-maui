@@ -4,66 +4,145 @@
              x:Class="yBook.Views.Klienci.KlienciPage"
              Title="Klienci">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="12">
+    <Grid>
 
-            <Label Text="Imię i nazwisko"/>
-            <Entry x:Name="NazwaEntry"/>
+        <!-- ========================= -->
+        <!-- LISTA -->
+        <!-- ========================= -->
 
-            <Label Text="Rola"/>
-            <Picker x:Name="RolaPicker">
-                <Picker.Items>
-                    <x:String>Klient</x:String>
-                    <x:String>VIP</x:String>
-                </Picker.Items>
-            </Picker>
-
-            <Label Text="E-mail"/>
-            <Entry x:Name="EmailEntry" Keyboard="Email"/>
-
-            <Label Text="Powiadomienia"/>
+        <VerticalStackLayout Padding="20"
+                             Spacing="12"
+                             x:Name="ListaSection">
 
             <HorizontalStackLayout>
-                <CheckBox x:Name="CbNowaPlatnosc"/>
-                <Label Text="Nowa płatność online" VerticalOptions="Center"/>
+
+                <Label Text="Klienci"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       HorizontalOptions="StartAndExpand"/>
+
+                <Button Text="dodaj klienta"
+                        Clicked="OnAddClientClicked"/>
+
             </HorizontalStackLayout>
 
-            <HorizontalStackLayout>
-                <CheckBox x:Name="CbWyslijPowiadomienieKlient"/>
-                <Label Text="Powiadomienie dla klienta" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
+            <CollectionView x:Name="ClientsList">
 
-            <HorizontalStackLayout>
-                <CheckBox x:Name="CbAnulowanieRezerwacji"/>
-                <Label Text="Anulowanie rezerwacji" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
+                <!-- NAGŁÓWEK -->
+                <CollectionView.Header>
+                    <Grid ColumnDefinitions="2*,2*,2*,1*,1*,2*,1*"
+                          Padding="10"
+                          BackgroundColor="#F5F5F5">
 
-            <HorizontalStackLayout>
-                <CheckBox x:Name="CbNowaRezerwacjaOnline"/>
-                <Label Text="Nowa rezerwacja online" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
+                        <Label Text="Imię" FontAttributes="Bold"/>
+                        <Label Text="Telefon" Grid.Column="1" FontAttributes="Bold"/>
+                        <Label Text="Email" Grid.Column="2" FontAttributes="Bold"/>
+                        <Label Text="Rabat" Grid.Column="3" FontAttributes="Bold"/>
+                        <Label Text="Typ" Grid.Column="4" FontAttributes="Bold"/>
+                        <Label Text="Uwagi" Grid.Column="5" FontAttributes="Bold"/>
+                        <Label Text="NIP" Grid.Column="6" FontAttributes="Bold"/>
 
-            <HorizontalStackLayout>
-                <CheckBox x:Name="CbSynchronizacjaRezerwacji"/>
-                <Label Text="Synchronizacja rezerwacji" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
+                    </Grid>
+                </CollectionView.Header>
 
-            <HorizontalStackLayout>
-                <CheckBox x:Name="CbUtworzenieNowejRezerwacji"/>
-                <Label Text="Utworzenie nowej rezerwacji" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
+                <!-- WIERSZE -->
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="2*,2*,2*,1*,1*,2*,1*"
+                              Padding="10">
 
-            <Label Text="Telefon"/>
-            <Entry x:Name="TelefonEntry" Keyboard="Telephone"/>
+                            <Label Text="{Binding Name}" />
+                            <Label Text="{Binding Phone}" Grid.Column="1"/>
+                            <Label Text="{Binding Email}" Grid.Column="2"/>
+                            <Label Text="{Binding Discount}" Grid.Column="3"/>
+                            <Label Text="{Binding TypeText}" Grid.Column="4"/>
+                            <Label Text="{Binding Notes}" Grid.Column="5"/>
+                            <Label Text="{Binding Nip}" Grid.Column="6"/>
 
-            <Button Text="Zapisz"
-                    BackgroundColor="#1565C0"
-                    TextColor="White"
-                    Clicked="OnSaveClicked"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
 
-            <Button Text="Anuluj"
-                    Clicked="OnCancelClicked"/>
+            </CollectionView>
 
         </VerticalStackLayout>
-    </ScrollView>
+
+
+
+        <!-- ========================= -->
+        <!-- FORMULARZ -->
+        <!-- ========================= -->
+
+        <ScrollView x:Name="FormSection"
+                    IsVisible="False"
+                    BackgroundColor="White">
+
+            <VerticalStackLayout Padding="20"
+                                 Spacing="14">
+
+                <Label Text="Dodaj klienta"
+                       FontSize="20"
+                       FontAttributes="Bold"/>
+
+                <Entry x:Name="NazwaEntry" Placeholder="Imię i nazwisko"/>
+                <Entry x:Name="EmailEntry" Placeholder="Email"/>
+                <Entry x:Name="TelefonEntry" Placeholder="Telefon"/>
+
+                <Entry x:Name="RabatEntry"
+                       Placeholder="Rabat"
+                       Keyboard="Numeric"
+                       Text="0"/>
+
+                <!-- 🔽 WIĘCEJ DANYCH -->
+                <HorizontalStackLayout Spacing="10">
+
+                    <CheckBox x:Name="CbWiecejDanych"
+                              CheckedChanged="OnMoreDataChecked"/>
+
+                    <Label x:Name="MoreDataLabel"
+                           Text="Więcej danych klienta"
+                           VerticalOptions="Center">
+
+                        <!-- kliknięcie w tekst -->
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnMoreDataLabelTapped"/>
+                        </Label.GestureRecognizers>
+
+                    </Label>
+
+                </HorizontalStackLayout>
+
+                <!-- ROZWIJANA SEKCJA -->
+                <VerticalStackLayout x:Name="MoreDataSection"
+                                     IsVisible="False">
+
+                    <Entry x:Name="FirmaEntry" Placeholder="Firma"/>
+                    <Entry x:Name="PeselEntry" Placeholder="PESEL"/>
+                    <Entry x:Name="NipEntry" Placeholder="NIP"/>
+                    <Entry x:Name="UlicaEntry" Placeholder="Ulica"/>
+                    <Entry x:Name="DomEntry" Placeholder="Dom"/>
+                    <Entry x:Name="LokalEntry" Placeholder="Lokal"/>
+                    <Entry x:Name="KodEntry" Placeholder="Kod"/>
+                    <Entry x:Name="MiastoEntry" Placeholder="Miasto"/>
+                    <Editor x:Name="UwagiEntry" Placeholder="Uwagi"/>
+
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout>
+                    <RadioButton x:Name="RbStalyKlient" IsChecked="True" Content="Stały" Margin="0,20,0,0"/> 
+
+
+                    <RadioButton x:Name="RbNiechcianyKlient" Content="Niechciany" Margin="20,20,0,0"/>
+                    
+                </HorizontalStackLayout>
+
+                <Button Text="Zapisz" Clicked="OnSaveClicked"/>
+                <Button Text="Anuluj" Clicked="OnCancelClicked"/>
+
+            </VerticalStackLayout>
+
+        </ScrollView>
+
+    </Grid>
+
 </ContentPage>

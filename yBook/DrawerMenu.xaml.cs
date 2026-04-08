@@ -1,4 +1,5 @@
 using yBook.Views.Ceny;
+using yBook.Views.Klienci;
 using yBook.Views.RezerwacjeOnline;
 
 namespace yBook.Controls
@@ -15,6 +16,8 @@ namespace yBook.Controls
                 { "Blokady",    false },
                 { "Ustawienia", false },
             };
+
+        public Action<object, object> HamburgerClicked { get; internal set; }
 
         public Action<object, object> HamburgerClicked { get; internal set; }
 
@@ -158,6 +161,15 @@ namespace yBook.Controls
                 case "Pulpit":
                     await Shell.Current.GoToAsync("//MainPage");
                     break;
+
+                case "Uzytkownicy":
+                    await Shell.Current.GoToAsync("UzytkownicyLista");
+                    break;
+                // —— Strona Klientow —————————————————————————————————————————————
+                case "Klienci":
+                    await Shell.Current.GoToAsync(nameof(KlienciPage));
+                    break;
+
 
                 // ── Logout ────────────────────────────────────────────────────
                 case "Logout":
