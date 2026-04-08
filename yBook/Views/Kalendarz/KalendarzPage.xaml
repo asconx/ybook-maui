@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:yBook.Controls"
+             x:Class="yBook.Views.Kalendarz.KalendarzPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#F4F6F9">
+
+    <Grid RowDefinitions="60,44,38,*">
+
+        <ctrl:PageHeader Grid.Row="0"
+                         Title="Kalendarz" Icon="📅" ShowBack="True"
+                         x:Name="Header"/>
+
+        <!-- Pasek miesięcy + rok -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto"
+              BackgroundColor="White" Padding="0,4">
+            <ScrollView Grid.Column="0" Orientation="Horizontal"
+                        HorizontalScrollBarVisibility="Never">
+                <HorizontalStackLayout x:Name="MonthBar" Spacing="2" Padding="8,0"/>
+            </ScrollView>
+            <HorizontalStackLayout Grid.Column="1" Spacing="6" Padding="8,0"
+                                   VerticalOptions="Center">
+                <Border StrokeShape="RoundRectangle 14" BackgroundColor="#3AACA2"
+                        Stroke="Transparent" WidthRequest="26" HeightRequest="26">
+                    <Label Text="‹" FontSize="15" TextColor="White"
+                           HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPrevYear"/>
+                    </Border.GestureRecognizers>
+                </Border>
+                <Label x:Name="LblRok" Text="2026" FontSize="14" FontAttributes="Bold"
+                       TextColor="#1A1A1A" VerticalOptions="Center"/>
+                <Border StrokeShape="RoundRectangle 14" BackgroundColor="#3AACA2"
+                        Stroke="Transparent" WidthRequest="26" HeightRequest="26">
+                    <Label Text="›" FontSize="15" TextColor="White"
+                           HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNextYear"/>
+                    </Border.GestureRecognizers>
+                </Border>
+            </HorizontalStackLayout>
+        </Grid>
+
+        <!-- Nagłówek dni -->
+        <Grid Grid.Row="2" ColumnDefinitions="130,*" BackgroundColor="White">
+            <Label Grid.Column="0" x:Name="LblMiesiacNazwa" Text="Kwiecień"
+                   FontSize="11" FontAttributes="Bold" TextColor="#3AACA2"
+                   HorizontalOptions="Center" VerticalOptions="Center"/>
+            <BoxView Grid.Column="0" Grid.ColumnSpan="2"
+                     HeightRequest="1" BackgroundColor="#DEDEDE"
+                     VerticalOptions="End"/>
+
+            <!-- AbsoluteLayout zamiast HorizontalStackLayout — brak odstępów -->
+            <ScrollView Grid.Column="1" Orientation="Horizontal"
+                        HorizontalScrollBarVisibility="Never"
+                        x:Name="DayHeaderScroll" Scrolled="OnDayHeaderScrolled">
+                <AbsoluteLayout x:Name="DayHeaderPanel" HeightRequest="38"/>
+            </ScrollView>
+        </Grid>
+
+        <!-- Siatka -->
+        <Grid Grid.Row="3" ColumnDefinitions="130,*" BackgroundColor="White">
+            <ScrollView Grid.Column="0" Orientation="Vertical"
+                        VerticalScrollBarVisibility="Never"
+                        x:Name="RoomNamesScroll" Scrolled="OnRoomNamesScrolled"
+                        BackgroundColor="White">
+                <VerticalStackLayout x:Name="RoomNamesPanel" Spacing="0"/>
+            </ScrollView>
+
+            <ScrollView Grid.Column="1" Orientation="Horizontal"
+                        HorizontalScrollBarVisibility="Always"
+                        x:Name="GridHScroll" Scrolled="OnGridHScrolled">
+                <ScrollView Orientation="Vertical"
+                            VerticalScrollBarVisibility="Never"
+                            x:Name="GridVScroll" Scrolled="OnGridVScrolled">
+                    <AbsoluteLayout x:Name="CalendarGrid" BackgroundColor="White"/>
+                </ScrollView>
+            </ScrollView>
+        </Grid>
+
+        <!-- Popup -->
+        <Grid Grid.Row="0" Grid.RowSpan="4"
+              x:Name="PopupOverlay" IsVisible="False" ZIndex="40">
+            <BoxView BackgroundColor="#55000000">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnClosePopup"/>
+                </BoxView.GestureRecognizers>
+            </BoxView>
+            <Border x:Name="PopupPanel" BackgroundColor="White"
+                    StrokeShape="RoundRectangle 16,0,0,16"
+                    StrokeThickness="0" WidthRequest="300"
+                    HorizontalOptions="End" VerticalOptions="Fill">
+                <ScrollView>
+                    <VerticalStackLayout Padding="20,24" Spacing="0">
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+                            <Label x:Name="PopupTitle" Text="Kwatera"
+                                   FontSize="17" FontAttributes="Bold"
+                                   TextColor="#1A1A1A" VerticalOptions="Center"/>
+                            <Border Grid.Column="1" StrokeShape="RoundRectangle 16"
+                                    BackgroundColor="Transparent" Stroke="#E0E0E0"
+                                    WidthRequest="30" HeightRequest="30">
+                                <Label Text="✕" FontSize="13" TextColor="#666"
+                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnClosePopup"/>
+                                </Border.GestureRecognizers>
+                            </Border>
+                        </Grid>
+                        <Label Text="Aktywne rezerwacje" FontSize="12"
+                               FontAttributes="Bold" TextColor="#999"
+                               Margin="0,0,0,10"/>
+                        <VerticalStackLayout x:Name="PopupRezerwacjeList" Spacing="10"/>
+                        <Border StrokeShape="RoundRectangle 22"
+                                BackgroundColor="#F5A623" Stroke="Transparent"
+                                Padding="18,10" HorizontalOptions="Start"
+                                Margin="0,20,0,0">
+                            <HorizontalStackLayout Spacing="6">
+                                <Label Text="przejdź do kwatery" FontSize="12"
+                                       FontAttributes="Bold" TextColor="White"
+                                       VerticalOptions="Center"/>
+                                <Label Text="›" FontSize="14" TextColor="White"
+                                       VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Border>
+        </Grid>
+
+        <ctrl:DrawerMenu Grid.Row="0" Grid.RowSpan="4"
+                         x:Name="Drawer" ZIndex="50"/>
+    </Grid>
+</ContentPage>

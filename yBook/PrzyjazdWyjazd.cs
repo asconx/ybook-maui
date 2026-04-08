@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace yBook.Models
 {
     public class PrzyjazdWyjazd : INotifyPropertyChanged
     {
+        public int PokojId { get; set; }
         public string Pokoj { get; set; }
         public DateTime Data { get; set; }
 
@@ -17,7 +17,7 @@ namespace yBook.Models
                 if (przyjazdMozliwy != value)
                 {
                     przyjazdMozliwy = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(PrzyjazdMozliwy));
                 }
             }
         }
@@ -31,16 +31,14 @@ namespace yBook.Models
                 if (wyjazdMozliwy != value)
                 {
                     wyjazdMozliwy = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(WyjazdMozliwy));
                 }
             }
         }
 
-        public string DataStr => Data.ToString("dd.MM.yyyy");
-
         public event PropertyChangedEventHandler PropertyChanged;
 
-        void OnPropertyChanged([CallerMemberName] string name = null)
+        void OnPropertyChanged(string name)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }

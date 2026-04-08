@@ -12,6 +12,6 @@ public partial class SurveysPage : ContentPage
     {
         base.OnAppearing();
         if (BindingContext is SurveysViewModel vm)
-            await vm.LoadSurveysCommand.ExecuteAsync(null);
+            await vm.FetchSurveysFromApiCommand.ExecuteAsync(null);
     }
 }
