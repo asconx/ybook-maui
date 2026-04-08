@@ -1,4 +1,5 @@
 using yBook.Views.Ceny;
+using yBook.Views.Klienci;
 using yBook.Views.RezerwacjeOnline;
 using yBook.Views.Ustawienia;
 
@@ -8,7 +9,6 @@ namespace yBook.Controls
     {
         const double DrawerWidth = 290;
         bool _isOpen = false;
-
         readonly Dictionary<string, bool> _groupState = new()
             {
                 { "Ceny",       false },
@@ -17,6 +17,8 @@ namespace yBook.Controls
                 { "Blokady",    false },
                 { "Ustawienia", false },
             };
+
+        public Action<object, object> HamburgerClicked { get; internal set; }
 
         public Action<object, object> HamburgerClicked { get; internal set; }
 
@@ -118,6 +120,10 @@ namespace yBook.Controls
                 case "KontaFinansowe":
                 case "RejestrPlatnosci":
                 case "ImportMT940":
+                case "Kalendarz":
+                    await Shell.Current.GoToAsync("KalendarzPage");
+                    break;
+
                 case "ICalendar":
                     await Shell.Current.GoToAsync(page);
                     break;
@@ -140,6 +146,11 @@ namespace yBook.Controls
                 case "Powiadomienia":
                     await Shell.Current.GoToAsync(nameof(PowiadomieniaPage));
                     break;
+
+                case "Uzytkownicy":
+                    await Shell.Current.GoToAsync("UzytkownicyLista");
+                    break;
+
                 // —— Strona Blokady —————————————————————————————————————————————
                 case "ZbiorczeBlokady":
                     await Shell.Current.GoToAsync("BlokadyPage");
@@ -149,12 +160,21 @@ namespace yBook.Controls
                     break;
                 // ── Rezerwacje Online ─────────────────────────────────────────
                 case "RezerwacjeOnline":
-                    await Shell.Current.Navigation.PushAsync(new RezerwacjeOnlinePage());
+                    await Shell.Current.Navigation.PushAsync(new Views.Blokady.RezerwacjeOnlinePage());
                     break;
                 // ── Pulpit: wróć do roota ──────────────────────────────────────
                 case "Pulpit":
                     await Shell.Current.GoToAsync("//MainPage");
                     break;
+
+                case "Uzytkownicy":
+                    await Shell.Current.GoToAsync("UzytkownicyLista");
+                    break;
+                // —— Strona Klientow —————————————————————————————————————————————
+                case "Klienci":
+                    await Shell.Current.GoToAsync(nameof(KlienciPage));
+                    break;
+
 
                 // ── Logout ────────────────────────────────────────────────────
                 case "Logout":
