@@ -37,5 +37,6 @@
         Title="Dane obiektu"
         ContentTemplate="{DataTemplate ustawienia:DaneObiektuPage}"
         Route="DaneObiektu"/>
+    
 
 </Shell>

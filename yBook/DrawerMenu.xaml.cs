@@ -176,6 +176,10 @@ namespace yBook.Controls
                 case "Klienci":
                     await Shell.Current.GoToAsync(nameof(KlienciPage));
                     break;
+                // ── Grupowe SMS ───────────────────────────────────────────────
+                case "GrupoweSms":
+                    await Shell.Current.Navigation.PushAsync(new GrupoweSmsPage());
+                    break;
 
 
                 // ── Logout ────────────────────────────────────────────────────
@@ -195,6 +199,8 @@ namespace yBook.Controls
                     await Shell.Current.CurrentPage
                                .DisplayAlert("yBook", $"Wkrótce: {page}", "OK");
                     break;
+
+
             }
         }
     }
