@@ -14,7 +14,7 @@
                              Spacing="12"
                              x:Name="ListaSection">
 
-            <HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="15">
 
                 <Label Text="Klienci"
                        FontSize="22"
@@ -26,44 +26,88 @@
 
             </HorizontalStackLayout>
 
-            <CollectionView x:Name="ClientsList">
+            <ScrollView VerticalScrollBarVisibility="Always"
+                        HorizontalScrollBarVisibility="Default"
+                        HeightRequest="400">
 
-                <!-- NAGŁÓWEK -->
-                <CollectionView.Header>
-                    <Grid ColumnDefinitions="2*,2*,2*,1*,1*,2*,1*"
-                          Padding="10"
-                          BackgroundColor="#F5F5F5">
+                <CollectionView x:Name="ClientsList"
+                                SelectionMode="Single">
 
-                        <Label Text="Imię" FontAttributes="Bold"/>
-                        <Label Text="Telefon" Grid.Column="1" FontAttributes="Bold"/>
-                        <Label Text="Email" Grid.Column="2" FontAttributes="Bold"/>
-                        <Label Text="Rabat" Grid.Column="3" FontAttributes="Bold"/>
-                        <Label Text="Typ" Grid.Column="4" FontAttributes="Bold"/>
-                        <Label Text="Uwagi" Grid.Column="5" FontAttributes="Bold"/>
-                        <Label Text="NIP" Grid.Column="6" FontAttributes="Bold"/>
-
-                    </Grid>
-                </CollectionView.Header>
-
-                <!-- WIERSZE -->
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <!-- NAGŁÓWEK -->
+                    <CollectionView.Header>
                         <Grid ColumnDefinitions="2*,2*,2*,1*,1*,2*,1*"
-                              Padding="10">
+                              Padding="10"
+                              BackgroundColor="#F5F5F5">
 
-                            <Label Text="{Binding Name}" />
-                            <Label Text="{Binding Phone}" Grid.Column="1"/>
-                            <Label Text="{Binding Email}" Grid.Column="2"/>
-                            <Label Text="{Binding Discount}" Grid.Column="3"/>
-                            <Label Text="{Binding TypeText}" Grid.Column="4"/>
-                            <Label Text="{Binding Notes}" Grid.Column="5"/>
-                            <Label Text="{Binding Nip}" Grid.Column="6"/>
+                            <Label Text="Imię" FontAttributes="Bold"/>
+                            <Label Text="Telefon" Grid.Column="1" FontAttributes="Bold"/>
+                            <Label Text="Email" Grid.Column="2" FontAttributes="Bold"/>
+                            <Label Text="Rabat" Grid.Column="3" FontAttributes="Bold"/>
+                            <Label Text="Typ" Grid.Column="4" FontAttributes="Bold"/>
+                            <Label Text="Uwagi" Grid.Column="5" FontAttributes="Bold"/>
+                            <Label Text="NIP" Grid.Column="6" FontAttributes="Bold"/>
 
                         </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
+                    </CollectionView.Header>
 
-            </CollectionView>
+                    <!-- WIERSZE -->
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="2*,2*,2*,1*,1*,2*,1*"
+                                  Padding="10"
+                                  RowDefinitions="Auto">
+
+                                <Label Text="{Binding Name}" 
+                                       LineBreakMode="TailTruncation"/>
+                                <Label Text="{Binding Phone}" 
+                                       Grid.Column="1"
+                                       LineBreakMode="TailTruncation"/>
+                                <Label Text="{Binding Email}" 
+                                       Grid.Column="2"
+                                       LineBreakMode="TailTruncation"/>
+                                <Label Text="{Binding Discount}" 
+                                       Grid.Column="3"
+                                       HorizontalOptions="Center"/>
+                                <Label Text="{Binding TypeText}" 
+                                       Grid.Column="4"
+                                       HorizontalOptions="Center"/>
+                                <Label Text="{Binding Notes}" 
+                                       Grid.Column="5"
+                                       LineBreakMode="TailTruncation"/>
+                                <Label Text="{Binding Nip}" 
+                                       Grid.Column="6"
+                                       HorizontalOptions="Center"
+                                       LineBreakMode="TailTruncation"/>
+
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+            </ScrollView>
+
+            <!-- PAGINACJA -->
+            <HorizontalStackLayout Spacing="10" 
+                                   HorizontalOptions="Center"
+                                   Margin="0,10,0,0">
+
+                <Button x:Name="PrevButton"
+                        Text="◄ Poprzednia"
+                        Clicked="OnPrevPageClicked"
+                        Padding="10"/>
+
+                <Label x:Name="PaginationLabel"
+                       Text="Strona 1 z 10"
+                       VerticalOptions="Center"
+                       FontSize="14"/>
+
+                <Button x:Name="NextButton"
+                        Text="Następna ►"
+                        Clicked="OnNextPageClicked"
+                        Padding="10"/>
+
+            </HorizontalStackLayout>
 
         </VerticalStackLayout>
 

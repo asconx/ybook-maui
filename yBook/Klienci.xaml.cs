@@ -12,6 +12,9 @@ namespace yBook.Views.Klienci
     public partial class KlienciPage : ContentPage
     {
         private readonly ApiService _apiService;
+        private List<Client> _allClients = new List<Client>();
+        private int _currentPage = 1;
+        private const int PageSize = 50;
 
         public KlienciPage()
         {
@@ -40,28 +43,51 @@ namespace yBook.Views.Klienci
             CbWiecejDanych.IsChecked = !CbWiecejDanych.IsChecked;
         }
 
-        void OnSaveClicked(object sender, EventArgs e)
+        async void OnSaveClicked(object sender, EventArgs e)
         {
-            var client = new Client
+            try
             {
-                Name = NazwaEntry.Text,
-                Email = EmailEntry.Text,
-                Phone = TelefonEntry.Text,
-                Nip = NipEntry.Text,
-                Notes = UwagiEntry.Text,
-                Discount = int.TryParse(RabatEntry.Text, out var r) ? r : 0,
-                Type = RbStalyKlient.IsChecked ? 1 : 0
-            };
+                // Walidacja
+                if (string.IsNullOrWhiteSpace(NazwaEntry.Text))
+                {
+                    await DisplayAlert("Błąd", "Imię i nazwisko jest wymagane", "OK");
+                    return;
+                }
 
-            // TODO: Implement API call to add client
-            // await _apiService.AddClientAsync(client);
+                var client = new Client
+                {
+                    Name = NazwaEntry.Text,
+                    Email = EmailEntry.Text,
+                    Phone = TelefonEntry.Text,
+                    Nip = NipEntry.Text,
+                    Notes = UwagiEntry.Text,
+                    Discount = int.TryParse(RabatEntry.Text, out var r) ? r : 0,
+                    Type = RbStalyKlient.IsChecked ? 1 : 0,
+                    CompanyName = FirmaEntry.Text,
+                    Pesel = PeselEntry.Text,
+                    Street = UlicaEntry.Text,
+                    HouseNumber = DomEntry.Text,
+                    ApartmentNumber = LokalEntry.Text,
+                    PostalCode = KodEntry.Text,
+                    City = MiastoEntry.Text
+                };
 
-            ClearForm();
+                // Dodaj klienta przez API
+                await _apiService.AddClientAsync(client);
 
-            FormSection.IsVisible = false;
-            ListaSection.IsVisible = true;
+                await DisplayAlert("Sukces", "Klient został dodany pomyślnie!", "OK");
 
-            RefreshClientList();
+                ClearForm();
+
+                FormSection.IsVisible = false;
+                ListaSection.IsVisible = true;
+
+                RefreshClientList();
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Błąd", $"Nie udało się dodać klienta: {ex.Message}", "OK");
+            }
         }
 
         void OnCancelClicked(object sender, EventArgs e)
@@ -74,12 +100,51 @@ namespace yBook.Views.Klienci
         {
             try
             {
-                var clients = await _apiService.GetClientsAsync();
-                ClientsList.ItemsSource = clients.Take(50).ToList();
+                _allClients = await _apiService.GetClientsAsync();
+                _currentPage = 1;
+                DisplayPage(_currentPage);
+                UpdatePaginationUI();
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Błąd", $"Nie udało się pobrać klientów: {ex.Message}", "OK");
+            }
+        }
+
+        void DisplayPage(int pageNumber)
+        {
+            var skip = (pageNumber - 1) * PageSize;
+            var pageData = _allClients.Skip(skip).Take(PageSize).ToList();
+            ClientsList.ItemsSource = pageData;
+        }
+
+        void UpdatePaginationUI()
+        {
+            int totalPages = (int)Math.Ceiling((double)_allClients.Count / PageSize);
+            PaginationLabel.Text = $"Strona {_currentPage} z {totalPages}";
+
+            PrevButton.IsEnabled = _currentPage > 1;
+            NextButton.IsEnabled = _currentPage < totalPages;
+        }
+
+        void OnPrevPageClicked(object sender, EventArgs e)
+        {
+            if (_currentPage > 1)
+            {
+                _currentPage--;
+                DisplayPage(_currentPage);
+                UpdatePaginationUI();
+            }
+        }
+
+        void OnNextPageClicked(object sender, EventArgs e)
+        {
+            int totalPages = (int)Math.Ceiling((double)_allClients.Count / PageSize);
+            if (_currentPage < totalPages)
+            {
+                _currentPage++;
+                DisplayPage(_currentPage);
+                UpdatePaginationUI();
             }
         }
 
@@ -91,7 +156,15 @@ namespace yBook.Views.Klienci
             RabatEntry.Text = "0";
             NipEntry.Text = "";
             UwagiEntry.Text = "";
+            FirmaEntry.Text = "";
+            PeselEntry.Text = "";
+            UlicaEntry.Text = "";
+            DomEntry.Text = "";
+            LokalEntry.Text = "";
+            KodEntry.Text = "";
+            MiastoEntry.Text = "";
 
+            RbStalyKlient.IsChecked = true;
             CbWiecejDanych.IsChecked = false;
             MoreDataSection.IsVisible = false;
             MoreDataLabel.Text = "Więcej danych klienta";
