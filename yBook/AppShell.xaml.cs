@@ -7,6 +7,7 @@ using yBook.Views.Klienci;
 using yBook.Views.Przyjazdy;
 using yBook.Views.Rabaty;
 using yBook.Views.Surveys;
+using yBook.Views.Ustawienia;
 using yBook.Views.Kalendarz;
 using yBook.Views.Uzytkownicy;
 using yBook.Views.Rabaty;
@@ -60,6 +61,11 @@ namespace yBook
             Routing.RegisterRoute("BlokadyPage", typeof(BlokadyPage));
             Routing.RegisterRoute("PrzyjazdWyjazdPage", typeof(PrzyjazdWyjazdPage));
 
+            //Powiadomienia
+            Routing.RegisterRoute(nameof(PowiadomieniaPage), typeof(PowiadomieniaPage));
+
+            // Klienci
+            Routing.RegisterRoute("Klienci", typeof(Views.Klienci.KlienciPage));
             // Klienci — zarejestruj nazwę zgodną z nameof(KlienciPage) używanym w GoToAsync
             Routing.RegisterRoute("KlienciPage", typeof(KlienciPage));
 
