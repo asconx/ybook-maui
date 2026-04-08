@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Ustawienia.DodajPokojePage"
+             BackgroundColor="White"
+             Title="Dodaj kwaterê">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
+            
+            <Grid ColumnDefinitions="*, *, *, *" Margin="0,0,0,30">
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                    <HorizontalStackLayout Spacing="10">
+                        <Image Source="edit_icon_blue.png" WidthRequest="24"/>
+                        <VerticalStackLayout>
+                            <Label Text="Podstawowe informacje" FontSize="12" TextColor="#85c1cc" FontAttributes="Bold"/>
+                            <Label Text="Wymagane pola" FontSize="10" TextColor="#999"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                    <BoxView HeightRequest="2" Color="#eee" Margin="0,10,0,0"/>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="10" Opacity="0.5" HorizontalOptions="Center">
+                    <Image Source="plus_icon_gray.png" WidthRequest="20"/>
+                    <VerticalStackLayout>
+                        <Label Text="Liczba osób" FontSize="12" TextColor="#999"/>
+                        <Label Text="Miejsca noclegowe" FontSize="10" TextColor="#999"/>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+                
+                <HorizontalStackLayout Grid.Column="2" Spacing="10" Opacity="0.5" HorizontalOptions="Center">
+                    <Image Source="plus_icon_gray.png" WidthRequest="20"/>
+                    <VerticalStackLayout>
+                        <Label Text="Za³aduj zdjêcia" FontSize="12" TextColor="#999"/>
+                        <Label Text="Wybierz zdjêcia" FontSize="10" TextColor="#999"/>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="3" Spacing="10" Opacity="0.5" HorizontalOptions="Center">
+                    <Image Source="plus_icon_gray.png" WidthRequest="20"/>
+                    <VerticalStackLayout>
+                        <Label Text="Udogodnienia" FontSize="12" TextColor="#999"/>
+                        <Label Text="Zaznacz opcje" FontSize="10" TextColor="#999"/>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <VerticalStackLayout Spacing="15" MaximumWidthRequest="400" HorizontalOptions="Start">
+                
+                <Border Stroke="#ccc" StrokeShape="Rectangle" Padding="10,0">
+                    <Picker Title="Wybierz obiekt" x:Name="ObiektPicker"/>
+                </Border>
+
+                <Border Stroke="#ccc" StrokeShape="Rectangle" Padding="10,0">
+                    <Picker Title="Typ kwatery" x:Name="TypPicker"/>
+                </Border>
+
+                <Grid ColumnDefinitions="2*, Auto, 1*" ColumnSpacing="10">
+                    <Border Grid.Column="0" Stroke="#ccc" StrokeShape="Rectangle" Padding="10,0">
+                        <Entry Placeholder="Standard"/>
+                    </Border>
+                    <Label Grid.Column="1" Text="x" VerticalOptions="Center" TextColor="#999"/>
+                    <Border Grid.Column="2" Stroke="#ccc" StrokeShape="Rectangle" Padding="10,0">
+                        <Entry Placeholder="Iloœæ" Keyboard="Numeric"/>
+                    </Border>
+                </Grid>
+
+                <Border Stroke="#ccc" StrokeShape="Rectangle" Padding="10,0">
+                    <Entry Placeholder="Nazwa"/>
+                </Border>
+
+                <VerticalStackLayout Spacing="2">
+                    <Border Stroke="#ccc" StrokeShape="Rectangle" Padding="10,0">
+                        <Entry Placeholder="Skrócona nazwa"/>
+                    </Border>
+                    <Label Text="Nazwa skrócona i kolor s¹ wyœwietlane w kalendarzu rezerwacji." FontSize="10" TextColor="#999" Margin="5,0"/>
+                </VerticalStackLayout>
+
+                <Border Stroke="#ccc" StrokeShape="Rectangle" Padding="10,0">
+                    <Entry Placeholder="Pozycja na kalendarzu" Keyboard="Numeric"/>
+                </Border>
+
+                <Border Stroke="#ccc" StrokeShape="Rectangle" Padding="10,0">
+                    <HorizontalStackLayout Spacing="10">
+                        <Entry Placeholder="#fff" WidthRequest="100"/>
+                        <Image Source="pencil_icon.png" WidthRequest="16" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <VerticalStackLayout Spacing="2">
+                    <Border Stroke="#ccc" StrokeShape="Rectangle" Padding="10,0">
+                        <Entry Placeholder="Smart Lock Id"/>
+                    </Border>
+                    <Label Text="Pole opcjonalne, u¿ywane by powi¹zaæ pomieszczenie z zamkiem." FontSize="10" TextColor="#999" Margin="5,0"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="2">
+                    <Border Stroke="#ccc" StrokeShape="Rectangle" Padding="10,5">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <Entry Placeholder="Cena podstawowa" Keyboard="Numeric"/>
+                            <Label Grid.Column="1" Text="z³" VerticalOptions="Center" TextColor="#999" Margin="0,0,10,0"/>
+                        </Grid>
+                    </Border>
+                    <Label Text="Pole opcjonalne, u¿ywane przy braku cennika." FontSize="10" TextColor="#999" Margin="5,0"/>
+                </VerticalStackLayout>
+
+                <Button Text="dalej" 
+                        BackgroundColor="#f3b562" 
+                        TextColor="White" 
+                        CornerRadius="15" 
+                        HorizontalOptions="Start"
+                        WidthRequest="80"
+                        Margin="0,20,0,0"/>
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
