@@ -2,9 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ctrl="clr-namespace:yBook.Controls"
-             x:Class="yBook.Views.RezerwacjeOnline.RezerwacjeOnlinePage">
+             x:Class="yBook.Views.Blokady.RezerwacjeOnlinePage">
 
-    <Grid RowDefinitions="60,Auto,*">
+    <Grid RowDefinitions="60,*">
 
         <!-- HEADER -->
         <ctrl:PageHeader Grid.Row="0"
@@ -12,231 +12,292 @@
                          Icon="🌐"
                          ShowBack="True"/>
 
-        <!-- PASEK FILTRÓW / AKCJI -->
         <Grid Grid.Row="1"
-              Padding="12,8"
-              ColumnDefinitions="*,8,Auto,8,Auto"
-              BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#1A1A2E}">
-
-            <!-- Wyszukiwarka -->
-            <Border Grid.Column="0"
-                    BackgroundColor="{AppThemeBinding Light=White, Dark=#252545}"
-                    StrokeShape="RoundRectangle 10"
-                    Stroke="#E0E0E0"
-                    Padding="10,0">
-                <SearchBar x:Name="SearchBar"
-                           Placeholder="Szukaj gościa, pokoju…"
-                           FontSize="13"
-                           BackgroundColor="Transparent"
-                           TextChanged="OnSearchChanged"/>
-            </Border>
-
-            <!-- Filtr statusu -->
-            <Border Grid.Column="2"
-                    BackgroundColor="{AppThemeBinding Light=White, Dark=#252545}"
-                    StrokeShape="RoundRectangle 10"
-                    Stroke="#E0E0E0"
-                    Padding="8,0">
-                <Picker x:Name="StatusPicker"
-                        Title="Status"
-                        FontSize="13"
-                        SelectedIndexChanged="OnStatusFilterChanged">
-                    <Picker.Items>
-                        <x:String>Wszystkie</x:String>
-                        <x:String>Oczekujące</x:String>
-                        <x:String>Potwierdzone</x:String>
-                        <x:String>Anulowane</x:String>
-                    </Picker.Items>
-                </Picker>
-            </Border>
-
-            <!-- Przycisk nowej rezerwacji -->
-            <Button Grid.Column="4"
-                    Text="＋ Nowa"
-                    BackgroundColor="#1565C0"
-                    TextColor="White"
-                    FontSize="13"
-                    CornerRadius="10"
-                    Padding="12,0"
-                    HeightRequest="42"
-                    Clicked="OnNowaRezerwacjaClicked"/>
-
-        </Grid>
-
-        <!-- LISTA REZERWACJI -->
-        <Grid Grid.Row="2"
+              RowDefinitions="Auto,*"
               BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
 
-            <!-- Stan pusty -->
-            <VerticalStackLayout x:Name="EmptyState"
-                                 IsVisible="False"
-                                 VerticalOptions="Center"
-                                 HorizontalOptions="Center"
-                                 Spacing="10">
-                <Label Text="🌐" FontSize="52" HorizontalOptions="Center"/>
-                <Label Text="Brak rezerwacji online"
-                       FontSize="16" FontAttributes="Bold"
-                       HorizontalOptions="Center"
-                       TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
-                <Label Text="Naciśnij ＋ Nowa aby dodać pierwszą."
-                       FontSize="13"
-                       HorizontalOptions="Center"
-                       TextColor="{AppThemeBinding Light=#90A4AE, Dark=#546E7A}"/>
-            </VerticalStackLayout>
+            <!-- PASEK GÓRNY: licznik + przycisk Dodaj -->
+            <Grid Grid.Row="0"
+                  Padding="16,12"
+                  ColumnDefinitions="Auto,Auto,*,Auto"
+                  BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}">
 
-            <!-- Lista -->
-            <CollectionView x:Name="RezerwacjeList"
-                            Margin="12,8,12,12"
-                            ItemsUpdatingScrollMode="KeepScrollOffset"
-                            SelectionMode="None">
+                <Label Grid.Column="0"
+                       Text="Rezerwacje online"
+                       FontSize="15"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"
+                       VerticalOptions="Center"/>
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame Margin="0,0,0,10"
-                               CornerRadius="14"
-                               Padding="0"
-                               HasShadow="True"
-                               BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}">
+                <!-- Licznik (pill) -->
+                <Border Grid.Column="1"
+                        BackgroundColor="#F57C00"
+                        StrokeShape="RoundRectangle 10"
+                        Padding="7,2"
+                        Margin="8,0,0,0"
+                        VerticalOptions="Center">
+                    <Label x:Name="LblLicznik"
+                           Text="0"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="White"/>
+                </Border>
 
-                            <!-- Kolorowy pasek statusu po lewej -->
-                            <Grid ColumnDefinitions="6,*">
+                <!-- Przycisk dodaj -->
+                <Button Grid.Column="3"
+                        Text="dodaj"
+                        BackgroundColor="#1A1A1A"
+                        TextColor="White"
+                        FontSize="13"
+                        CornerRadius="20"
+                        Padding="18,0"
+                        HeightRequest="36"
+                        Clicked="OnDodajClicked"/>
+            </Grid>
 
-                                <BoxView Grid.Column="0"
-                                         CornerRadius="14,0,0,14"
-                                         BackgroundColor="{Binding StatusKolor}"/>
+            <!-- TABELA -->
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Spacing="0">
 
-                                <VerticalStackLayout Grid.Column="1"
-                                                     Padding="14,12"
-                                                     Spacing="8">
+                    <!-- NAGŁÓWEK TABELI -->
+                    <Grid Padding="16,10"
+                          ColumnDefinitions="44,*,90,90,140,130,90,*"
+                          BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#1A1A2E}">
 
-                                    <!-- Wiersz 1: ID + status + data złożenia -->
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <HorizontalStackLayout Grid.Column="0" Spacing="6">
-                                            <Label Text="#"
-                                                   FontSize="11"
-                                                   TextColor="{AppThemeBinding Light=#90A4AE, Dark=#546E7A}"
-                                                   VerticalOptions="Center"/>
-                                            <Label Text="{Binding Id}"
-                                                   FontSize="11"
-                                                   FontAttributes="Bold"
-                                                   TextColor="{AppThemeBinding Light=#90A4AE, Dark=#546E7A}"
-                                                   VerticalOptions="Center"/>
-                                        </HorizontalStackLayout>
-                                        <Label Grid.Column="1"
-                                               Text="{Binding StatusLabel}"
+                        <BoxView Grid.ColumnSpan="8"
+                                 VerticalOptions="End"
+                                 HeightRequest="1"
+                                 BackgroundColor="#E0E0E0"/>
+
+                        <!-- pusta kolumna (ikony akcji) -->
+                        <Label Grid.Column="0" Text="" />
+
+                        <Label Grid.Column="1"
+                               Text="Slug"
+                               FontSize="12" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+
+                        <Label Grid.Column="2"
+                               Text="Grupowanie"
+                               FontSize="12" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+
+                        <Label Grid.Column="3"
+                               Text="Czcionka"
+                               FontSize="12" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+
+                        <Label Grid.Column="4"
+                               Text="Początkowy termin"
+                               FontSize="12" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+
+                        <Label Grid.Column="5"
+                               Text="Nazwa przedpłaty"
+                               FontSize="12" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+
+                        <Label Grid.Column="6"
+                               Text="Opcja faktury"
+                               FontSize="12" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+
+                        <Label Grid.Column="7"
+                               Text="Rozliczenie"
+                               FontSize="12" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+
+                    </Grid>
+
+                    <!-- WIERSZE -->
+                    <CollectionView x:Name="RezerwacjeList"
+                                    SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+
+                                <!-- Wiersz tabeli -->
+                                <Grid Padding="16,0"
+                                      ColumnDefinitions="44,*,90,90,140,130,90,*"
+                                      MinimumHeightRequest="52">
+
+                                    <!-- Separator dolny -->
+                                    <BoxView Grid.ColumnSpan="8"
+                                             VerticalOptions="End"
+                                             HeightRequest="1"
+                                             BackgroundColor="#F0F0F0"/>
+
+                                    <!-- Kolumna 0: ikony akcji -->
+                                    <HorizontalStackLayout Grid.Column="0"
+                                                           Spacing="4"
+                                                           VerticalOptions="Center">
+
+                                        <!-- Edytuj -->
+                                        <Border BackgroundColor="#17A2B8"
+                                                StrokeShape="RoundRectangle 6"
+                                                WidthRequest="28" HeightRequest="28">
+                                            <Label Text="✏️"
+                                                   FontSize="13"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="OnEdytujTapped"
+                                                                          CommandParameter="{Binding .}"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </Border>
+
+                                        <!-- Usuń -->
+                                        <Border BackgroundColor="#FFA500"
+                                                StrokeShape="RoundRectangle 6"
+                                                WidthRequest="28" HeightRequest="28">
+                                            <Label Text="🗑️"
+                                                   FontSize="13"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="OnUsunTapped"
+                                                                          CommandParameter="{Binding .}"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </Border>
+
+                                    </HorizontalStackLayout>
+
+                                    <!-- Kolumna 1: Slug -->
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Slug}"
+                                           FontSize="13"
+                                           TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"
+                                           VerticalOptions="Center"/>
+
+                                    <!-- Kolumna 2: Grupowanie (pill) -->
+                                    <Border Grid.Column="2"
+                                            StrokeShape="RoundRectangle 12"
+                                            Stroke="#BDBDBD"
+                                            BackgroundColor="Transparent"
+                                            Padding="10,3"
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="Start">
+                                        <Label Text="{Binding GrupowanieLabel}"
                                                FontSize="12"
-                                               FontAttributes="Bold"
-                                               TextColor="{Binding StatusKolor}"/>
-                                    </Grid>
-
-                                    <!-- Wiersz 2: Imię i nazwisko + pokój -->
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <Label Grid.Column="0"
-                                               Text="{Binding PelneNazwisko}"
-                                               FontSize="16"
-                                               FontAttributes="Bold"
-                                               TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
-                                        <Frame Grid.Column="1"
-                                               BackgroundColor="#E3F2FD"
-                                               CornerRadius="8"
-                                               Padding="8,3"
-                                               HasShadow="False">
-                                            <Label Text="{Binding TypPokoju}"
-                                                   FontSize="12"
-                                                   TextColor="#1565C0"
-                                                   FontAttributes="Bold"/>
-                                        </Frame>
-                                    </Grid>
-
-                                    <!-- Wiersz 3: Daty pobytu -->
-                                    <HorizontalStackLayout Spacing="6">
-                                        <Label Text="🛬"  FontSize="13"/>
-                                        <Label Text="{Binding DataPrzyjazdu, StringFormat='{0:dd.MM.yyyy}'}"
-                                               FontSize="13"
                                                TextColor="{AppThemeBinding Light=#455A64, Dark=#90A4AE}"/>
-                                        <Label Text="→"   FontSize="13"
-                                               TextColor="{AppThemeBinding Light=#90A4AE, Dark=#546E7A}"/>
-                                        <Label Text="{Binding DataWyjazdu, StringFormat='{0:dd.MM.yyyy}'}"
-                                               FontSize="13"
+                                    </Border>
+
+                                    <!-- Kolumna 3: Czcionka -->
+                                    <Label Grid.Column="3"
+                                           Text="{Binding Czcionka}"
+                                           FontSize="13"
+                                           TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"
+                                           VerticalOptions="Center"/>
+
+                                    <!-- Kolumna 4: Termin (pill z obramowaniem) -->
+                                    <Border Grid.Column="4"
+                                            StrokeShape="RoundRectangle 12"
+                                            Stroke="#80BDBDBD"
+                                            BackgroundColor="Transparent"
+                                            Padding="8,3"
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="Start">
+                                        <Label Text="{Binding TerminLabel}"
+                                               FontSize="11"
+                                               TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
+                                    </Border>
+
+                                    <!-- Kolumna 5: Nazwa przedpłaty -->
+                                    <Label Grid.Column="5"
+                                           Text="{Binding NazwaPrzedplaty}"
+                                           FontSize="13"
+                                           TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"
+                                           VerticalOptions="Center"/>
+
+                                    <!-- Kolumna 6: Opcja faktury (pill) -->
+                                    <Border Grid.Column="6"
+                                            StrokeShape="RoundRectangle 12"
+                                            Stroke="#BDBDBD"
+                                            BackgroundColor="Transparent"
+                                            Padding="10,3"
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="Start">
+                                        <Label Text="{Binding OpcjaFakturyLabel}"
+                                               FontSize="12"
                                                TextColor="{AppThemeBinding Light=#455A64, Dark=#90A4AE}"/>
-                                        <Label Text="·"   FontSize="13"
-                                               TextColor="{AppThemeBinding Light=#90A4AE, Dark=#546E7A}"/>
-                                        <Label Text="{Binding LiczbaNoci, StringFormat='{0} noc(y)'}"
-                                               FontSize="13"
-                                               FontAttributes="Bold"
-                                               TextColor="#1565C0"/>
-                                    </HorizontalStackLayout>
+                                    </Border>
 
-                                    <!-- Wiersz 4: Kontakt -->
-                                    <HorizontalStackLayout Spacing="14">
-                                        <HorizontalStackLayout Spacing="4">
-                                            <Label Text="✉️" FontSize="12"/>
-                                            <Label Text="{Binding Email}"
-                                                   FontSize="12"
-                                                   TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
-                                        </HorizontalStackLayout>
-                                        <HorizontalStackLayout Spacing="4">
-                                            <Label Text="📞" FontSize="12"/>
-                                            <Label Text="{Binding Telefon}"
-                                                   FontSize="12"
-                                                   TextColor="{AppThemeBinding Light=#607D8B, Dark=#78909C}"/>
-                                        </HorizontalStackLayout>
-                                    </HorizontalStackLayout>
+                                    <!-- Kolumna 7: Rozliczenie -->
+                                    <Label Grid.Column="7"
+                                           Text="{Binding Rozliczenie}"
+                                           FontSize="13"
+                                           TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"
+                                           VerticalOptions="Center"/>
 
-                                    <BoxView HeightRequest="1"
-                                             BackgroundColor="{AppThemeBinding Light=#ECEFF1, Dark=#2C2C3E}"/>
+                                </Grid>
 
-                                    <!-- Wiersz 5: Akcje -->
-                                    <Grid ColumnDefinitions="*,8,*,8,*">
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-                                        <Button Grid.Column="0"
-                                                Text="✏️ Edytuj"
-                                                BackgroundColor="#E3F2FD"
-                                                TextColor="#1565C0"
-                                                FontSize="12"
-                                                CornerRadius="8"
-                                                HeightRequest="36"
-                                                CommandParameter="{Binding .}"
-                                                Clicked="OnEdytujClicked"/>
+                    <!-- Stan pusty -->
+                    <VerticalStackLayout x:Name="EmptyState"
+                                         IsVisible="False"
+                                         Padding="0,60"
+                                         HorizontalOptions="Center"
+                                         Spacing="8">
+                        <Label Text="🌐" FontSize="48" HorizontalOptions="Center"/>
+                        <Label Text="Brak rezerwacji online"
+                               FontSize="15" FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               TextColor="#90A4AE"/>
+                        <Label Text="Naciśnij dodaj aby dodać pierwszą."
+                               FontSize="13"
+                               HorizontalOptions="Center"
+                               TextColor="#B0BEC5"/>
+                    </VerticalStackLayout>
 
-                                        <Button Grid.Column="2"
-                                                Text="✅ Potwierdź"
-                                                BackgroundColor="#E8F5E9"
-                                                TextColor="#2E7D32"
-                                                FontSize="12"
-                                                CornerRadius="8"
-                                                HeightRequest="36"
-                                                CommandParameter="{Binding .}"
-                                                Clicked="OnPotwierdzClicked"/>
+                    <!-- Stopka: Wierszy na stronie -->
+                    <Grid Padding="16,10"
+                          ColumnDefinitions="*,Auto,Auto,Auto,Auto"
+                          BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}">
 
-                                        <Button Grid.Column="4"
-                                                Text="❌ Anuluj"
-                                                BackgroundColor="#FFEBEE"
-                                                TextColor="#C62828"
-                                                FontSize="12"
-                                                CornerRadius="8"
-                                                HeightRequest="36"
-                                                CommandParameter="{Binding .}"
-                                                Clicked="OnAnulujClicked"/>
+                        <BoxView Grid.ColumnSpan="5"
+                                 VerticalOptions="Start"
+                                 HeightRequest="1"
+                                 BackgroundColor="#E0E0E0"/>
 
-                                    </Grid>
+                        <Label Grid.Column="1"
+                               Text="Wierszy na stronie:"
+                               FontSize="12"
+                               TextColor="#90A4AE"
+                               VerticalOptions="Center"/>
 
-                                </VerticalStackLayout>
-                            </Grid>
+                        <Border Grid.Column="2"
+                                Margin="8,0"
+                                StrokeShape="RoundRectangle 4"
+                                Stroke="#E0E0E0"
+                                Padding="6,2">
+                            <Picker x:Name="WierszePicker"
+                                    FontSize="12"
+                                    WidthRequest="55"
+                                    SelectedIndexChanged="OnWierszeChanged">
+                                <Picker.Items>
+                                    <x:String>15</x:String>
+                                    <x:String>30</x:String>
+                                    <x:String>50</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
 
-                            <!-- Tap na całą kartę → szczegóły -->
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnKartaTapped"
-                                                      CommandParameter="{Binding .}"/>
-                            </Frame.GestureRecognizers>
+                        <Label Grid.Column="3"
+                               x:Name="LblStopka"
+                               Text="1–0 z 0"
+                               FontSize="12"
+                               TextColor="#90A4AE"
+                               VerticalOptions="Center"/>
 
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
+                    </Grid>
 
-            </CollectionView>
+                </VerticalStackLayout>
+            </ScrollView>
 
         </Grid>
-
     </Grid>
 </ContentPage>

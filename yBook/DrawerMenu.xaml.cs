@@ -155,7 +155,7 @@ namespace yBook.Controls
                     break;
                 // ── Rezerwacje Online ─────────────────────────────────────────
                 case "RezerwacjeOnline":
-                    await Shell.Current.Navigation.PushAsync(new RezerwacjeOnlinePage());
+                    await Shell.Current.Navigation.PushAsync(new Views.Blokady.RezerwacjeOnlinePage());
                     break;
                 // ── Pulpit: wróć do roota ──────────────────────────────────────
                 case "Pulpit":
