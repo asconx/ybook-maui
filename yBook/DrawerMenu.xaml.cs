@@ -1,6 +1,6 @@
 using yBook.Views.Ceny;
 using yBook.Views.Klienci;
-using yBook.Views.RezerwacjeOnline;
+
 using yBook;
 using yBook.Views.Ustawienia;
 
@@ -9,6 +9,7 @@ namespace yBook.Controls
     public partial class DrawerMenu : ContentView
     {
         const double DrawerWidth = 290;
+        private const string V = "Uzytkownicy";
         bool _isOpen = false;
         readonly Dictionary<string, bool> _groupState = new()
             {
@@ -21,7 +22,7 @@ namespace yBook.Controls
 
         public Action<object, object> HamburgerClicked { get; internal set; }
 
-        public Action<object, object> HamburgerClicked { get; internal set; }
+        
 
         public DrawerMenu()
         {
@@ -170,10 +171,6 @@ namespace yBook.Controls
                 // ── Pulpit: wróć do roota ──────────────────────────────────────
                 case "Pulpit":
                     await Shell.Current.GoToAsync("//MainPage");
-                    break;
-
-                case "Uzytkownicy":
-                    await Shell.Current.GoToAsync("UzytkownicyLista");
                     break;
                 // —— Strona Klientow —————————————————————————————————————————————
                 case "Klienci":
