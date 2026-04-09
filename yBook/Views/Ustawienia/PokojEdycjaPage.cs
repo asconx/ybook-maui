@@ -40,7 +40,6 @@ public class PokojEdycjaPage : ContentPage
     private MButton TabOsoby;
     private MButton TabZdjecia;
     private MButton TabUdogodnienia;
-    private BoxView TabIndicator;
     private MScrollView ContentScroll;
     private MButton BtnSave;
 
@@ -72,7 +71,9 @@ public class PokojEdycjaPage : ContentPage
                 new RowDefinition { Height = new GridLength(60, GridUnitType.Absolute) },
                 new RowDefinition { Height = GridLength.Auto },
                 new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }
-            }
+            },
+            ColumnSpacing = 0,
+            RowSpacing = 0
         };
 
         // Row 0: Header
@@ -88,29 +89,28 @@ public class PokojEdycjaPage : ContentPage
 
         // Row 1: Tabs
         var tabsGrid = new Grid { ColumnSpacing = 0, BackgroundColor = Colors.White, Padding = 0 };
-        
+
         TabBasic = new MButton { Text = "Podstawowe", BackgroundColor = Colors.Transparent, TextColor = Colors.Black, FontAttributes = FontAttributes.Bold, FontSize = 13, Padding = new Thickness(20, 15), BorderWidth = 0 };
         TabBasic.Clicked += (s, e) => SwitchTab(0);
-        
+
         TabOsoby = new MButton { Text = "Liczba osób", BackgroundColor = Colors.Transparent, TextColor = Color.FromArgb("#999"), FontSize = 13, Padding = new Thickness(20, 15), BorderWidth = 0 };
         TabOsoby.Clicked += (s, e) => SwitchTab(1);
-        
+
         TabZdjecia = new MButton { Text = "Zdjęcia", BackgroundColor = Colors.Transparent, TextColor = Color.FromArgb("#999"), FontSize = 13, Padding = new Thickness(20, 15), BorderWidth = 0 };
         TabZdjecia.Clicked += (s, e) => SwitchTab(2);
-        
+
         TabUdogodnienia = new MButton { Text = "Udogodnienia", BackgroundColor = Colors.Transparent, TextColor = Color.FromArgb("#999"), FontSize = 13, Padding = new Thickness(20, 15), BorderWidth = 0 };
         TabUdogodnienia.Clicked += (s, e) => SwitchTab(3);
 
-        var tabsStack = new HorizontalStackLayout { TabBasic, TabOsoby, TabZdjecia, TabUdogodnienia };
+        var tabsStack = new HorizontalStackLayout 
+        { 
+            Spacing = 0,
+            Padding = 0,
+            Children = { TabBasic, TabOsoby, TabZdjecia, TabUdogodnienia }
+        };
         var tabsScroll = new MScrollView { Content = tabsStack, Orientation = ScrollOrientation.Horizontal, HorizontalScrollBarVisibility = ScrollBarVisibility.Never };
 
-        TabIndicator = new BoxView { Color = Color.FromArgb("#D4A574"), HeightRequest = 3, VerticalOptions = LayoutOptions.End, WidthRequest = 100, HorizontalOptions = LayoutOptions.Start, Margin = new Thickness(20, 0, 0, 0) };
-        
-        var tabsWithIndicator = new Grid { RowDefinitions = new RowDefinitionCollection { new RowDefinition { Height = GridLength.Auto }, new RowDefinition { Height = GridLength.Auto } } };
-        tabsWithIndicator.Add(tabsScroll, 0, 0);
-        tabsWithIndicator.Add(TabIndicator, 0, 1);
-
-        mainGrid.Add(tabsWithIndicator, 0, 1);
+        mainGrid.Add(tabsScroll, 0, 1);
 
         // Row 2: Content
         TabBasicContent = BuildBasicTab();
@@ -125,12 +125,30 @@ public class PokojEdycjaPage : ContentPage
         var contentStack = new StackLayout 
         { 
             Spacing = 0,
+            Padding = 0,
             Children = { TabBasicContent, TabOsobyContent, TabZdjeciaContent, TabUdogodneniaContent }
         };
 
-        ContentScroll = new MScrollView { Content = contentStack, Orientation = ScrollOrientation.Vertical };
-        
-        var contentGrid = new Grid { RowDefinitions = new RowDefinitionCollection { new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }, new RowDefinition { Height = GridLength.Auto } } };
+        ContentScroll = new MScrollView 
+        { 
+            Content = contentStack, 
+            Orientation = ScrollOrientation.Vertical,
+            VerticalOptions = LayoutOptions.Fill,
+            VerticalScrollBarVisibility = ScrollBarVisibility.Default,
+            Padding = 0
+        };
+
+        var contentGrid = new Grid 
+        { 
+            RowDefinitions = new RowDefinitionCollection 
+            { 
+                new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }, 
+                new RowDefinition { Height = GridLength.Auto } 
+            },
+            Padding = 0,
+            ColumnSpacing = 0,
+            RowSpacing = 0
+        };
         contentGrid.Add(ContentScroll, 0, 0);
 
         BtnSave = new MButton 
@@ -138,7 +156,7 @@ public class PokojEdycjaPage : ContentPage
             Text = _isEditMode ? "Zapisz zmiany" : "Dodaj kwaterę",
             BackgroundColor = Color.FromArgb("#D4A574"),
             TextColor = Colors.White,
-            Margin = new Thickness(20, 0, 20, 20),
+            Margin = new Thickness(20, 10, 20, 20),
             Padding = new Thickness(15, 12),
             FontAttributes = FontAttributes.Bold,
             CornerRadius = 25
@@ -174,27 +192,27 @@ public class PokojEdycjaPage : ContentPage
 
         return new StackLayout 
         { 
-            Padding = new Thickness(20, 15),
-            Spacing = 15,
+            Padding = new Thickness(15, 10),
+            Spacing = 10,
             Children = 
             {
                 new Label { Text = "Wybierz obiekt", FontSize = 12, TextColor = Color.FromArgb("#888") },
                 PickerObiekt,
-                new Label { Text = "Typ kwatery", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 10, 0, 0) },
+                new Label { Text = "Typ kwatery", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
                 PickerTyp,
-                new Label { Text = "Standard", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 10, 0, 0) },
+                new Label { Text = "Standard", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
                 EntryStandard,
-                new Label { Text = "Nazwa", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 10, 0, 0) },
+                new Label { Text = "Nazwa", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
                 EntryNazwa,
-                new Label { Text = "Skrócona nazwa", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 10, 0, 0) },
+                new Label { Text = "Skrócona nazwa", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
                 EntrySkroconaNazwa,
-                new Label { Text = "Pozycja na kalendarzu", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 10, 0, 0) },
+                new Label { Text = "Pozycja na kalendarzu", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
                 EntryPozycjaKalendarzu,
-                new Label { Text = "Kolor", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 10, 0, 0) },
+                new Label { Text = "Kolor", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
                 EntryKolor,
-                new Label { Text = "Smart Lock Id", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 10, 0, 0) },
+                new Label { Text = "Smart Lock Id", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
                 EntrySmartLockId,
-                new Label { Text = "Cena podstawowa", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 10, 0, 0) },
+                new Label { Text = "Cena podstawowa", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
                 EntryCenaPodstawowa
             }
         };
@@ -208,15 +226,15 @@ public class PokojEdycjaPage : ContentPage
 
         return new StackLayout 
         { 
-            Padding = new Thickness(20, 15),
-            Spacing = 15,
+            Padding = new Thickness(15, 10),
+            Spacing = 10,
             Children = 
             {
                 new Label { Text = "Minimalna liczba osób", FontSize = 12, TextColor = Color.FromArgb("#888") },
                 EntryMinOsoby,
-                new Label { Text = "Maksymalna liczba osób", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 10, 0, 0) },
+                new Label { Text = "Maksymalna liczba osób", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
                 EntryMaxOsoby,
-                new Label { Text = "Metraż", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 10, 0, 0) },
+                new Label { Text = "Metraż", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
                 EntryMetraz
             }
         };
@@ -231,8 +249,8 @@ public class PokojEdycjaPage : ContentPage
 
         return new StackLayout 
         { 
-            Padding = new Thickness(20, 15),
-            Spacing = 15,
+            Padding = new Thickness(15, 10),
+            Spacing = 10,
             Children = 
             {
                 new Label { Text = "Dodaj zdjęcia pokoju", FontSize = 14, FontAttributes = FontAttributes.Bold },
@@ -246,8 +264,8 @@ public class PokojEdycjaPage : ContentPage
     {
         var stack = new StackLayout 
         { 
-            Padding = new Thickness(20, 15),
-            Spacing = 15
+            Padding = new Thickness(15, 10),
+            Spacing = 8
         };
 
         stack.Add(new Label { Text = "Zaznacz dostępne udogodnienia", FontSize = 14, FontAttributes = FontAttributes.Bold });
@@ -307,8 +325,11 @@ public class PokojEdycjaPage : ContentPage
         TabUdogodnienia.TextColor = tabIndex == 3 ? Colors.Black : Color.FromArgb("#999");
         TabUdogodnienia.FontAttributes = tabIndex == 3 ? FontAttributes.Bold : FontAttributes.None;
 
-        double indicatorPosition = 20 + (tabIndex * 160);
-        TabIndicator.TranslateTo(indicatorPosition, 0, 300);
+        // Resetuj scroll na top
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            await ContentScroll.ScrollToAsync(0, 0, false);
+        });
     }
 
     private async void OnAddPhotoClicked(object sender, EventArgs e)
