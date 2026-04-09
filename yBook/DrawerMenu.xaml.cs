@@ -118,6 +118,8 @@ namespace yBook.Controls
             {
                 // ── Strony finansów — gotowe ──────────────────────────────────
                 case "UslugiOplaty":
+                    await Shell.Current.GoToAsync("UslugiOplaty");
+                    break;
                 case "Dokumenty":
                 case "KontaFinansowe":
                 case "RejestrPlatnosci":
