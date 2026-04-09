@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ctrl="clr-namespace:yBook.Controls"
-             x:Class="yBook.Views.Przyjazdy.PrzyjazdWyjazdPage">
+             x:Class="yBook.Views.Przyjazdy.PrzyjazdWyjazdPage"
+             xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui">
 
     <Grid RowDefinitions="60,*">
 
@@ -107,6 +108,21 @@
                     </CollectionView.ItemTemplate>
 
                 </CollectionView>
+
+                <Frame BackgroundColor="#FFFFFF"
+           CornerRadius="20"
+           Padding="10"
+           HasShadow="True">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Przyjazdy i Wyjazdy"
+                   FontAttributes="Bold"
+                   FontSize="16"
+                   HorizontalOptions="Center"/>
+                        <microcharts:ChartView x:Name="ArrivalsDeparturesChart"
+                                   HeightRequest="200"/>
+                    </VerticalStackLayout>
+                </Frame>    
+
 
                 <!-- POKOJE -->
                 <CollectionView x:Name="RoomsList">

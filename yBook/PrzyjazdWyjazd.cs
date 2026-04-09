@@ -1,44 +1,58 @@
-﻿using System.ComponentModel;
+﻿using Microcharts;
+using SkiaSharp;
+using yBook.Models;
+using System.Linq;
 
-namespace yBook.Models
+namespace yBook.Views.Przyjazdy
 {
-    public class PrzyjazdWyjazd : INotifyPropertyChanged
+    public partial class PrzyjazdWyjazdPage : ContentPage
     {
-        public int PokojId { get; set; }
-        public string Pokoj { get; set; }
-        public DateTime Data { get; set; }
+        public List<PrzyjazdWyjazd> PrzyjazdyWyjazdy { get; set; }
 
-        bool przyjazdMozliwy = true;
-        public bool PrzyjazdMozliwy
+        public PrzyjazdWyjazdPage()
         {
-            get => przyjazdMozliwy;
-            set
-            {
-                if (przyjazdMozliwy != value)
-                {
-                    przyjazdMozliwy = value;
-                    OnPropertyChanged(nameof(PrzyjazdMozliwy));
-                }
-            }
+            InitializeComponent();
+            PrzyjazdyWyjazdy = GetSampleData(); // Twoje dane – np. z bazy
+            LoadChart();
         }
 
-        bool wyjazdMozliwy = true;
-        public bool WyjazdMozliwy
+        void LoadChart()
         {
-            get => wyjazdMozliwy;
-            set
+            int liczbaPrzyjazdow = PrzyjazdyWyjazdy.Count(p => p.PrzyjazdMozliwy);
+            int liczbaWyjazdow = PrzyjazdyWyjazdy.Count(p => p.WyjazdMozliwy);
+
+            var entries = new[]
             {
-                if (wyjazdMozliwy != value)
+                new ChartEntry(liczbaPrzyjazdow)
                 {
-                    wyjazdMozliwy = value;
-                    OnPropertyChanged(nameof(WyjazdMozliwy));
+                    Label = "Przyjazdy",
+                    ValueLabel = liczbaPrzyjazdow.ToString(),
+                    Color = SKColor.Parse("#4DB6AC")
+                },
+                new ChartEntry(liczbaWyjazdow)
+                {
+                    Label = "Wyjazdy",
+                    ValueLabel = liczbaWyjazdow.ToString(),
+                    Color = SKColor.Parse("#FF8A65")
                 }
-            }
+            };
+
+            ArrivalsDeparturesChart.Chart = new DonutChart
+            {
+                Entries = entries,
+                HoleRadius = 0.5f,
+                LabelTextSize = 32
+            };
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        void OnPropertyChanged(string name)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        List<PrzyjazdWyjazd> GetSampleData()
+        {
+            return new List<PrzyjazdWyjazd>
+            {
+                new PrzyjazdWyjazd { PokojId = 1, Pokoj = "101", Data = DateTime.Today, PrzyjazdMozliwy = true, WyjazdMozliwy = false },
+                new PrzyjazdWyjazd { PokojId = 2, Pokoj = "102", Data = DateTime.Today, PrzyjazdMozliwy = false, WyjazdMozliwy = true },
+                new PrzyjazdWyjazd { PokojId = 3, Pokoj = "103", Data = DateTime.Today, PrzyjazdMozliwy = true, WyjazdMozliwy = true },
+            };
+        }
     }
 }
