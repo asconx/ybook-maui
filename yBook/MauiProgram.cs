@@ -27,6 +27,7 @@ namespace yBook
             // ── Services ─────────────────────────────────────────────────────
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<ISurveyService, SurveyService>();
+            builder.Services.AddSingleton<IPanelService, PanelService>();
 
             // ── Shell ─────────────────────────────────────────────────────────
             builder.Services.AddSingleton<AppShell>();
@@ -41,6 +42,7 @@ namespace yBook
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<RabatyPage>();
             builder.Services.AddTransient<PokojePage>();
+            builder.Services.AddTransient<PokojEdycjaPage>();
             builder.Services.AddTransient<SurveysPage>();
             builder.Services.AddTransient<EditSurveyPage>();
             builder.Services.AddTransient<yBook.Views.Kalendarz.KalendarzPage>();
