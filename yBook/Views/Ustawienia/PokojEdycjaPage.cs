@@ -1,420 +1,239 @@
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Layouts;
-using Microsoft.Maui.Controls.Hosting;
 using yBook.Models;
 using yBook.Services;
-using System.Collections.ObjectModel;
-using MButton = Microsoft.Maui.Controls.Button;
-using MScrollView = Microsoft.Maui.Controls.ScrollView;
-using MCheckBox = Microsoft.Maui.Controls.CheckBox;
 
 namespace yBook.Views.Ustawienia;
 
-public class PokojEdycjaPage : ContentPage
+public partial class PokojEdycjaPage : ContentPage
 {
     private Pokoj _pokoj;
-    private int _activeTabIndex = 0;
     private bool _isEditMode = false;
     private IPanelService _panelService;
+    private int _activeTabIndex = 0;
 
-    // UI Controls
-    private Entry EntryNazwa;
-    private Entry EntrySkroconaNazwa;
-    private Entry EntryStandard;
-    private Entry EntryKolor;
-    private Entry EntryMetraz;
-    private Entry EntryMaxOsoby;
-    private Entry EntryMinOsoby;
-    private Entry EntryCenaPodstawowa;
-    private Entry EntrySmartLockId;
-    private Entry EntryPozycjaKalendarzu;
-    private Picker PickerObiekt;
-    private Picker PickerTyp;
-    private CollectionView PhotosList;
-    private StackLayout TabBasicContent;
-    private StackLayout TabOsobyContent;
-    private StackLayout TabZdjeciaContent;
-    private StackLayout TabUdogodneniaContent;
-    private MButton TabBasic;
-    private MButton TabOsoby;
-    private MButton TabZdjecia;
-    private MButton TabUdogodnienia;
-    private MScrollView ContentScroll;
-    private MButton BtnSave;
+    // Kontrolki UI
+    private Entry EntryNazwa, EntryCena, EntrySkrot, EntryPozycja, EntrySmartLock, EntryMaxOsoby, EntryMetraz;
+    private Picker PickerObiekt, PickerTyp, PickerStandard, BedPicker;
+    private Editor EditorOpis;
+    private StackLayout Tab1, Tab2, Tab3, Tab4;
+    private Grid StepperContainer;
 
-    public PokojEdycjaPage()
-    {
-        _pokoj = new Pokoj();
-        _panelService = IPlatformApplication.Current?.Services.GetService<IPanelService>();
-        BuildUI();
-    }
+    // Stylizacja
+    private Color AccentColor = Color.FromArgb("#e8c08d");
+    private Color BlueGray = Color.FromArgb("#8ca7ad");
+    private Color GrayText = Color.FromArgb("#7a869a");
+    private Color BorderColor = Color.FromArgb("#dee2e6");
 
-    public PokojEdycjaPage(Pokoj pokoj)
+    public PokojEdycjaPage() => InitializePage(new Pokoj(), false);
+    public PokojEdycjaPage(Pokoj pokoj) => InitializePage(pokoj, true);
+
+    private void InitializePage(Pokoj pokoj, bool isEdit)
     {
         _pokoj = pokoj ?? new Pokoj();
-        _isEditMode = pokoj != null;
+        _isEditMode = isEdit;
         _panelService = IPlatformApplication.Current?.Services.GetService<IPanelService>();
-        BuildUI();
-        LoadPokojData();
+
+        Shell.SetNavBarIsVisible(this, false);
+        BuildMainLayout();
+        SwitchTab(0);
+        if (_isEditMode) LoadDataToUI();
     }
 
-    private void BuildUI()
+    private void BuildMainLayout()
     {
         BackgroundColor = Colors.White;
-        Padding = 0;
-
         var mainGrid = new Grid
         {
-            RowDefinitions = new RowDefinitionCollection 
-            { 
-                new RowDefinition { Height = new GridLength(60, GridUnitType.Absolute) },
-                new RowDefinition { Height = GridLength.Auto },
-                new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }
-            },
-            ColumnSpacing = 0,
-            RowSpacing = 0
+            RowDefinitions = {
+                new RowDefinition { Height = GridLength.Auto }, // Stepper
+                new RowDefinition { Height = GridLength.Star }, // Content
+                new RowDefinition { Height = GridLength.Auto }  // Footer
+            }
         };
 
-        // Row 0: Header
-        var headerLabel = new Label 
-        { 
-            Text = "Edycja kwatery",
-            FontSize = 18,
-            FontAttributes = FontAttributes.Bold,
-            Margin = new Thickness(20, 0),
-            VerticalOptions = LayoutOptions.Center
+        StepperContainer = new Grid
+        {
+            Padding = new Thickness(20, 20),
+            ColumnDefinitions = {
+            new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star),
+            new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star),
+            new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star),
+            new ColumnDefinition(GridLength.Auto)
+        }
         };
-        mainGrid.Add(headerLabel, 0, 0);
+        mainGrid.Add(StepperContainer, 0, 0);
 
-        // Row 1: Tabs
-        var tabsGrid = new Grid { ColumnSpacing = 0, BackgroundColor = Colors.White, Padding = 0 };
+        Tab1 = BuildTabPodstawowe();
+        Tab2 = BuildTabOsoby();
+        Tab3 = BuildTabZdjecia();
+        Tab4 = BuildTabUdogodnienia();
 
-        TabBasic = new MButton { Text = "Podstawowe", BackgroundColor = Colors.Transparent, TextColor = Colors.Black, FontAttributes = FontAttributes.Bold, FontSize = 13, Padding = new Thickness(20, 15), BorderWidth = 0 };
-        TabBasic.Clicked += (s, e) => SwitchTab(0);
+        mainGrid.Add(new ScrollView { Content = new Grid { Children = { Tab1, Tab2, Tab3, Tab4 } } }, 0, 1);
 
-        TabOsoby = new MButton { Text = "Liczba osób", BackgroundColor = Colors.Transparent, TextColor = Color.FromArgb("#999"), FontSize = 13, Padding = new Thickness(20, 15), BorderWidth = 0 };
-        TabOsoby.Clicked += (s, e) => SwitchTab(1);
-
-        TabZdjecia = new MButton { Text = "Zdjęcia", BackgroundColor = Colors.Transparent, TextColor = Color.FromArgb("#999"), FontSize = 13, Padding = new Thickness(20, 15), BorderWidth = 0 };
-        TabZdjecia.Clicked += (s, e) => SwitchTab(2);
-
-        TabUdogodnienia = new MButton { Text = "Udogodnienia", BackgroundColor = Colors.Transparent, TextColor = Color.FromArgb("#999"), FontSize = 13, Padding = new Thickness(20, 15), BorderWidth = 0 };
-        TabUdogodnienia.Clicked += (s, e) => SwitchTab(3);
-
-        var tabsStack = new HorizontalStackLayout 
-        { 
-            Spacing = 0,
-            Padding = 0,
-            Children = { TabBasic, TabOsoby, TabZdjecia, TabUdogodnienia }
-        };
-        var tabsScroll = new MScrollView { Content = tabsStack, Orientation = ScrollOrientation.Horizontal, HorizontalScrollBarVisibility = ScrollBarVisibility.Never };
-
-        mainGrid.Add(tabsScroll, 0, 1);
-
-        // Row 2: Content
-        TabBasicContent = BuildBasicTab();
-        TabOsobyContent = BuildOsobyTab();
-        TabZdjeciaContent = BuildZdjeciaTab();
-        TabUdogodneniaContent = BuildUdogodneniaTab();
-
-        TabOsobyContent.IsVisible = false;
-        TabZdjeciaContent.IsVisible = false;
-        TabUdogodneniaContent.IsVisible = false;
-
-        var contentStack = new StackLayout 
-        { 
-            Spacing = 0,
-            Padding = 0,
-            Children = { TabBasicContent, TabOsobyContent, TabZdjeciaContent, TabUdogodneniaContent }
-        };
-
-        ContentScroll = new MScrollView 
-        { 
-            Content = contentStack, 
-            Orientation = ScrollOrientation.Vertical,
-            VerticalOptions = LayoutOptions.Fill,
-            VerticalScrollBarVisibility = ScrollBarVisibility.Default,
-            Padding = 0
-        };
-
-        var contentGrid = new Grid 
-        { 
-            RowDefinitions = new RowDefinitionCollection 
-            { 
-                new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }, 
-                new RowDefinition { Height = GridLength.Auto } 
-            },
-            Padding = 0,
-            ColumnSpacing = 0,
-            RowSpacing = 0
-        };
-        contentGrid.Add(ContentScroll, 0, 0);
-
-        BtnSave = new MButton 
-        { 
-            Text = _isEditMode ? "Zapisz zmiany" : "Dodaj kwaterę",
-            BackgroundColor = Color.FromArgb("#D4A574"),
+        var btnSave = new Button
+        {
+            Text = "zapisz kwaterę",
+            BackgroundColor = AccentColor,
             TextColor = Colors.White,
-            Margin = new Thickness(20, 10, 20, 20),
-            Padding = new Thickness(15, 12),
-            FontAttributes = FontAttributes.Bold,
-            CornerRadius = 25
+            CornerRadius = 20,
+            Margin = 20,
+            HorizontalOptions = LayoutOptions.End,
+            HeightRequest = 45,
+            WidthRequest = 200
         };
-        BtnSave.Clicked += OnSaveClicked;
-        contentGrid.Add(BtnSave, 0, 1);
-
-        mainGrid.Add(contentGrid, 0, 2);
+        btnSave.Clicked += OnSaveClicked;
+        mainGrid.Add(btnSave, 0, 2);
 
         Content = mainGrid;
-
-        InitializeData();
     }
 
-    private StackLayout BuildBasicTab()
+    private StackLayout BuildTabPodstawowe() => new StackLayout
     {
-        PickerObiekt = new Picker { Title = "Wybierz obiekt" };
-        PickerObiekt.Items.Add("Czujnik temperatury — recepcja");
-        PickerObiekt.SelectedIndex = 0;
+        Padding = 30,
+        Spacing = 10,
+        Children = {
+        CreateField("Wybierz obiekt", PickerObiekt = new Picker { Title = "Wybierz..." }),
+        CreateField("Typ kwatery", PickerTyp = new Picker { Title = "Pokój" }),
+        CreateField("Standard", PickerStandard = new Picker { Title = "Standard" }),
+        CreateField("Nazwa", EntryNazwa = new Entry { Placeholder = "Mały pokój 1" }),
+        CreateField("Skrócona nazwa", EntrySkrot = new Entry { Placeholder = "1" }, "Nazwa skrócona i kolor są wyświetlane w kalendarzu rezerwacji."),
+        CreateField("Pozycja na kalendarzu", EntryPozycja = new Entry { Placeholder = "68" }),
+        CreateField("Smart Lock Id", EntrySmartLock = new Entry { Placeholder = "Smart Lock Id" }),
+        CreateField("Cena podstawowa", EntryCena = new Entry { Placeholder = "0" }),
+        new Button { Text = "dalej", BackgroundColor = AccentColor, CornerRadius = 15, WidthRequest = 100 }.WithClick((s,e) => SwitchTab(1))
+    }
+    };
 
-        PickerTyp = new Picker { Title = "Typ kwatery" };
-        PickerTyp.Items.Add("Pokój");
-        PickerTyp.Items.Add("Apartament");
-        PickerTyp.Items.Add("Willa");
+    private StackLayout BuildTabOsoby() => new StackLayout
+    {
+        Padding = 30,
+        Spacing = 15,
+        Children = {
+        new HorizontalStackLayout { Spacing = 10, Children = {
+            new Border { Stroke = BorderColor, Content = BedPicker = new Picker { Title = "Wybierz łóżka", WidthRequest = 200 } },
+            new Button { Text = "+ dodaj łóżko", BackgroundColor = Colors.Black, CornerRadius = 20 }
+        }},
+        new Border { BackgroundColor = Color.FromArgb("#ffe8d1"), Stroke = AccentColor, Padding = 5, HorizontalOptions = LayoutOptions.Start, StrokeShape = new RoundRectangle{CornerRadius=15},
+            Content = new Label { Text = "✓ Rozkładana sofa  ✕", TextColor = AccentColor } },
+        new HorizontalStackLayout { Spacing = 10, Children = {
+            new Label { Text = "Maksymalna liczba osób", VerticalOptions = LayoutOptions.Center },
+            new Border { Stroke = BorderColor, Content = EntryMaxOsoby = new Entry { Text = "2", WidthRequest = 60 } }
+        }},
+        CreateField("Metraż", EntryMetraz = new Entry { Placeholder = "6" }),
+        CreateField("Opis", EditorOpis = new Editor { HeightRequest = 120 }),
+        new HorizontalStackLayout { Spacing = 10, Children = {
+            new Button { Text = "wstecz", BackgroundColor = BlueGray, CornerRadius = 15 }.WithClick((s,e) => SwitchTab(0)),
+            new Button { Text = "dalej", BackgroundColor = AccentColor, CornerRadius = 15 }.WithClick((s,e) => SwitchTab(2))
+        }}
+    }
+    };
+}
+public partial class PokojEdycjaPage
+{
+    private StackLayout BuildTabZdjecia() => new StackLayout
+    {
+        Padding = 30,
+        Spacing = 20,
+        Children = {
+        new FlexLayout { Wrap = FlexWrap.Wrap, Children = {
+            CreatePhotoThumb("photo1.jpg"), CreatePhotoThumb("photo2.jpg")
+        }},
+        new Border { Stroke = BorderColor, Padding = 15, Content = new Label { Text = "Wybierz zdjęcia lub je przeciągnij.", TextColor = GrayText } },
+        new HorizontalStackLayout { Spacing = 10, Children = {
+            new Button { Text = "wstecz", BackgroundColor = BlueGray, CornerRadius = 15 }.WithClick((s,e) => SwitchTab(1)),
+            new Button { Text = "dalej", BackgroundColor = AccentColor, CornerRadius = 15 }.WithClick((s,e) => SwitchTab(3))
+        }}
+    }
+    };
 
-        EntryStandard = new Entry { Placeholder = "Standard" };
-        EntryNazwa = new Entry { Placeholder = "Nazwa pokoju" };
-        EntrySkroconaNazwa = new Entry { Placeholder = "Skrócona nazwa" };
-        EntryPozycjaKalendarzu = new Entry { Placeholder = "0", Keyboard = Keyboard.Numeric };
-        EntryKolor = new Entry { Placeholder = "#fff", Text = "#fff" };
-        EntrySmartLockId = new Entry { Placeholder = "Smart Lock Id" };
-        EntryCenaPodstawowa = new Entry { Placeholder = "0", Keyboard = Keyboard.Numeric };
+    private StackLayout BuildTabUdogodnienia() => new StackLayout
+    {
+        Padding = 30,
+        Spacing = 20,
+        Children = {
+        new FlexLayout { Wrap = FlexWrap.Wrap, Children = {
+            CreateTag("Basen"), CreateTag("Balkon"), CreateTag("Biurko", true), CreateTag("Czajnik"),
+            CreateTag("Mydło", true), CreateTag("TV", true), CreateTag("Suszarka", true)
+        }},
+        new Button { Text = "wstecz", BackgroundColor = BlueGray, CornerRadius = 15, HorizontalOptions = LayoutOptions.Start }.WithClick((s,e) => SwitchTab(2))
+    }
+    };
 
-        return new StackLayout 
-        { 
-            Padding = new Thickness(15, 10),
-            Spacing = 10,
-            Children = 
-            {
-                new Label { Text = "Wybierz obiekt", FontSize = 12, TextColor = Color.FromArgb("#888") },
-                PickerObiekt,
-                new Label { Text = "Typ kwatery", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
-                PickerTyp,
-                new Label { Text = "Standard", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
-                EntryStandard,
-                new Label { Text = "Nazwa", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
-                EntryNazwa,
-                new Label { Text = "Skrócona nazwa", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
-                EntrySkroconaNazwa,
-                new Label { Text = "Pozycja na kalendarzu", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
-                EntryPozycjaKalendarzu,
-                new Label { Text = "Kolor", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
-                EntryKolor,
-                new Label { Text = "Smart Lock Id", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
-                EntrySmartLockId,
-                new Label { Text = "Cena podstawowa", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
-                EntryCenaPodstawowa
-            }
-        };
+    private void SwitchTab(int index)
+    {
+        _activeTabIndex = index;
+        Tab1.IsVisible = (index == 0);
+        Tab2.IsVisible = (index == 1);
+        Tab3.IsVisible = (index == 2);
+        Tab4.IsVisible = (index == 3);
+        UpdateStepper(index);
     }
 
-    private StackLayout BuildOsobyTab()
+    private void UpdateStepper(int activeIndex)
     {
-        EntryMinOsoby = new Entry { Placeholder = "1", Keyboard = Keyboard.Numeric };
-        EntryMaxOsoby = new Entry { Placeholder = "4", Keyboard = Keyboard.Numeric };
-        EntryMetraz = new Entry { Placeholder = "Metraż w m²", Keyboard = Keyboard.Numeric };
+        StepperContainer.Children.Clear();
+        string[] titles = { "Podstawowe informacje", "Liczba osób", "Załaduj zdjęcia", "Udogodnienia" };
+        string[] icons = { "✓", "✎", "📷", "✚" };
 
-        return new StackLayout 
-        { 
-            Padding = new Thickness(15, 10),
-            Spacing = 10,
-            Children = 
-            {
-                new Label { Text = "Minimalna liczba osób", FontSize = 12, TextColor = Color.FromArgb("#888") },
-                EntryMinOsoby,
-                new Label { Text = "Maksymalna liczba osób", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
-                EntryMaxOsoby,
-                new Label { Text = "Metraż", FontSize = 12, TextColor = Color.FromArgb("#888"), Margin = new Thickness(0, 5, 0, 0) },
-                EntryMetraz
-            }
-        };
-    }
-
-    private StackLayout BuildZdjeciaTab()
-    {
-        var btnAddPhoto = new MButton { Text = "Dodaj zdjęcie", BackgroundColor = Colors.Black, TextColor = Colors.White, Padding = new Thickness(15, 10), FontAttributes = FontAttributes.Bold };
-        btnAddPhoto.Clicked += OnAddPhotoClicked;
-
-        PhotosList = new CollectionView { ItemsSource = new ObservableCollection<string>() };
-
-        return new StackLayout 
-        { 
-            Padding = new Thickness(15, 10),
-            Spacing = 10,
-            Children = 
-            {
-                new Label { Text = "Dodaj zdjęcia pokoju", FontSize = 14, FontAttributes = FontAttributes.Bold },
-                btnAddPhoto,
-                PhotosList
-            }
-        };
-    }
-
-    private StackLayout BuildUdogodneniaTab()
-    {
-        var stack = new StackLayout 
-        { 
-            Padding = new Thickness(15, 10),
-            Spacing = 8
-        };
-
-        stack.Add(new Label { Text = "Zaznacz dostępne udogodnienia", FontSize = 14, FontAttributes = FontAttributes.Bold });
-
-        var items = new[] { "Biurko", "Mydło", "Ogrzewanie", "Internet", "Telewizor", "Szczotka do zębów" };
-        foreach (var item in items)
+        for (int i = 0; i < titles.Length; i++)
         {
-            var checkBox = new MCheckBox { };
-            var label = new Label { Text = item, FontSize = 13, VerticalOptions = LayoutOptions.Center };
-            var checkBoxStack = new HorizontalStackLayout { Spacing = 10 };
-            checkBoxStack.Add(checkBox);
-            checkBoxStack.Add(label);
-            stack.Add(checkBoxStack);
+            bool isActive = i <= activeIndex;
+            var step = new VerticalStackLayout
+            {
+                HorizontalOptions = LayoutOptions.Center,
+                Children = {
+                new Border { HeightRequest = 30, WidthRequest = 30, StrokeShape = new RoundRectangle{CornerRadius=15},
+                             BackgroundColor = isActive ? BlueGray : Color.FromArgb("#e0e0e0"),
+                             Content = new Label { Text = icons[i], TextColor = Colors.White, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center } },
+                new Label { Text = titles[i], FontSize = 8, TextColor = isActive ? BlueGray : GrayText, HorizontalTextAlignment = TextAlignment.Center }
+            }
+            };
+            StepperContainer.Add(step, i * 2, 0);
+            if (i < 3) StepperContainer.Add(new BoxView { Color = BorderColor, HeightRequest = 1, VerticalOptions = LayoutOptions.Center }, (i * 2) + 1, 0);
         }
+    }
 
+    private View CreateField(string label, View control, string hint = null)
+    {
+        var stack = new VerticalStackLayout { Spacing = 2, Margin = new Thickness(0, 0, 0, 10) };
+        stack.Add(new Label { Text = label, FontSize = 12, TextColor = GrayText });
+        stack.Add(new Border { Stroke = BorderColor, Padding = new Thickness(10, 0), Content = control });
+        if (hint != null) stack.Add(new Label { Text = hint, FontSize = 10, TextColor = GrayText });
         return stack;
     }
 
-    private void InitializeData()
+    private View CreateTag(string text, bool isSelected = false) => new Border
     {
-    }
+        Margin = new Thickness(3),
+        Padding = new Thickness(12, 6),
+        BackgroundColor = isSelected ? AccentColor : Color.FromArgb("#f0f0f0"),
+        StrokeShape = new RoundRectangle { CornerRadius = 15 },
+        Content = new Label { Text = (isSelected ? "✓ " : "") + text, TextColor = isSelected ? Colors.White : Colors.Black, FontSize = 12 }
+    };
 
-    private void LoadPokojData()
+    private View CreatePhotoThumb(string src) => new Grid
     {
-        if (!_isEditMode) return;
+        Margin = new Thickness(5),
+        Children = {
+            new Border { StrokeShape = new RoundRectangle{CornerRadius=5}, Content = new Image { Source = src, WidthRequest = 120, HeightRequest = 80, Aspect = Aspect.AspectFill } },
+            new Button { Text = "✕", BackgroundColor = BlueGray, HeightRequest = 20, WidthRequest = 20, CornerRadius = 10, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Start }
+        }
+    };
 
+    private void LoadDataToUI()
+    {
         EntryNazwa.Text = _pokoj.Nazwa;
-        EntrySkroconaNazwa.Text = _pokoj.ShortName;
-        EntryStandard.Text = _pokoj.Standard;
-        EntryKolor.Text = _pokoj.Kolor;
-        EntryCenaPodstawowa.Text = _pokoj.DefaultPrice.ToString();
-        EntryMetraz.Text = _pokoj.Powierzchnia;
         EntryMaxOsoby.Text = _pokoj.MaxOsobLiczbą.ToString();
-        EntryMinOsoby.Text = _pokoj.MinOsobLiczbą.ToString();
-        EntrySmartLockId.Text = _pokoj.LockId.ToString();
-        EntryPozycjaKalendarzu.Text = _pokoj.CalendarPosition.ToString();
+        EntryMetraz.Text = _pokoj.Powierzchnia;
     }
 
-    private void SwitchTab(int tabIndex)
-    {
-        _activeTabIndex = tabIndex;
+    private async void OnSaveClicked(object sender, EventArgs e) => await Navigation.PopAsync();
+}
 
-        TabBasicContent.IsVisible = (tabIndex == 0);
-        TabOsobyContent.IsVisible = (tabIndex == 1);
-        TabZdjeciaContent.IsVisible = (tabIndex == 2);
-        TabUdogodneniaContent.IsVisible = (tabIndex == 3);
-
-        TabBasic.TextColor = tabIndex == 0 ? Colors.Black : Color.FromArgb("#999");
-        TabBasic.FontAttributes = tabIndex == 0 ? FontAttributes.Bold : FontAttributes.None;
-
-        TabOsoby.TextColor = tabIndex == 1 ? Colors.Black : Color.FromArgb("#999");
-        TabOsoby.FontAttributes = tabIndex == 1 ? FontAttributes.Bold : FontAttributes.None;
-
-        TabZdjecia.TextColor = tabIndex == 2 ? Colors.Black : Color.FromArgb("#999");
-        TabZdjecia.FontAttributes = tabIndex == 2 ? FontAttributes.Bold : FontAttributes.None;
-
-        TabUdogodnienia.TextColor = tabIndex == 3 ? Colors.Black : Color.FromArgb("#999");
-        TabUdogodnienia.FontAttributes = tabIndex == 3 ? FontAttributes.Bold : FontAttributes.None;
-
-        // Resetuj scroll na top
-        MainThread.BeginInvokeOnMainThread(async () =>
-        {
-            await ContentScroll.ScrollToAsync(0, 0, false);
-        });
-    }
-
-    private async void OnAddPhotoClicked(object sender, EventArgs e)
-    {
-        try
-        {
-            var result = await FilePicker.PickAsync(new PickOptions
-            {
-                FileTypes = FilePickerFileType.Images,
-                PickerTitle = "Wybierz zdjęcie"
-            });
-
-            if (result != null)
-            {
-                var filePath = result.FullPath;
-                if (PhotosList.ItemsSource is ObservableCollection<string> photos)
-                {
-                    photos.Add(filePath);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Błąd", $"Nie udało się wybrać zdjęcia: {ex.Message}", "OK");
-        }
-    }
-
-    private async void OnSaveClicked(object sender, EventArgs e)
-    {
-        try
-        {
-            _pokoj.Nazwa = EntryNazwa.Text;
-            _pokoj.ShortName = EntrySkroconaNazwa.Text;
-            _pokoj.Standard = EntryStandard.Text;
-            _pokoj.Kolor = EntryKolor.Text;
-            _pokoj.Powierzchnia = EntryMetraz.Text;
-
-            if (int.TryParse(EntryCenaPodstawowa.Text, out int price))
-                _pokoj.DefaultPrice = price;
-
-            if (int.TryParse(EntryMaxOsoby.Text, out int maxOsoby))
-                _pokoj.MaxOsobLiczbą = maxOsoby;
-
-            if (int.TryParse(EntryMinOsoby.Text, out int minOsoby))
-                _pokoj.MinOsobLiczbą = minOsoby;
-
-            if (int.TryParse(EntrySmartLockId.Text, out int lockId))
-                _pokoj.LockId = lockId;
-
-            if (int.TryParse(EntryPozycjaKalendarzu.Text, out int calendarPos))
-                _pokoj.CalendarPosition = calendarPos;
-
-            if (_panelService == null)
-                throw new InvalidOperationException("Panel Service nie jest dostępny");
-
-            if (_isEditMode)
-            {
-                var success = await _panelService.UpdatePokoj(_pokoj.Id, _pokoj);
-                if (success)
-                {
-                    await DisplayAlert("Sukces", "Pokój został zaktualizowany", "OK");
-                    await Shell.Current.GoToAsync("..");
-                }
-                else
-                {
-                    await DisplayAlert("Błąd", "Nie udało się zaktualizować pokoju", "OK");
-                }
-            }
-            else
-            {
-                var createdPokoj = await _panelService.CreatePokoj(_pokoj);
-                if (createdPokoj != null)
-                {
-                    await DisplayAlert("Sukces", "Pokój został dodany", "OK");
-                    await Shell.Current.GoToAsync("..");
-                }
-                else
-                {
-                    await DisplayAlert("Błąd", "Nie udało się dodać pokoju", "OK");
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Błąd", $"Nie udało się zapisać pokoju: {ex.Message}", "OK");
-        }
-    }
+public static class ButtonExtensions
+{
+    public static Button WithClick(this Button b, EventHandler h) { b.Clicked += h; return b; }
 }
