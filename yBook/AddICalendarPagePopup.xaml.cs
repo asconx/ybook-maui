@@ -1,3 +1,6 @@
+using System;
+using System.Threading.Tasks;
+
 namespace yBook.Views.ICalendar
 {
     public partial class AddCalendarPopup : ContentPage
@@ -34,7 +37,11 @@ namespace yBook.Views.ICalendar
 
             var safeName = name.Replace(" ", "_").ToLower();
 
-            ExportLinkEntry.Text = $"https://api.ybook.com/export/{safeName}_{Guid.NewGuid()}";
+            if (string.IsNullOrWhiteSpace(ExportLinkEntry.Text))
+            {
+                ExportLinkEntry.Text =
+                    $"https://api.ybook.com/export/{safeName}_{Guid.NewGuid()}";
+            }
         }
 
         private async void OnSaveClicked(object sender, EventArgs e)

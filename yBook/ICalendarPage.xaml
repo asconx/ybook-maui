@@ -28,7 +28,7 @@
                     Clicked="OnDodajClicked"/>
 
         </HorizontalStackLayout>
-
+        
 
         <CollectionView Grid.Row="2"
                         ItemsSource="{Binding Items}">
@@ -51,3 +51,8 @@
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+</ContentPage>

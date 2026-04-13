@@ -6,10 +6,9 @@
 
     <Grid VerticalOptions="Center" HorizontalOptions="Center">
 
-        <Frame WidthRequest="300"
-               Padding="15"
-               CornerRadius="12"
-               BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+        <Border WidthRequest="300"
+                Padding="15"
+                BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
             <VerticalStackLayout Spacing="10">
 
@@ -37,6 +36,6 @@
                         Clicked="OnCancelClicked"/>
 
             </VerticalStackLayout>
-        </Frame>
+        </Border>
     </Grid>
-</ContentPage>>
+</ContentPage>

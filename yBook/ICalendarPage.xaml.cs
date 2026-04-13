@@ -1,7 +1,5 @@
+using System;
 using System.Collections.ObjectModel;
-using System.Reflection.PortableExecutable;
-using yBook.Models;
-using static Android.Preferences.PreferenceActivity;
 
 namespace yBook.Views.ICalendar
 {
@@ -12,7 +10,6 @@ namespace yBook.Views.ICalendar
         public ICalendarPage()
         {
             InitializeComponent();
-            Header.HamburgerClicked += (_, _) => Drawer.Open();
 
             BindingContext = this;
         }
@@ -48,7 +45,9 @@ namespace yBook.Views.ICalendar
             if (result != null)
             {
                 var index = Items.IndexOf(item);
-                Items[index] = result;
+
+                Items.RemoveAt(index);
+                Items.Insert(index, result);
             }
         }
 
