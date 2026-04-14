@@ -156,6 +156,10 @@ namespace yBook.Controls
                 case "Powiadomienia":
                     await Shell.Current.GoToAsync(nameof(PowiadomieniaPage));
                     break;
+                // —— Strona Statusy —————————————————————————————————————————————
+                case "Statusy":
+                    await Shell.Current.GoToAsync(nameof(StatusyPage));
+                    break;
 
                 case "Uzytkownicy":
                     await Shell.Current.GoToAsync("UzytkownicyLista");

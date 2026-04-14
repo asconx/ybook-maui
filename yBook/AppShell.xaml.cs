@@ -73,6 +73,9 @@ namespace yBook
             //Powiadomienia
             Routing.RegisterRoute(nameof(PowiadomieniaPage), typeof(PowiadomieniaPage));
 
+            //Statusy
+            Routing.RegisterRoute(nameof(StatusyPage), typeof(StatusyPage));
+
             // Klienci
             Routing.RegisterRoute("Klienci", typeof(Views.Klienci.KlienciPage));
             // Klienci — zarejestruj nazwę zgodną z nameof(KlienciPage) używanym w GoToAsync

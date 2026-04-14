@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:yBook.ViewModels"
+    x:Class="yBook.Views.Ustawienia.StatusyPage"
+    Title="Statusy">
+
+    <!-- ViewModel ustawiony w code-behind, nie tutaj -->
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="12">
+
+            <!-- ── Nagłówek ─────────────────────────────────────────── -->
+            <Grid ColumnDefinitions="*,Auto">
+
+                <Label
+                    Grid.Column="0"
+                    Text="{Binding LiczbaStatusow, StringFormat='Statusy: {0}'}"
+                    FontSize="22"
+                    FontAttributes="Bold"
+                    VerticalOptions="Center"/>
+
+                <Button
+                    Grid.Column="1"
+                    Text="+ Dodaj status"
+                    IsVisible="{Binding PrzyciskDodajWidoczny}"
+                    Command="{Binding PokazFormularzCommand}"/>
+
+            </Grid>
+
+            <!-- ── Formularz dodaj / edytuj ─────────────────────────── -->
+            <Frame
+                IsVisible="{Binding FormularzWidoczny}"
+                BorderColor="LightGray"
+                CornerRadius="8"
+                Padding="12">
+
+                <VerticalStackLayout Spacing="10">
+
+                    <Label
+                        Text="{Binding TytulFormularza}"
+                        FontSize="16"
+                        FontAttributes="Bold"/>
+
+                    <Label Text="Nazwa"/>
+                    <Entry
+                        Placeholder="np. Aktywny"
+                        Text="{Binding NowaNazwa}"/>
+
+                    <Label Text="Kolor (hex)"/>
+                    <Entry
+                        Placeholder="#3498db"
+                        Text="{Binding NowyKolor}"/>
+
+                    <Label Text="Opis"/>
+                    <Editor
+                        Placeholder="Krótki opis statusu..."
+                        Text="{Binding NowyOpis}"
+                        HeightRequest="72"/>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Button
+                            Grid.Column="0"
+                            Text="Zapisz"
+                            BackgroundColor="#2ecc71"
+                            TextColor="White"
+                            Command="{Binding ZapiszCommand}"/>
+                        <Button
+                            Grid.Column="1"
+                            Text="Anuluj"
+                            BackgroundColor="#e74c3c"
+                            TextColor="White"
+                            Command="{Binding AnulujCommand}"/>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- ── Lista statusów ────────────────────────────────────── -->
+            <CollectionView
+                ItemsSource="{Binding Statusy}"
+                SelectionMode="None">
+
+                <CollectionView.EmptyView>
+                    <Label
+                        Text="Brak statusów — dodaj pierwszy!"
+                        HorizontalOptions="Center"
+                        TextColor="Gray"
+                        Margin="0,32"/>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,4" CornerRadius="8" Padding="12" BorderColor="LightGray">
+                            <Grid ColumnDefinitions="10,*,Auto,Auto" ColumnSpacing="10">
+
+                                <!-- Pasek koloru -->
+                                <BoxView
+                                    Grid.Column="0"
+                                    CornerRadius="4"
+                                    Color="{Binding Kolor}"
+                                    VerticalOptions="Fill"/>
+
+                                <!-- Nazwa + opis + powiadomienia -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                    <Label
+                                        Text="{Binding Nazwa}"
+                                        FontAttributes="Bold"
+                                        FontSize="15"/>
+                                    <Label
+                                        Text="{Binding Opis}"
+                                        FontSize="12"
+                                        TextColor="Gray"/>
+                                    <Label
+                                        Text="{Binding PowiadomieniaText}"
+                                        FontSize="11"
+                                        TextColor="CornflowerBlue"/>
+                                </VerticalStackLayout>
+
+                                <!-- Przycisk Edytuj -->
+                                <Button
+                                    Grid.Column="2"
+                                    Text="Edytuj"
+                                    FontSize="12"
+                                    Padding="8,4"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                      Path=BindingContext.EdytujCommand}"
+                                    CommandParameter="{Binding .}"/>
+
+                                <!-- Przycisk Usuń -->
+                                <Button
+                                    Grid.Column="3"
+                                    Text="Usuń"
+                                    FontSize="12"
+                                    Padding="8,4"
+                                    BackgroundColor="#e74c3c"
+                                    TextColor="White"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                      Path=BindingContext.UsunCommand}"
+                                    CommandParameter="{Binding .}"/>
+
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
