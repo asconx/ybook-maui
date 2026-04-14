@@ -21,7 +21,6 @@ namespace yBook.Views.ICalendar
                 ExportLinkEntry.Text = item.ExportLink;
                 Import1Entry.Text = item.Import1;
                 Import2Entry.Text = item.Import2;
-                ExtraEntry.Text = item.Extra;
             }
         }
 
@@ -52,7 +51,6 @@ namespace yBook.Views.ICalendar
             item.ExportLink = ExportLinkEntry.Text;
             item.Import1 = Import1Entry.Text;
             item.Import2 = Import2Entry.Text;
-            item.Extra = ExtraEntry.Text;
 
             tcs.SetResult(item);
 

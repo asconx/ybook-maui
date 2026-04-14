@@ -8,51 +8,91 @@
     <Grid RowDefinitions="60,Auto,*"
           BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
 
+        <!-- HEADER -->
         <ctrl:PageHeader Grid.Row="0"
                          Title="ICalendar"
                          Icon="📅"
-                         ShowBack="True"
-                         x:Name="Header"/>
+                         ShowBack="True"/>
 
+        <!-- TOP BAR -->
         <HorizontalStackLayout Grid.Row="1" Padding="12" Spacing="12">
-
             <Label Text="Synchronizacje"
                    FontAttributes="Bold"
                    VerticalOptions="Center"/>
-
             <Label x:Name="LblCount"
                    Text="0"
                    VerticalOptions="Center"/>
-
             <Button Text="Dodaj"
                     Clicked="OnDodajClicked"/>
-
         </HorizontalStackLayout>
-        
 
-        <CollectionView Grid.Row="2"
-                        ItemsSource="{Binding Items}">
+        <!-- SCROLL -->
+        <ScrollView Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalScrollBarVisibility="Always">
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid ColumnDefinitions="*,Auto,Auto" Padding="10">
+            <!-- FULL WIDTH -->
+            <VerticalStackLayout HorizontalOptions="FillAndExpand"
+                                 MinimumWidthRequest="800"
+                                 Spacing="0">
 
-                        <Label Text="{Binding Name}"
-                               VerticalOptions="Center"/>
+                <!-- HEADER -->
+                <Grid Padding="10"
+                      ColumnDefinitions="Auto,*,*,*,*"
+                      BackgroundColor="{AppThemeBinding Light=#E0E0E0, Dark=#2A2A2A}">
+                    <Label Text="Akcje" FontAttributes="Bold"/>
+                    <Label Grid.Column="1" Text="Nazwa" FontAttributes="Bold"/>
+                    <Label Grid.Column="2" Text="Export link" FontAttributes="Bold"/>
+                    <Label Grid.Column="3" Text="Import 1" FontAttributes="Bold"/>
+                    <Label Grid.Column="4" Text="Import 2" FontAttributes="Bold"/>
+                </Grid>
 
-                        <Button Text="Edytuj"
-                                Grid.Column="1"
-                                Clicked="OnEditClicked"/>
+                <!-- LISTA -->
+                <CollectionView ItemsSource="{Binding Items}"
+                                VerticalOptions="FillAndExpand">
 
-                        <Button Text="Usuń"
-                                Grid.Column="2"
-                                Clicked="OnDeleteClicked"/>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10"
+                                  ColumnDefinitions="Auto,*,*,*,*"
+                                  BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
+                                <!-- AKCJE -->
+                                <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                    <Button Text="✏"
+                                            Clicked="OnEditClicked"/>
+                                    <Button Text="🗑"
+                                            Clicked="OnDeleteClicked"
+                                            BackgroundColor="#f44336"
+                                            TextColor="White"/>
+                                </HorizontalStackLayout>
 
-        </CollectionView>
+                                <!-- DANE -->
+                                <Label Grid.Column="1"
+                                       Text="{Binding Name}"
+                                       VerticalOptions="Center"/>
+
+                                <Label Grid.Column="2"
+                                       Text="{Binding ExportLink}"
+                                       LineBreakMode="TailTruncation"
+                                       VerticalOptions="Center"/>
+
+                                <Label Grid.Column="3"
+                                       Text="{Binding Import1}"
+                                       VerticalOptions="Center"/>
+
+                                <Label Grid.Column="4"
+                                       Text="{Binding Import2}"
+                                       VerticalOptions="Center"/>
+
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
 
     </Grid>
 </ContentPage>

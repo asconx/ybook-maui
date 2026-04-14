@@ -26,9 +26,6 @@
                 <Entry Placeholder="Import 2"
                        x:Name="Import2Entry"/>
 
-                <Entry Placeholder="Extra"
-                       x:Name="ExtraEntry"/>
-
                 <Button Text="Zapisz"
                         Clicked="OnSaveClicked"/>
 

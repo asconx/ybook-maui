@@ -10,7 +10,6 @@ namespace yBook.Views.ICalendar
         public ICalendarPage()
         {
             InitializeComponent();
-
             BindingContext = this;
         }
 
@@ -69,6 +68,5 @@ namespace yBook.Views.ICalendar
         public string ExportLink { get; set; }
         public string Import1 { get; set; }
         public string Import2 { get; set; }
-        public string Extra { get; set; }
     }
 }
