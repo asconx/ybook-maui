@@ -41,14 +41,14 @@
 
                         <!-- Zameldowany / Niezameldowany -->
                         <HorizontalStackLayout Spacing="24">
-                            <HorizontalStackLayout Spacing="8">
-                                <CheckBox x:Name="ChkZameldowany" IsChecked="True" Color="#1565C0"/>
+                                <HorizontalStackLayout Spacing="8">
+                                <CheckBox x:Name="ChkZameldowany" IsChecked="True" Color="#1565C0" CheckedChanged="OnFiltrChanged"/>
                                 <Label Text="Zameldowany"
                                        FontSize="13" VerticalOptions="Center"
                                        TextColor="{AppThemeBinding Light=#455A64, Dark=#B0BEC5}"/>
                             </HorizontalStackLayout>
                             <HorizontalStackLayout Spacing="8">
-                                <CheckBox x:Name="ChkNiezameldowany" IsChecked="True" Color="#1565C0"/>
+                                <CheckBox x:Name="ChkNiezameldowany" IsChecked="True" Color="#1565C0" CheckedChanged="OnFiltrChanged"/>
                                 <Label Text="Niezameldowany"
                                        FontSize="13" VerticalOptions="Center"
                                        TextColor="{AppThemeBinding Light=#455A64, Dark=#B0BEC5}"/>
@@ -66,7 +66,7 @@
                                        TextColor="{AppThemeBinding Light=#90A4AE, Dark=#607D8B}"/>
 
                                 <!-- Wiersz 1 -->
-                                <FlexLayout Wrap="Wrap" Direction="Row" Gap="6">
+                                <FlexLayout x:Name="TagsFlex" Wrap="Wrap" Direction="Row">
                                     <Border x:Name="TagRezWstepna"
                                             BackgroundColor="#FFF8E1"
                                             Stroke="#FFD54F" StrokeThickness="1"

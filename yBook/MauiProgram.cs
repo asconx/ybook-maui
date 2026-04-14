@@ -28,6 +28,7 @@ namespace yBook
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<ISurveyService, SurveyService>();
             builder.Services.AddSingleton<IPanelService, PanelService>();
+            builder.Services.AddSingleton<ISmsService, SmsService>(sp => new SmsService(sp.GetRequiredService<IAuthService>(), sp.GetRequiredService<HttpClient>()));
 
             // ── Shell ─────────────────────────────────────────────────────────
             builder.Services.AddSingleton<AppShell>();
@@ -46,6 +47,7 @@ namespace yBook
             builder.Services.AddTransient<SurveysPage>();
             builder.Services.AddTransient<EditSurveyPage>();
             builder.Services.AddTransient<yBook.Views.Kalendarz.KalendarzPage>();
+            builder.Services.AddTransient<GrupoweSmsPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
