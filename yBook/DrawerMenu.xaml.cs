@@ -184,6 +184,20 @@ namespace yBook.Controls
                 case "Pulpit":
                     await Shell.Current.GoToAsync("//MainPage");
                     break;
+                case "Recepcja":
+                    // Otwórz stronę Recepcja zamiast wyświetlać alert
+                    var recepcjaPage = yBook.Services.ServiceLocator.Get<yBook.Views.RecepcjaPage>();
+                    if (recepcjaPage != null)
+                    {
+                        await Shell.Current.Navigation.PushAsync(recepcjaPage);
+                    }
+                    else
+                    {
+                        // fallback: resolve ActiveReservationService and construct page
+                        var svc = yBook.Services.ServiceLocator.Get<yBook.Services.Api.ActiveReservationService>();
+                        await Shell.Current.Navigation.PushAsync(new yBook.Views.RecepcjaPage(svc!));
+                    }
+                    break;
                 // —— Strona Klientow —————————————————————————————————————————————
                 case "Klienci":
                     await Shell.Current.GoToAsync(nameof(KlienciPage));

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:yBook.ViewModels"
+             xmlns:models="clr-namespace:yBook.Models"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="yBook.Views.RecepcjaDetailPage"
+             Title="Recepcja - szczegóły"
+             BackgroundColor="{StaticResource BgColor}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <!-- Theme colors -->
+            <Color x:Key="BgColor">#EAF6FF</Color>
+            <Color x:Key="PrimaryColor">#1976D2</Color>
+            <Color x:Key="AccentColor">#E3F2FD</Color>
+            <Color x:Key="CardBorderColor">#BBDEFB</Color>
+            <Color x:Key="TextPrimary">#0D47A1</Color>
+            <!-- Column background slightly darker than page background -->
+            <Color x:Key="ColumnBgColor">#D6EEFF</Color>
+
+            <!-- Styles -->
+            <Style x:Key="CardFrameStyle" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="Padding" Value="10" />
+                <!-- Slightly darker blue for column cards (same for all three columns) -->
+                <Setter Property="BackgroundColor" Value="{StaticResource ColumnBgColor}" />
+                <Setter Property="BorderColor" Value="{StaticResource CardBorderColor}" />
+            </Style>
+
+            <Style x:Key="HeaderLabelStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+
+            <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="CornerRadius" Value="6" />
+            </Style>
+
+            <!-- Slightly more pronounced action button for important actions -->
+            <Style x:Key="AccentActionButtonStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="#1565C0" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="Padding" Value="10,8" />
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+
+            <!-- ViewModel resource -->
+            <vm:ReservationViewModel x:Key="ReservationVm" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid x:Name="RootGrid" ColumnSpacing="12" RowSpacing="12" Padding="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="Col0" Width="*" />
+                <ColumnDefinition x:Name="Col1" Width="2*" />
+                <ColumnDefinition x:Name="Col2" Width="360" />
+            </Grid.ColumnDefinitions>
+
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="DeviceStates">
+                    <VisualState x:Name="Phone">
+                        <VisualState.Setters>
+                            <Setter TargetName="Col0" Property="Width" Value="*" />
+                            <Setter TargetName="Col1" Property="Width" Value="0" />
+                            <Setter TargetName="Col2" Property="Width" Value="0" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Tablet">
+                        <VisualState.Setters>
+                            <Setter TargetName="Col0" Property="Width" Value="*" />
+                            <Setter TargetName="Col1" Property="Width" Value="2*" />
+                            <Setter TargetName="Col2" Property="Width" Value="360" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+
+            <!-- Left: reservation data -->
+            <ScrollView Grid.Column="0">
+                <VerticalStackLayout Spacing="12" Padding="8">
+                    <Frame Style="{StaticResource CardFrameStyle}">
+                        <VerticalStackLayout x:Name="LeftDetailsStack" Spacing="8">
+                            <Button Text="dodaj termin" HorizontalOptions="Start" Style="{StaticResource AccentActionButtonStyle}" Clicked="OnActionButtonClicked" />
+
+                            <HorizontalStackLayout Spacing="10">
+                                <Label Text="Dorośli" VerticalOptions="Center" />
+                                <Stepper Minimum="1" Maximum="10" Value="1" x:Name="StepAdults" />
+                                <Label x:Name="LblAdults" Text="1" />
+                            </HorizontalStackLayout>
+
+                            <HorizontalStackLayout Spacing="10">
+                                <Label Text="Dzieci" VerticalOptions="Center" />
+                                <Stepper Minimum="0" Maximum="10" Value="0" x:Name="StepChildren" />
+                                <Label x:Name="LblChildren" Text="0" />
+                            </HorizontalStackLayout>
+
+                            <HorizontalStackLayout Spacing="10">
+                                <Label Text="0-3 lat" VerticalOptions="Center" />
+                                <Stepper Minimum="0" Maximum="10" Value="0" x:Name="StepInfants" />
+                                <Label x:Name="LblInfants" Text="0" />
+                            </HorizontalStackLayout>
+
+                            <Picker x:Name="PickerRoom" Title="Wybierz pokój" ItemsSource="{Binding Rooms}" />
+
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                                <DatePicker x:Name="DateFrom" Date="{Binding From}" />
+                                <DatePicker x:Name="DateTo" Date="{Binding To}" />
+                            </Grid>
+
+                            <Label x:Name="LblNights" Text="0 nocy" />
+
+                            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                                <Label Text="Dostawka" VerticalOptions="Center" />
+                                <Switch x:Name="SwExtraBed" />
+                                <Label x:Name="LblExtraBedCost" Text="0 PLN" />
+                            </HorizontalStackLayout>
+
+                            <Label x:Name="LblRoomPrice" Text="Cena za noc: 0 PLN" FontAttributes="Bold" />
+
+                        </VerticalStackLayout>
+                    </Frame>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!-- Middle: details + notes -->
+            <ScrollView Grid.Column="1">
+                <VerticalStackLayout Spacing="12" Padding="8">
+                    <Frame Style="{StaticResource CardFrameStyle}">
+                        <VerticalStackLayout Spacing="8">
+                            <Picker x:Name="PickerStatus" Title="Status rezerwacji">
+                                <Picker.Items>
+                                    <x:String>Rezerwacja wstępna</x:String>
+                                    <x:String>Oferta</x:String>
+                                    <x:String>Rezerwacja potwierdzona</x:String>
+                                    <x:String>Rezerwacja rozliczona</x:String>
+                                    <x:String>Anulowanie rezerwacji</x:String>
+                                    <x:String>Wysłano kod dostępu</x:String>
+                                    <x:String>test grupowy sms</x:String>
+                                </Picker.Items>
+                            </Picker>
+
+                            <Label Text="Uwagi" FontAttributes="Bold" />
+                            <Editor x:Name="EditorUwagi" HeightRequest="120" />
+
+                            <Label Text="Informacje do powiadomienia" FontAttributes="Bold" />
+                            <Editor x:Name="EditorInfo" HeightRequest="120" />
+
+                            <toolkit:Expander>
+                                <toolkit:Expander.Header>
+                                    <Label Text="Wysłane powiadomienia" />
+                                </toolkit:Expander.Header>
+                                <toolkit:Expander.Content>
+                                    <VerticalStackLayout>
+                                        <Label Text="Brak" />
+                                    </VerticalStackLayout>
+                                </toolkit:Expander.Content>
+                            </toolkit:Expander>
+
+                            <toolkit:Expander>
+                                <toolkit:Expander.Header>
+                                    <Label Text="Meldunek (check-in / check-out)" />
+                                </toolkit:Expander.Header>
+                                <toolkit:Expander.Content>
+                                    <VerticalStackLayout>
+                                        <Label Text="Sprawdzenie rezerwacji" />
+                                        <Label Text="Przekazanie klucza" />
+                                        <Label Text="Wyjaśnienie zasad obiektu" />
+                                    </VerticalStackLayout>
+                                </toolkit:Expander.Content>
+                            </toolkit:Expander>
+
+                            <toolkit:Expander>
+                                <toolkit:Expander.Header>
+                                    <Label Text="Parking (rejestracja pojazdu)" />
+                                </toolkit:Expander.Header>
+                                <toolkit:Expander.Content>
+                                    <VerticalStackLayout>
+                                        <Label Text="Rejestracja pojazdu" />
+                                    </VerticalStackLayout>
+                                </toolkit:Expander.Content>
+                            </toolkit:Expander>
+
+                        </VerticalStackLayout>
+                    </Frame>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!-- Right: summary -->
+            <ScrollView Grid.Column="2">
+                <VerticalStackLayout Spacing="12" Padding="8">
+                    <Frame Style="{StaticResource CardFrameStyle}">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Podsumowanie" Style="{StaticResource HeaderLabelStyle}" />
+                            <Label x:Name="LblSumNights" Text="Suma za noclegi: 0 PLN" />
+                            <Label x:Name="LblExtraCharges" Text="Opłaty dodatkowe: 0 PLN" />
+                            <HorizontalStackLayout Spacing="6">
+                                <Label Text="Rabat:" VerticalOptions="Center" />
+                                <Entry x:Name="EntDiscount" Placeholder="% lub kwota" PlaceholderColor="{StaticResource TextPrimary}" />
+                            </HorizontalStackLayout>
+                            <Label x:Name="LblPrepayment" Text="Przedpłata: 0 PLN" />
+                            <Label x:Name="LblTotalPrice" Text="Cena za całość: 0 PLN" FontAttributes="Bold" />
+                            <Label x:Name="LblRemaining" Text="Pozostało do zapłaty: 0 PLN" FontAttributes="Bold" />
+
+                            <Button Text="dodaj wpłatę" Style="{StaticResource PrimaryButtonStyle}" Clicked="OnActionButtonClicked" />
+                            <Button Text="obciążenia" Style="{StaticResource PrimaryButtonStyle}" Clicked="OnActionButtonClicked" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <HorizontalStackLayout Spacing="12">
+                        <Button Text="archiwizuj" BackgroundColor="#424242" TextColor="White" Clicked="OnActionButtonClicked" />
+                        <Button Text="zapisz" Style="{StaticResource PrimaryButtonStyle}" Clicked="OnActionButtonClicked" />
+                        <Button Text="powiadomienie" Style="{StaticResource AccentActionButtonStyle}" Clicked="OnActionButtonClicked" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
