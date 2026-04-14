@@ -454,19 +454,37 @@ namespace yBook.Views.Ustawienia
                 var json = await resp.Content.ReadAsStringAsync();
                 var doc = JsonDocument.Parse(json);
 
-                UserStore.Users.Clear();
-                foreach (var elem in doc.RootElement.EnumerateArray())
+                MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    var user = new User
+                    UserStore.Users.Clear();
+
+                    // ✅ KLUCZOWA ZMIANA
+                    if (!doc.RootElement.TryGetProperty("items", out var items))
+                        return;
+
+                    foreach (var elem in items.EnumerateArray())
                     {
-                        Id = elem.GetProperty("id").GetInt32(),
-                        Name = elem.GetProperty("name").GetString() ?? "",
-                        Email = elem.GetProperty("email").GetString() ?? "",
-                        Phone = elem.TryGetProperty("phone", out var phoneProp) ? phoneProp.GetString() : "",
-                        Role = elem.TryGetProperty("role", out var roleProp) ? roleProp.GetString() : ""
-                    };
-                    UserStore.Users.Add(user);
-                }
+                        try
+                        {
+                            var user = new User
+                            {
+                                Id = elem.GetProperty("id").GetInt32(),
+                                Name = elem.GetProperty("name").GetString() ?? "",
+                                Email = elem.GetProperty("email").GetString() ?? "",
+                                Phone = elem.TryGetProperty("phone", out var phoneProp) ? phoneProp.GetString() : "",
+                                Role = elem.TryGetProperty("role", out var roleProp) ? roleProp.GetString() : ""
+                            };
+
+                            UserStore.Users.Add(user);
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[FetchUsers] Parse error: {ex.Message}");
+                        }
+                    }
+
+                    UpdateEmptyLabel();
+                });
             }
             catch (Exception ex)
             {
