@@ -11,6 +11,7 @@ namespace yBook.Views.Recepcja
         private List<RezerwacjaOnline> _rezerwacjeNiezameldowane = new();
         private string _activeTab = "zameldowany";
         private readonly IRezerwacjaService _rezerwacjaService;
+        private bool _isLoading = false;
 
         public RecepcjaPage()
         {
@@ -19,14 +20,31 @@ namespace yBook.Views.Recepcja
             LoadRezerwacje();
         }
 
-        private void LoadRezerwacje()
+        private async void LoadRezerwacje()
         {
-            _rezerwacjeZameldowane = _rezerwacjaService.GetRezerwacjeZameldowane();
-            _rezerwacjeNiezameldowane = _rezerwacjaService.GetRezerwacjeNiezameldowane();
-            _rezerwacje = _rezerwacjeZameldowane;
+            if (_isLoading) return;
+            
+            _isLoading = true;
+            try
+            {
+                _rezerwacjeZameldowane = await _rezerwacjaService.GetRezerwacjeZameldowaneAsync();
+                _rezerwacjeNiezameldowane = await _rezerwacjaService.GetRezerwacjeNiezameldowaneAsync();
+                _rezerwacje = _rezerwacjeZameldowane;
 
-            RenderRezerwacje();
-            UpdateTabColors();
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    RenderRezerwacje();
+                    UpdateTabColors();
+                });
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Blad", $"Nie udalo sie zaladowac rezerwacji: {ex.Message}", "OK");
+            }
+            finally
+            {
+                _isLoading = false;
+            }
         }
 
         private void RenderRezerwacje()
@@ -83,7 +101,6 @@ namespace yBook.Views.Recepcja
             };
             headerGrid.Add(lblNumer, 0);
 
-            // Badge statusu
             var statusKolor = rez.Status switch
             {
                 StatusRezerwacji.Potwierdzona => "#2E7D32",
@@ -108,7 +125,6 @@ namespace yBook.Views.Recepcja
             headerGrid.Add(badge, 1);
             stack.Add(headerGrid);
 
-            // Pe³ne imiê i nazwisko
             var lblGosc = new Label
             {
                 Text = rez.PelneNazwisko,
@@ -118,7 +134,6 @@ namespace yBook.Views.Recepcja
             };
             stack.Add(lblGosc);
 
-            // Typ pokoju
             var lblTyp = new Label
             {
                 Text = rez.TypPokoju,
@@ -127,7 +142,6 @@ namespace yBook.Views.Recepcja
             };
             stack.Add(lblTyp);
 
-            // Separator
             var separator = new BoxView
             {
                 HeightRequest = 1,
@@ -136,7 +150,6 @@ namespace yBook.Views.Recepcja
             };
             stack.Add(separator);
 
-            // Termin
             var lblTermin = new Label
             {
                 Text = $"Termin: {rez.DataPrzyjazdu:yyyy-MM-dd} – {rez.DataWyjazdu:yyyy-MM-dd}",
@@ -145,10 +158,9 @@ namespace yBook.Views.Recepcja
             };
             stack.Add(lblTermin);
 
-            // Noce
             var lblNoci = new Label
             {
-                Text = $"{rez.LiczbaNoci} noce",
+                Text = $"{rez.LiczbaNocy} noce",
                 FontSize = 11,
                 TextColor = Color.FromArgb("#78909C")
             };
@@ -199,15 +211,23 @@ namespace yBook.Views.Recepcja
 
         void OnSearchTextChanged(object? sender, TextChangedEventArgs e)
         {
-            var searchText = e.NewTextValue?.ToLower() ?? "";
+            if (string.IsNullOrWhiteSpace(e.NewTextValue))
+            {
+                RenderRezerwacje();
+                return;
+            }
 
-            var filtered = (_activeTab == "zameldowany" ? _rezerwacjeZameldowane : _rezerwacjeNiezameldowane)
-                .Where(r => r.Id.Contains(searchText) ||
-                           r.PelneNazwisko.ToLower().Contains(searchText))
+            var filtered = _rezerwacje
+                .Where(r => r.Id.Contains(e.NewTextValue) || 
+                            r.PelneNazwisko.Contains(e.NewTextValue, StringComparison.OrdinalIgnoreCase) ||
+                            r.Email.Contains(e.NewTextValue, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
-            _rezerwacje = filtered;
-            RenderRezerwacje();
+            RezerwacjeContainer.Children.Clear();
+            foreach (var rez in filtered)
+            {
+                RezerwacjeContainer.Children.Add(CreateRezerwacjaCard(rez));
+            }
         }
 
         private async void OnRezerwacjaTapped(RezerwacjaOnline rez)
