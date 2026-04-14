@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using yBook.Services;
 using yBook.ViewModels;
 using yBook.Views.Auth;
+using yBook.Views.Finanse;
 using yBook.Views.Rabaty;
 using yBook.Views.Surveys;
 using yBook.Views.Ustawienia;
@@ -46,6 +47,8 @@ namespace yBook
             builder.Services.AddTransient<SurveysPage>();
             builder.Services.AddTransient<EditSurveyPage>();
             builder.Services.AddTransient<yBook.Views.Kalendarz.KalendarzPage>();
+            builder.Services.AddSingleton<IFinanseService, FinanseService>();
+            builder.Services.AddTransient<RejestrPlatnosciPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

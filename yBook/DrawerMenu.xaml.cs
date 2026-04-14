@@ -22,7 +22,7 @@ namespace yBook.Controls
 
         public Action<object, object> HamburgerClicked { get; internal set; }
 
-        
+
 
         public DrawerMenu()
         {
@@ -121,9 +121,17 @@ namespace yBook.Controls
                     await Shell.Current.GoToAsync("UslugiOplaty");
                     break;
                 case "Dokumenty":
+                    await Shell.Current.GoToAsync("Dokumenty");
+                    break;
                 case "KontaFinansowe":
+                    await Shell.Current.GoToAsync("KontaFinansowe");
+                    break;
                 case "RejestrPlatnosci":
+                    await Shell.Current.GoToAsync("RejestrPlatnosci");
+                    break;
                 case "ImportMT940":
+                    await Shell.Current.GoToAsync("ImportMT940");
+                    break;
                 case "Kalendarz":
                     await Shell.Current.GoToAsync("KalendarzPage");
                     break;

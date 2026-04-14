@@ -166,4 +166,58 @@ namespace yBook.Models
             new() { Id="4", NazwaPliku="wyciag_PKO_2024_03b.mt940", DataImportu=new(2024,3,19,8,55,0), Status=StatusImportu.Oczekuje,      LiczbaOper=8,  Dopasowano=0,  Suma=4_100.00m  },
         };
     }
+
+    // ── DTO – modele odpowiedzi API (internal, dostępne w całym projekcie) ────
+
+    internal class ApiPlatnosc
+    {
+        public object?   Id                { get; set; }
+        public string?   Title             { get; set; }
+        public string?   Description       { get; set; }
+        public string?   Type              { get; set; }
+        public string?   Direction         { get; set; }
+        public string?   Client            { get; set; }
+        public string?   ClientName        { get; set; }
+        public string?   AccountName       { get; set; }
+        public string?   ReservationNo     { get; set; }
+        public string?   ReservationNumber { get; set; }
+        public DateTime? Date              { get; set; }
+        public DateTime? CreatedAt         { get; set; }
+        public decimal?  Amount            { get; set; }
+        public decimal?  Value             { get; set; }
+        public bool?     Income            { get; set; }
+    }
+
+    internal class ApiDokument
+    {
+        public object?   Id                { get; set; }
+        public string?   ReservationNo     { get; set; }
+        public string?   ReservationNumber { get; set; }
+        public string?   Number            { get; set; }
+        public string?   DocumentNumber    { get; set; }
+        public string?   Type              { get; set; }
+        public string?   Client            { get; set; }
+        public string?   ClientName        { get; set; }
+        public decimal?  GrossAmount       { get; set; }
+        public decimal?  Amount            { get; set; }
+        public decimal?  PaidAmount        { get; set; }
+        public DateTime? IssueDate         { get; set; }
+        public DateTime? CreatedAt         { get; set; }
+        public DateTime? SaleDate          { get; set; }
+        public DateTime? PaymentDate       { get; set; }
+    }
+
+    internal class ApiKonto
+    {
+        public object?  Id             { get; set; }
+        public string?  Name           { get; set; }
+        public string?  Type           { get; set; }
+        public string?  Number         { get; set; }
+        public string?  AccountNumber  { get; set; }
+        public decimal? Balance        { get; set; }
+        public decimal? CurrentBalance { get; set; }
+        public string?  Currency       { get; set; }
+        public bool?    Active         { get; set; }
+    }
+
 }
