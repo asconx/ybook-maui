@@ -53,9 +53,12 @@ namespace yBook
             Routing.RegisterRoute("RejestrPlatnosci", typeof(RejestrPlatnosciPage));
             Routing.RegisterRoute("ImportMT940", typeof(ImportMT940Page));
 
-            // Inne
-            Routing.RegisterRoute("ICalendar", typeof(ICalendarPage));
-            Routing.RegisterRoute("UslugiOplaty", typeof(UslugiOplaty));
+			// ceny
+			Routing.RegisterRoute("UslugiOplaty", typeof(UslugiOplaty));
+			Routing.RegisterRoute("UslugiOplatyDodawanie", typeof(UslugiOplatyDodawanie)); //UslugiOplaty helper page
+
+			// Inne
+			Routing.RegisterRoute("ICalendar", typeof(ICalendarPage));
             Routing.RegisterRoute("Cenniki", typeof(CennikPage));
             Routing.RegisterRoute("RabatyPage", typeof(RabatyPage));
             Routing.RegisterRoute("BlokadyPage", typeof(BlokadyPage));

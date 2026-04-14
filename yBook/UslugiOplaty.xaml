@@ -27,6 +27,8 @@
 		<Style x:Key="CustomText" TargetType="Label">
 			<Setter Property="TextColor" Value="Black"/>
 			<Setter Property="FontSize" Value="11"/>
+			<Setter Property="HorizontalOptions" Value="LayoutOptions.Center"/>
+			<Setter Property="VerticalOptions" Value="LayoutOptions.Center"/>
 		</Style>
 
 		<Style x:Key="CustomTextBold" TargetType="Label">
@@ -115,15 +117,15 @@
             <!-- _____________________ -->
             <!--        HEADER         -->
 			<ScrollView Orientation="Horizontal">
-				<Grid ColumnDefinitions="80,120,120,150,200,120,120,150,200"
+				<Grid ColumnDefinitions="80, 80,120,120,150,200,120,120,150,200"
                       Padding="12,8">
-					<Label Grid.Column="1" Text="Nazwa" Style="{StaticResource CustomTextBold}"/>
-					<Label Grid.Column="2" Text="Rodzaj" Style="{StaticResource CustomTextBold}"/>
-					<Label Grid.Column="3" Text="Typ" Style="{StaticResource CustomTextBold}"/>
-					<Label Grid.Column="4" Text="Cena" Style="{StaticResource CustomTextBold}"/>
-					<Label Grid.Column="5" Text="Data od" Style="{StaticResource CustomTextBold}"/>
-					<Label Grid.Column="6" Text="Data do" Style="{StaticResource CustomTextBold}"/>
-					<Label Grid.Column="7" Text="Opis" Style="{StaticResource CustomTextBold}"/>
+					<Label Grid.Column="2" Text="Nazwa" Style="{StaticResource CustomTextBold}"/>
+					<Label Grid.Column="3" Text="Rodzaj" Style="{StaticResource CustomTextBold}"/>
+					<Label Grid.Column="4" Text="Typ" Style="{StaticResource CustomTextBold}"/>
+					<Label Grid.Column="5" Text="Cena" Style="{StaticResource CustomTextBold}"/>
+					<Label Grid.Column="6" Text="Data od" Style="{StaticResource CustomTextBold}"/>
+					<Label Grid.Column="7" Text="Data do" Style="{StaticResource CustomTextBold}"/>
+					<Label Grid.Column="8" Text="Opis" Style="{StaticResource CustomTextBold}"/>
                 </Grid>
             </ScrollView>
 
@@ -136,35 +138,51 @@
                         <Grid RowDefinitions="Auto,1">
 
                             <ScrollView Orientation="Horizontal">
-								<Grid ColumnDefinitions="80,120,120,150,200,120,120,150,200" Padding="12">
+								<Grid ColumnDefinitions="80,80,120,120,150,200,120,120,150,200" Padding="12">
 
-									<!-- DESTROY -->
+									<!-- DELETE -->
 									<Border Style="{StaticResource CustomBorder}" Grid.Column="0">
 										<Label Text="Usuń"
-										   Style="{StaticResource CustomText}"
-										   HorizontalOptions="Center"
-										   VerticalOptions="Center"/>
+											   Style="{StaticResource CustomText}"
+											   HorizontalOptions="Center"
+											   VerticalOptions="Center"/>
 										<Border.GestureRecognizers>
-											<TapGestureRecognizer Tapped="OnDeleteClicked"/>
+											<TapGestureRecognizer 
+												Tapped="OnDeleteClicked"
+												CommandParameter="{Binding .}"/>
 										</Border.GestureRecognizers>
 									</Border>
-									<!-- Name -->
+
+									<!-- MODIFY -->
 									<Border Style="{StaticResource CustomBorder}" Grid.Column="1">
+										<Label Text="Modyfikuj"
+											   Style="{StaticResource CustomText}"
+											   HorizontalOptions="Center"
+											   VerticalOptions="Center"/>
+										<Border.GestureRecognizers>
+											<TapGestureRecognizer 
+												Tapped="OnModifClicked"
+												CommandParameter="{Binding .}"/>
+										</Border.GestureRecognizers>
+									</Border>
+
+									<!-- Name -->
+									<Border Style="{StaticResource CustomBorder}" Grid.Column="2">
 										<Label Style="{StaticResource CustomText}" Text="{Binding Name}" />
 									</Border>
 
 									<!-- RODZAJ -->
-									<Border Style="{StaticResource CustomBorder}" Grid.Column="2">
+									<Border Style="{StaticResource CustomBorder}" Grid.Column="3">
 										<Label Style="{StaticResource CustomText}" Text="{Binding Rodzaj}" />
 									</Border>
 
 									<!-- TYP -->
-									<Border Style="{StaticResource CustomBorder}" Grid.Column="3">
+									<Border Style="{StaticResource CustomBorder}" Grid.Column="4">
 										<Label Style="{StaticResource CustomText}" Text="{Binding Typ}" />
 									</Border>
 
 									<!-- CENY -->
-									<Border Style="{StaticResource CustomBorder}" Grid.Column="4">
+									<Border Style="{StaticResource CustomBorder}" Grid.Column="5">
 										<VerticalStackLayout BindableLayout.ItemsSource="{Binding Ceny}">
 											<BindableLayout.ItemTemplate>
 												<DataTemplate>
@@ -175,17 +193,17 @@
 									</Border>
 
 									<!-- DataOd -->
-									<Border Style="{StaticResource CustomBorder}" Grid.Column="5">
+									<Border Style="{StaticResource CustomBorder}" Grid.Column="6">
 										<Label Style="{StaticResource CustomText}" Text="{Binding DataOd}" />
 									</Border>
 
 									<!-- DataDo -->
-									<Border Style="{StaticResource CustomBorder}" Grid.Column="6">
+									<Border Style="{StaticResource CustomBorder}" Grid.Column="7">
 										<Label Style="{StaticResource CustomText}" Text="{Binding DataDo}" />
 									</Border>
 
 									<!-- Opis -->
-									<Border Style="{StaticResource CustomBorder}" Grid.Column="7">
+									<Border Style="{StaticResource CustomBorder}" Grid.Column="8">
 										<Label Style="{StaticResource CustomText}" Text="{Binding Opis}" />
 									</Border>
 
