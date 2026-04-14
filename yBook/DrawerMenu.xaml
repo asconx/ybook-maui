@@ -175,12 +175,24 @@
                             <Label Grid.Column="0" Text="👤" FontSize="14" VerticalOptions="Center"/>
                             <Label Grid.Column="1" Text="Użytkownicy i role" FontSize="13" TextColor="#CFD8DC" VerticalOptions="Center"/>
                             <Grid.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnItemTapped" CommandParameter="UzytkownicyIRole"/>
+                                <TapGestureRecognizer Tapped="OnItemTapped" CommandParameter="UzytkownicyIRolePage"/>
                             </Grid.GestureRecognizers>
                         </Grid>
                         <Grid Padding="42,11,18,11" BackgroundColor="Transparent"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><Label Grid.Column="0" Text="📧" FontSize="14" VerticalOptions="Center"/><Label Grid.Column="1" Text="Szablony e-mail / SMS" FontSize="13" TextColor="#CFD8DC" VerticalOptions="Center"/><Grid.GestureRecognizers><TapGestureRecognizer Tapped="OnItemTapped" CommandParameter="Szablony"/></Grid.GestureRecognizers></Grid>
                         <Grid Padding="42,11,18,11" BackgroundColor="Transparent"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><Label Grid.Column="0" Text="🧾" FontSize="14" VerticalOptions="Center"/><Label Grid.Column="1" Text="Konfiguracja faktur" FontSize="13" TextColor="#CFD8DC" VerticalOptions="Center"/><Grid.GestureRecognizers><TapGestureRecognizer Tapped="OnItemTapped" CommandParameter="KonfFaktur"/></Grid.GestureRecognizers></Grid>
                         <Grid Padding="42,11,18,11" BackgroundColor="Transparent"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><Label Grid.Column="0" Text="🔔" FontSize="14" VerticalOptions="Center"/><Label Grid.Column="1" Text="Powiadomienia" FontSize="13" TextColor="#CFD8DC" VerticalOptions="Center"/><Grid.GestureRecognizers><TapGestureRecognizer Tapped="OnItemTapped" CommandParameter="Powiadomienia"/></Grid.GestureRecognizers></Grid>
+                        <Grid Padding="42,11,18,11" BackgroundColor="Transparent">
+                            <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="28"/>
+                            <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Text="🏷️" FontSize="14" VerticalOptions="Center"/>
+                            <Label Grid.Column="1" Text="Statusy" FontSize="13" 
+                            TextColor="#CFD8DC" VerticalOptions="Center"/>
+                            <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnItemTapped" CommandParameter="Statusy"/>
+                            </Grid.GestureRecognizers>
+                        </Grid>
                     </VerticalStackLayout>
 
                     <BoxView HeightRequest="1" BackgroundColor="#283593" Margin="0,8"/>

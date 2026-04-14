@@ -5,26 +5,33 @@ namespace yBook.Views.Ceny;
 
 public partial class UslugiOplaty : ContentPage
 {
-    List<Usluga> _all = new();
+	// =========================================
+	//                VARIABLES
+	// =========================================
+	List<Usluga> _all = new();
     string? _typ = null;
 
-    public UslugiOplaty()
-    {
-        InitializeComponent();
-    }
-
-    protected override void OnAppearing()
+	// =========================================
+	//                   START
+	// =========================================
+	public UslugiOplaty()
+	{
+		InitializeComponent();
+	}
+	protected override void OnAppearing()
     {
         base.OnAppearing();
 
-        _all = MockData();
+        _all.AddRange(MockData());
         ApplyFilter();
     }
 
-    void OnSearchChanged(object sender, TextChangedEventArgs e)
-        => ApplyFilter();
+	// =========================================
+	//                    EVENTS
+	// =========================================
+	void OnSearchChanged(object sender, TextChangedEventArgs e) => ApplyFilter();
 
-    async void OnTypTapped(object sender, EventArgs e)
+	async void OnTypTapped(object sender, EventArgs e)
     {
         var options = new[] { "Wszystkie", "Opłata dzienna", "Jednorazowa" };
         var res = await DisplayActionSheet("Typ", "Anuluj", null, options);
@@ -37,7 +44,34 @@ public partial class UslugiOplaty : ContentPage
         ApplyFilter();
     }
 
-    void ApplyFilter()
+	async void OnDodajClicked(object sender, EventArgs e)
+	{
+		_all.Add(new Usluga()
+		{
+			Name = "Cassian",
+			Rodzaj = "Bestia",
+			Typ = "DND",
+			Ceny = new() { "67 zł" },
+			DataOd = "1-01-01",
+			DataDo = "9999-12-31",
+			Opis = "Lassian"
+		});
+
+		ApplyFilter();
+	}
+	void OnDeleteClicked(object sender, EventArgs e)
+	{
+		if (sender is BindableObject bo &&
+			bo.BindingContext is Usluga item)
+		{
+			_all.Remove(item);
+			ApplyFilter();
+		}
+	}
+	// =========================================
+	//             PRIVATE ACTIONS
+	// =========================================
+	private void ApplyFilter()
     {
         var q = Search.Text?.ToLower() ?? "";
 
@@ -49,14 +83,7 @@ public partial class UslugiOplaty : ContentPage
         Lista.ItemsSource = result;
         LblCount.Text = result.Count.ToString();
     }
-
-    async void OnDodajClicked(object sender, EventArgs e)
-    {
-        await DisplayAlert("Info", "Dodawanie wkrótce", "OK");
-    }
-
-    // MOCK
-    List<Usluga> MockData()
+    private List<Usluga> MockData()
     {
         return new List<Usluga>
         {
