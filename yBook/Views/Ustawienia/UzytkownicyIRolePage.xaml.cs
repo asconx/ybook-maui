@@ -11,8 +11,7 @@ namespace yBook.Views.Ustawienia
         {
             InitializeComponent();
 
-            // Bind users
-            UsersCollection.ItemsSource = UserStore.Users;
+            // Bind user
 
             // Simple static roles list for now
             RolesCollection.ItemsSource = new List<string> { "Administrator", "Manager", "Pracownik" };
