@@ -1,20 +1,28 @@
 using yBook.Views.Ceny;
+using yBook.Views.Klienci;
+
+using yBook;
+using yBook.Views.Ustawienia;
 
 namespace yBook.Controls
 {
     public partial class DrawerMenu : ContentView
     {
         const double DrawerWidth = 290;
+        private const string V = "Uzytkownicy";
         bool _isOpen = false;
-
         readonly Dictionary<string, bool> _groupState = new()
-        {
-            { "Ceny",       false },
-            { "Finanse",    false },
-            { "Raporty",    false },
-            { "Blokady",    false },
-            { "Ustawienia", false },
-        };
+            {
+                { "Ceny",       false },
+                { "Finanse",    false },
+                { "Raporty",    false },
+                { "Blokady",    false },
+                { "Ustawienia", false },
+            };
+
+        public Action<object, object> HamburgerClicked { get; internal set; }
+
+        
 
         public DrawerMenu()
         {
@@ -67,12 +75,12 @@ namespace yBook.Controls
 
             var (submenu, arrow) = group switch
             {
-                "Ceny"       => (MenuCenyGroup,      LblCenyArrow),
-                "Finanse"    => (MenuFinanseGroup,    LblFinanseArrow),
-                "Raporty"    => (MenuRaportyGroup,    LblRaportyArrow),
-                "Blokady"    => (MenuBlokadyGroup,    LblBlokadyArrow),
+                "Ceny" => (MenuCenyGroup, LblCenyArrow),
+                "Finanse" => (MenuFinanseGroup, LblFinanseArrow),
+                "Raporty" => (MenuRaportyGroup, LblRaportyArrow),
+                "Blokady" => (MenuBlokadyGroup, LblBlokadyArrow),
                 "Ustawienia" => (MenuUstawieniaGroup, LblUstawieniaArrow),
-                _            => (null, null)
+                _ => (null, null)
             };
             if (submenu is null || arrow is null) return;
 
@@ -81,7 +89,7 @@ namespace yBook.Controls
             if (open)
             {
                 submenu.IsVisible = true;
-                submenu.Opacity   = 0;
+                submenu.Opacity = 0;
                 await submenu.FadeTo(1, 160);
             }
             else
@@ -110,10 +118,16 @@ namespace yBook.Controls
             {
                 // ── Strony finansów — gotowe ──────────────────────────────────
                 case "UslugiOplaty":
+                    await Shell.Current.GoToAsync("UslugiOplaty");
+                    break;
                 case "Dokumenty":
                 case "KontaFinansowe":
                 case "RejestrPlatnosci":
                 case "ImportMT940":
+                case "Kalendarz":
+                    await Shell.Current.GoToAsync("KalendarzPage");
+                    break;
+
                 case "ICalendar":
                     await Shell.Current.GoToAsync(page);
                     break;
@@ -122,12 +136,25 @@ namespace yBook.Controls
                     break;
                 // —— Strona Rabaty —————————————————————————————————————————————
                 case "Rabaty":
-                    await Shell.Current.GoToAsync("RabatyPage");
+                    await Shell.Current.GoToAsync("//RabatyPage");
                     break;
+                case "DaneObiektu":
+                    await Shell.Current.GoToAsync("//DaneObiektu");
+                    break;
+
                 // —— Strona Pokoje —————————————————————————————————————————————
                 case "Pokoje":
-                    await Shell.Current.GoToAsync("PokojePage");
+                    await Shell.Current.GoToAsync("//PokojePage");
                     break;
+                // —— Strona Powiadomienia —————————————————————————————————————————————
+                case "Powiadomienia":
+                    await Shell.Current.GoToAsync(nameof(PowiadomieniaPage));
+                    break;
+
+                case "Uzytkownicy":
+                    await Shell.Current.GoToAsync("UzytkownicyLista");
+                    break;
+
                 // —— Strona Blokady —————————————————————————————————————————————
                 case "ZbiorczeBlokady":
                     await Shell.Current.GoToAsync("BlokadyPage");
@@ -135,14 +162,27 @@ namespace yBook.Controls
                 case "PrzyjazdWyjazd":
                     await Shell.Current.GoToAsync("PrzyjazdWyjazdPage");
                     break;
+                case "Kasa":
+                    // Otwórz stronę Kasa
+                    await Shell.Current.Navigation.PushAsync(new Kasa());
+                    break;
+                // ── Rezerwacje Online ─────────────────────────────────────────
+                case "RezerwacjeOnline":
+                    await Shell.Current.Navigation.PushAsync(new Views.Blokady.RezerwacjeOnlinePage());
+                    break;
                 // ── Pulpit: wróć do roota ──────────────────────────────────────
                 case "Pulpit":
                     await Shell.Current.GoToAsync("//MainPage");
                     break;
-
-                case "Uzytkownicy":
-                    await Shell.Current.GoToAsync("UzytkownicyLista");
+                // —— Strona Klientow —————————————————————————————————————————————
+                case "Klienci":
+                    await Shell.Current.GoToAsync(nameof(KlienciPage));
                     break;
+                // ── Grupowe SMS ───────────────────────────────────────────────
+                case "GrupoweSms":
+                    await Shell.Current.Navigation.PushAsync(new GrupoweSmsPage());
+                    break;
+
 
                 // ── Logout ────────────────────────────────────────────────────
                 case "Logout":
@@ -161,6 +201,8 @@ namespace yBook.Controls
                     await Shell.Current.CurrentPage
                                .DisplayAlert("yBook", $"Wkrótce: {page}", "OK");
                     break;
+
+
             }
         }
     }

@@ -1,4 +1,8 @@
 using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 using Microsoft.Maui.Controls;
 using yBook.Models;
 using yBook.Services;
@@ -55,23 +59,71 @@ namespace yBook.Views.Uzytkownicy
                 return;
             }
 
-            if (_editingUser != null)
+            // Przygotuj notification_settings CSV
+            string BuildNotifCsv(User u)
             {
-                // Update existing user in place
-                _editingUser.Name = user.Name;
-                _editingUser.Role = user.Role;
-                _editingUser.Email = user.Email;
-                _editingUser.Phone = user.Phone;
-                _editingUser.NowaPlatnosc = user.NowaPlatnosc;
-                _editingUser.WyslijPowiadomienieKlient = user.WyslijPowiadomienieKlient;
-                _editingUser.AnulowanieRezerwacji = user.AnulowanieRezerwacji;
-                _editingUser.NowaRezerwacjaOnline = user.NowaRezerwacjaOnline;
-                _editingUser.SynchronizacjaRezerwacji = user.SynchronizacjaRezerwacji;
-                _editingUser.UtworzenieNowejRezerwacji = user.UtworzenieNowejRezerwacji;
+                var list = new List<string>();
+                if (u.NowaPlatnosc) list.Add("new_online_payment");
+                if (u.WyslijPowiadomienieKlient) list.Add("reservation_notification");
+                if (u.AnulowanieRezerwacji) list.Add("cancel_reservation");
+                if (u.NowaRezerwacjaOnline) list.Add("new_online_booking");
+                if (u.SynchronizacjaRezerwacji) list.Add("new_ical_sync");
+                if (u.UtworzenieNowejRezerwacji) list.Add("create_reservation");
+                return string.Join(",", list);
+            }
+
+            // Edycja istniej¹cego -> PUT do API, potem zast¹p w kolekcji
+            if (_editingUser != null && _editingUser.Id > 0)
+            {
+                try
+                {
+                    var auth = IPlatformApplication.Current!.Services.GetRequiredService<IAuthService>();
+                    var token = await auth.GetTokenAsync();
+                    if (string.IsNullOrEmpty(token))
+                    {
+                        await DisplayAlert("B³¹d", "Brak tokena autoryzacji.", "OK");
+                        return;
+                    }
+
+                    using var http = new HttpClient { BaseAddress = new Uri("https://api.ybook.pl") };
+                    http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                    var payload = new
+                    {
+                        name = user.Name,
+                        email = user.Email,
+                        phone = user.Phone,
+                        role = user.Role,
+                        notification_settings = BuildNotifCsv(user)
+                    };
+
+                    var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+                    var resp = await http.PutAsync($"/entity/user/{_editingUser.Id}", content);
+
+                    if (!resp.IsSuccessStatusCode && resp.StatusCode != System.Net.HttpStatusCode.NoContent)
+                    {
+                        await DisplayAlert("B³¹d", $"Nie uda³o siê zapisaæ zmian ({(int)resp.StatusCode}).", "OK");
+                        return;
+                    }
+
+                    // Zastêpujemy wpis w UserStore (aby CollectionView odœwie¿y³ siê)
+                    var idx = UserStore.Users.IndexOf(_editingUser);
+                    user.Id = _editingUser.Id;
+                    if (idx >= 0)
+                        UserStore.Users[idx] = user;
+                    else
+                        UserStore.Add(user);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[Users] Save error: {ex.Message}");
+                    await DisplayAlert("B³¹d", "Wyst¹pi³ b³¹d podczas zapisu.", "OK");
+                    return;
+                }
             }
             else
             {
-                // Dodaj do wspólnego store -> lista na Uzytkownicy1 zaktualizuje siê automatycznie
+                // Tworzenie nowego lokalnie (mo¿esz dodaæ POST do API analogicznie)
                 UserStore.Add(user);
             }
 

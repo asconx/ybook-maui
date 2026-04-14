@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:yBook.Views.Surveys"
+             xmlns:models="clr-namespace:yBook.Models"
              x:Class="yBook.Views.Surveys.SurveysPage"
+             x:DataType="vm:SurveysViewModel"
              Title="Ankiety"
              BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
 
     <Grid RowDefinitions="Auto,*" Padding="0">
 
-        <!-- Header z przyciskiem Dodaj -->
-        <Grid ColumnDefinitions="*,Auto" Padding="16" RowSpacing="0" ColumnSpacing="12">
+        <!-- Header -->
+        <Grid ColumnDefinitions="*,Auto" Padding="16" ColumnSpacing="12">
             <Label Grid.Column="0"
                    Text="Ankiety"
                    FontSize="24"
@@ -25,90 +28,116 @@
                     FontSize="12"/>
         </Grid>
 
-        <!-- Lista ankiet lub komunikat -->
-        <VerticalStackLayout Grid.Row="1" Padding="16" Spacing="12">
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="12">
 
-            <!-- Błąd -->
-            <Frame x:Name="ErrorFrame"
-                   IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyBoolConverter}}"
-                   CornerRadius="10"
-                   Padding="12"
-                   BackgroundColor="#FFEBEE">
-                <Label Text="{Binding ErrorMessage}"
-                       TextColor="#C62828"
-                       FontSize="12"/>
-            </Frame>
+                <!-- Błąd -->
+                <Border IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                        BackgroundColor="#FFEBEE"
+                        StrokeShape="RoundRectangle 10"
+                        StrokeThickness="0"
+                        Padding="12">
+                    <Label Text="{Binding ErrorMessage}"
+                           TextColor="#C62828"
+                           FontSize="12"/>
+                </Border>
 
-            <!-- Loading -->
-            <ActivityIndicator IsRunning="{Binding IsLoading}"
-                               IsVisible="{Binding IsLoading}"
-                               Color="#1565C0"
-                               Scale="1.5"/>
+                <!-- Loading -->
+                <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                   IsVisible="{Binding IsLoading}"
+                                   Color="#1565C0"
+                                   Scale="1.5"/>
 
-            <!-- Lista ankiet -->
-            <CollectionView ItemsSource="{Binding Surveys}"
-                            SelectionMode="Single"
-                            SelectionChangedCommand="{Binding EditSurveyCommand}"
-                            SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
-                            IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame Margin="0,4" CornerRadius="12" Padding="14" HasShadow="True"
-                               BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
-                            <Grid ColumnDefinitions="*,Auto" RowSpacing="4">
-                                <!-- Zawartość ankiety -->
-                                <VerticalStackLayout Grid.Column="0" Spacing="4">
-                                    <Label Text="{Binding Title}"
-                                           FontSize="15"
-                                           FontAttributes="Bold"
-                                           TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
-                                    <Label Text="{Binding Description}"
-                                           FontSize="12"
-                                           TextColor="{AppThemeBinding Light=#78909C, Dark=#90A4AE}"
-                                           MaxLines="2"/>
-                                    <Label Text="{Binding CreatedAt, StringFormat='Utworzona: {0:g}'}"
-                                           FontSize="11"
-                                           TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
-                                </VerticalStackLayout>
+                <!-- Lista ankiet -->
+                <CollectionView ItemsSource="{Binding Surveys}"
+                                IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Survey">
+                            <Border Margin="0,4"
+                                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                                    StrokeShape="RoundRectangle 12"
+                                    StrokeThickness="0"
+                                    Padding="14">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                        <Label Text="{Binding Aspect1, StringFormat='📋 {0}'}"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                                        <Label Text="{Binding Question1}"
+                                               FontSize="12"
+                                               TextColor="{AppThemeBinding Light=#78909C, Dark=#90A4AE}"
+                                               MaxLines="2"/>
+                                        <VerticalStackLayout Spacing="2" Margin="0,4,0,0">
+                                            <Label Text="{Binding Aspect2, StringFormat='• {0}'}"
+                                                   FontSize="11"
+                                                   TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+                                            <Label Text="{Binding Aspect3, StringFormat='• {0}'}"
+                                                   FontSize="11"
+                                                   TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+                                            <Label Text="{Binding Aspect4, StringFormat='• {0}'}"
+                                                   FontSize="11"
+                                                   TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+                                            <Label Text="{Binding Aspect5, StringFormat='• {0}'}"
+                                                   FontSize="11"
+                                                   TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+                                        </VerticalStackLayout>
+                                        <Label Text="{Binding DateModified, StringFormat='Zmieniono: {0}'}"
+                                               FontSize="10"
+                                               TextColor="{AppThemeBinding Light=#BDBDBD, Dark=#424242}"
+                                               Margin="0,4,0,0"/>
+                                    </VerticalStackLayout>
 
-                                <!-- Przycisk Usuń -->
-                                <Button Grid.Column="1"
-                                        Grid.Row="0"
-                                        Grid.RowSpan="3"
-                                        Text="🗑️"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteSurveyCommand}"
-                                        CommandParameter="{Binding .}"
-                                        BackgroundColor="#FFEBEE"
-                                        TextColor="#C62828"
-                                        Padding="8"
-                                        CornerRadius="8"
-                                        FontSize="16"/>
-                            </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                                    <!-- Przyciski Edytuj / Usuń -->
+                                    <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                                        <Button Text="✏️"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SurveysViewModel}}, Path=EditSurveyCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#E3F2FD"
+                                                TextColor="#1565C0"
+                                                Padding="8"
+                                                CornerRadius="8"
+                                                FontSize="16"/>
+                                        <Button Text="🗑️"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SurveysViewModel}}, Path=DeleteSurveyCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#FFEBEE"
+                                                TextColor="#C62828"
+                                                Padding="8"
+                                                CornerRadius="8"
+                                                FontSize="16"/>
+                                    </HorizontalStackLayout>
+                                </Grid>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SurveysViewModel}}, Path=EditSurveyCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
 
-            <!-- Pusty stan -->
-            <VerticalStackLayout IsVisible="{Binding Surveys, Converter={StaticResource ListEmptyBoolConverter}}"
-                                 VerticalOptions="Center"
-                                 HorizontalOptions="Center"
-                                 Spacing="8">
-                <Label Text="📋"
-                       FontSize="48"
-                       HorizontalOptions="Center"/>
-                <Label Text="Brak ankiet"
-                       FontSize="16"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center"
-                       TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"/>
-                <Label Text="Naciśnij 'Dodaj', aby utworzyć nową ankietę"
-                       FontSize="12"
-                       HorizontalOptions="Center"
-                       TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout VerticalOptions="Center"
+                                             HorizontalOptions="Center"
+                                             Spacing="8"
+                                             Margin="0,40">
+                            <Label Text="📋" FontSize="48" HorizontalOptions="Center"/>
+                            <Label Text="Brak ankiet"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Center"
+                                   TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"/>
+                            <Label Text="Naciśnij '➕ Dodaj', aby utworzyć nową ankietę"
+                                   FontSize="12"
+                                   HorizontalOptions="Center"
+                                   TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+
             </VerticalStackLayout>
-
-        </VerticalStackLayout>
+        </ScrollView>
 
     </Grid>
 

@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:yBook.Controls"
+             x:Class="yBook.Views.Ustawienia.DaneObiektuPage"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <!-- ── DrawerMenu ── -->
+        <ctrl:DrawerMenu Grid.Row="0" Grid.RowSpan="3"
+                         x:Name="Drawer" ZIndex="50"/>
+
+        <!-- ── Zakładki ── -->
+        <ScrollView Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalScrollBarVisibility="Never"
+                    BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+            <HorizontalStackLayout x:Name="TabBar" Spacing="0" Padding="16,0"/>
+        </ScrollView>
+
+        <!-- ── Separator ── -->
+        <BoxView Grid.Row="1" HeightRequest="1"
+                 BackgroundColor="{AppThemeBinding Light=#E0E0E0, Dark=#333}"
+                 VerticalOptions="End" ZIndex="1"/>
+
+        <!-- ── Treść zakładki ── -->
+        <ScrollView Grid.Row="2"
+                    BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+            <Grid Padding="24,20">
+
+                <!-- TAB: dane podstawowe -->
+                <VerticalStackLayout x:Name="TabDanePodstawowe" Spacing="14">
+                    <Label Text="Kategoria obiektu:"
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"/>
+                    <HorizontalStackLayout Spacing="16">
+                        <HorizontalStackLayout Spacing="6">
+                            <CheckBox x:Name="CbPokoje" Color="#1565C0"/>
+                            <Label Text="pokoje" VerticalOptions="Center" FontSize="13"
+                                   TextColor="{AppThemeBinding Light=#37474F, Dark=#CFD8DC}"/>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="6">
+                            <CheckBox x:Name="CbCamping" Color="#1565C0"/>
+                            <Label Text="camping" VerticalOptions="Center" FontSize="13"
+                                   TextColor="{AppThemeBinding Light=#37474F, Dark=#CFD8DC}"/>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="6">
+                            <CheckBox x:Name="CbDomki" Color="#1565C0"/>
+                            <Label Text="domki" VerticalOptions="Center" FontSize="13"
+                                   TextColor="{AppThemeBinding Light=#37474F, Dark=#CFD8DC}"/>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="6">
+                            <CheckBox x:Name="CbHotel" Color="#1565C0"/>
+                            <Label Text="hotel" VerticalOptions="Center" FontSize="13"
+                                   TextColor="{AppThemeBinding Light=#37474F, Dark=#CFD8DC}"/>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="6">
+                            <CheckBox x:Name="CbApartamenty" Color="#1565C0"/>
+                            <Label Text="apartamenty" VerticalOptions="Center" FontSize="13"
+                                   TextColor="{AppThemeBinding Light=#37474F, Dark=#CFD8DC}"/>
+                        </HorizontalStackLayout>
+                    </HorizontalStackLayout>
+
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="Nazwa" FontSize="11" TextColor="#1565C0" Margin="0,4,0,0"/>
+                            <Entry x:Name="EntNazwa" Placeholder="np. Villa Orłowska"
+                                   FontSize="14" BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="Miejscowość" FontSize="11" TextColor="#1565C0" Margin="0,4,0,0"/>
+                            <Entry x:Name="EntMiejscowosc" Placeholder="np. Gdynia"
+                                   FontSize="14" BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="Pełny adres" FontSize="11" TextColor="#1565C0" Margin="0,4,0,0"/>
+                            <Entry x:Name="EntAdres" Placeholder="np. Akacjowa 21a, 81-520 Gdynia"
+                                   FontSize="14" BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="Nazwa firmy" FontSize="11" TextColor="#1565C0" Margin="0,4,0,0"/>
+                            <Entry x:Name="EntNazwaFirmy" FontSize="14" BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="NIP" FontSize="11" TextColor="#1565C0" Margin="0,4,0,0"/>
+                            <Entry x:Name="EntNip" Keyboard="Numeric" FontSize="14"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="E-mail" FontSize="11" TextColor="#1565C0" Margin="0,4,0,0"/>
+                            <Entry x:Name="EntEmail" Keyboard="Email" FontSize="14"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="Telefon" FontSize="11" TextColor="#1565C0" Margin="0,4,0,0"/>
+                            <Entry x:Name="EntTelefon" Keyboard="Telephone" FontSize="14"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Button x:Name="BtnZapiszDane"
+                            Text="zapisz zmiany"
+                            FontSize="15" FontAttributes="Bold"
+                            TextColor="White"
+                            BackgroundColor="#1E293B"
+                            CornerRadius="24"
+                            HeightRequest="50"
+                            WidthRequest="200"
+                            HorizontalOptions="Start"
+                            Clicked="OnZapisz"/>
+                </VerticalStackLayout>
+
+                <!-- TAB: check-in i check-out -->
+                <VerticalStackLayout x:Name="TabCheckIn" IsVisible="False" Spacing="18">
+
+                    <Grid ColumnDefinitions="Auto,12,Auto" RowDefinitions="Auto,8,Auto">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Przyjazd"
+                               FontSize="15" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"
+                               VerticalOptions="Center"/>
+                        <Frame Grid.Row="0" Grid.Column="2"
+                               CornerRadius="16" Padding="10,4" HasShadow="False"
+                               BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2A2A2A}"
+                               BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                            <Entry x:Name="EntPrzyjazd" Text="15:00"
+                                   FontSize="14" WidthRequest="80"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </Frame>
+                    </Grid>
+
+                    <Label Text="Akcje związane z zameldowaniem"
+                           FontSize="13" TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"/>
+                    <FlexLayout x:Name="FlexZameldowanie" Wrap="Wrap" Direction="Row" >
+                    </FlexLayout>
+
+                    <Grid ColumnDefinitions="Auto,12,Auto" Margin="0,10,0,0">
+                        <Label Grid.Column="0" Text="Wyjazd"
+                               FontSize="15" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"
+                               VerticalOptions="Center"/>
+                        <Frame Grid.Column="2"
+                               CornerRadius="16" Padding="10,4" HasShadow="False"
+                               BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#2A2A2A}"
+                               BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                            <Entry x:Name="EntWyjazd" Text="11:00"
+                                   FontSize="14" WidthRequest="80"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </Frame>
+                    </Grid>
+
+                    <Label Text="Akcje związane z wymeldowaniem"
+                           FontSize="13" TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"/>
+                    <FlexLayout x:Name="FlexWymeldowanie" Wrap="Wrap" Direction="Row" >
+                    </FlexLayout>
+
+                    <Button Text="zapisz zmiany"
+                            FontSize="15" FontAttributes="Bold"
+                            TextColor="White" BackgroundColor="#1E293B"
+                            CornerRadius="24" HeightRequest="50" WidthRequest="200"
+                            HorizontalOptions="Start" Clicked="OnZapisz" Margin="0,10,0,0"/>
+                </VerticalStackLayout>
+
+                <!-- TAB: logo i zdjęcia -->
+                <VerticalStackLayout x:Name="TabLogo" IsVisible="False" Spacing="16">
+                    <Label Text="Logo obiektu"
+                           FontSize="14" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"/>
+
+                    <Frame x:Name="LogoFrame"
+                           CornerRadius="10" Padding="0" HasShadow="False"
+                           WidthRequest="200" HeightRequest="120"
+                           HorizontalOptions="Start"
+                           BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#2A2A2A}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <Label x:Name="LblLogoPlaceholder"
+                               Text="Załaduj logo wybierając lub przeciągnij."
+                               FontSize="12"
+                               TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               Margin="16"/>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnWybierzLogo"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <Label Text="Zdjęcia obiektu"
+                           FontSize="14" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"
+                           Margin="0,8,0,0"/>
+
+                    <Frame CornerRadius="10" Padding="16" HasShadow="False"
+                           MinimumHeightRequest="80"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <Label Text="Wybierz zdjęcia obiektu lub je przeciągnij."
+                               FontSize="13"
+                               TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnWybierzZdjecia"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <Button Text="zapisz zmiany"
+                            FontSize="15" FontAttributes="Bold"
+                            TextColor="White" BackgroundColor="#1E293B"
+                            CornerRadius="24" HeightRequest="50" WidthRequest="200"
+                            HorizontalOptions="Start" Clicked="OnZapisz"/>
+                </VerticalStackLayout>
+
+                <!-- TAB: opis miejsca -->
+                <VerticalStackLayout x:Name="TabOpis" IsVisible="False" Spacing="16">
+                    <Label Text="W cenie pobytu"
+                           FontSize="14" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"/>
+                    <Frame CornerRadius="8" Padding="12" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <Editor x:Name="EditorWCenie"
+                                Placeholder="np. Bezpłatny parking, Szybki internet..."
+                                FontSize="13" MinimumHeightRequest="120"
+                                BackgroundColor="Transparent"
+                                TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                    </Frame>
+
+                    <Label Text="Ważne informacje"
+                           FontSize="14" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"
+                           Margin="0,8,0,0"/>
+                    <Frame CornerRadius="8" Padding="12" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <Editor x:Name="EditorWazneInfo"
+                                Placeholder="np. Osoba rezerwująca jest zobowiązana..."
+                                FontSize="13" MinimumHeightRequest="120"
+                                BackgroundColor="Transparent"
+                                TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                    </Frame>
+
+                    <Button Text="zapisz zmiany"
+                            FontSize="15" FontAttributes="Bold"
+                            TextColor="White" BackgroundColor="#1E293B"
+                            CornerRadius="24" HeightRequest="50" WidthRequest="200"
+                            HorizontalOptions="Start" Clicked="OnZapisz"/>
+                </VerticalStackLayout>
+
+                <!-- TAB: przedpłata -->
+                <VerticalStackLayout x:Name="TabPrzedplata" IsVisible="False" Spacing="16">
+                    <Label Text="Przedpłata podstawowa"
+                           FontSize="14" FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"/>
+
+                    <HorizontalStackLayout Spacing="12">
+                        <Frame CornerRadius="8" Padding="10,4" HasShadow="False" WidthRequest="120"
+                               BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                               BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                            <VerticalStackLayout>
+                                <Label Text="Kwota" FontSize="11" TextColor="#1565C0"/>
+                                <Entry x:Name="EntKwotaPrzedplaty" Text="30.00"
+                                       Keyboard="Numeric" FontSize="14"
+                                       BackgroundColor="Transparent"
+                                       TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                        <HorizontalStackLayout Spacing="16" VerticalOptions="Center">
+                            <HorizontalStackLayout Spacing="6">
+                                <RadioButton x:Name="RbProcent" IsChecked="True" Value="procent"/>
+                                <Label Text="%" VerticalOptions="Center" FontSize="14"
+                                       TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Spacing="6">
+                                <RadioButton x:Name="RbZl" Value="zl"/>
+                                <Label Text="zł" VerticalOptions="Center" FontSize="14"
+                                       TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                            </HorizontalStackLayout>
+                        </HorizontalStackLayout>
+                    </HorizontalStackLayout>
+
+                    <Frame CornerRadius="8" Padding="10,4" HasShadow="False" WidthRequest="160"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="Ilość dni na wpłatę" FontSize="11" TextColor="#1565C0"/>
+                            <Entry x:Name="EntDniNaWplate" Text="5"
+                                   Keyboard="Numeric" FontSize="14"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <VerticalStackLayout Spacing="10" Margin="0,8,0,0">
+                        <HorizontalStackLayout Spacing="10">
+                            <Switch x:Name="SwPrzedplataNieodlegle" OnColor="#1565C0"/>
+                            <Label Text="Przedpłata na rezerwacje nieodległe"
+                                   FontSize="13" VerticalOptions="Center"
+                                   TextColor="{AppThemeBinding Light=#37474F, Dark=#CFD8DC}"/>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="10">
+                            <Switch x:Name="SwPrzedplataOdlegle" OnColor="#1565C0"/>
+                            <Label Text="Przedpłata na rezerwacje odległe"
+                                   FontSize="13" VerticalOptions="Center"
+                                   TextColor="{AppThemeBinding Light=#37474F, Dark=#CFD8DC}"/>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="10">
+                            <Switch x:Name="SwPrzedplataMinimalna" OnColor="#1565C0"/>
+                            <Label Text="Przedpłata minimalna"
+                                   FontSize="13" VerticalOptions="Center"
+                                   TextColor="{AppThemeBinding Light=#37474F, Dark=#CFD8DC}"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <Button Text="zapisz zmiany"
+                            FontSize="15" FontAttributes="Bold"
+                            TextColor="White" BackgroundColor="#1E293B"
+                            CornerRadius="24" HeightRequest="50" WidthRequest="200"
+                            HorizontalOptions="Start" Clicked="OnZapisz" Margin="0,10,0,0"/>
+                </VerticalStackLayout>
+
+                <!-- TAB: metody płatności -->
+                <VerticalStackLayout x:Name="TabPlatnosci" IsVisible="False" Spacing="20">
+
+                    <!-- Przelew tradycyjny -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Przelew tradycyjny"
+                               FontSize="14" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"/>
+                        <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                               BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                               BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                            <VerticalStackLayout>
+                                <Label Text="Rachunek bankowy do przelewu" FontSize="11" TextColor="#1565C0"/>
+                                <Entry x:Name="EntRachunek" Keyboard="Numeric" FontSize="13"
+                                       BackgroundColor="Transparent"
+                                       TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Paynow -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Paynow" FontSize="15" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"/>
+                        <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                               BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                               BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                            <Entry x:Name="EntPaynowApi" Placeholder="Klucz API" FontSize="13"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </Frame>
+                        <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                               BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                               BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                            <Entry x:Name="EntPaynowSignature" Placeholder="Signature key" FontSize="13"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Autopay -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Autopay" FontSize="15" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"/>
+                        <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                               BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                               BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                            <Entry x:Name="EntAutopayId" Placeholder="ID klienta" FontSize="13"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </Frame>
+                        <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                               BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                               BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                            <Entry x:Name="EntAutopayApiKey" Placeholder="Klucz API" FontSize="13"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <Button Text="zapisz zmiany"
+                            FontSize="15" FontAttributes="Bold"
+                            TextColor="White" BackgroundColor="#1E293B"
+                            CornerRadius="24" HeightRequest="50" WidthRequest="200"
+                            HorizontalOptions="Start" Clicked="OnZapisz"/>
+                </VerticalStackLayout>
+
+                <!-- TAB: strona internetowa i sm -->
+                <VerticalStackLayout x:Name="TabStrona" IsVisible="False" Spacing="14">
+                    <HorizontalStackLayout Spacing="10">
+                        <Switch x:Name="SwAktywujProfil" OnColor="#1565C0"/>
+                        <Label Text="Aktywuj profil na zewnętrznych portalach"
+                               FontSize="13" VerticalOptions="Center"
+                               TextColor="{AppThemeBinding Light=#37474F, Dark=#CFD8DC}"/>
+                    </HorizontalStackLayout>
+
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="Adres strony internetowej" FontSize="11" TextColor="#1565C0"/>
+                            <Entry x:Name="EntStrona" Keyboard="Url" FontSize="13"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="Link do regulaminu" FontSize="11" TextColor="#1565C0"/>
+                            <Entry x:Name="EntRegulamin" Keyboard="Url" FontSize="13"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="Link do klauzuli informacyjnej" FontSize="11" TextColor="#1565C0"/>
+                            <Entry x:Name="EntKlauzula" Keyboard="Url" FontSize="13"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="Link do polityki prywatności" FontSize="11" TextColor="#1565C0"/>
+                            <Entry x:Name="EntPolityka" Keyboard="Url" FontSize="13"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <Entry x:Name="EntFacebook" Placeholder="Link Facebook" FontSize="13"
+                               BackgroundColor="Transparent"
+                               TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                    </Frame>
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <Entry x:Name="EntInstagram" Placeholder="Link Instagram" FontSize="13"
+                               BackgroundColor="Transparent"
+                               TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                    </Frame>
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <Entry x:Name="EntYoutube" Placeholder="Link Youtube" FontSize="13"
+                               BackgroundColor="Transparent"
+                               TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                    </Frame>
+
+                    <Button Text="zapisz zmiany"
+                            FontSize="15" FontAttributes="Bold"
+                            TextColor="White" BackgroundColor="#1E293B"
+                            CornerRadius="24" HeightRequest="50" WidthRequest="200"
+                            HorizontalOptions="Start" Clicked="OnZapisz"/>
+                </VerticalStackLayout>
+
+                <!-- TAB: grupy wiekowe -->
+                <VerticalStackLayout x:Name="TabGrupy" IsVisible="False" Spacing="12">
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="Nazwa grupy wiekowej 1" FontSize="11" TextColor="#1565C0"/>
+                            <Entry x:Name="EntGrupa1" Placeholder="np. Dorośli" FontSize="13"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="Nazwa grupy wiekowej 2" FontSize="11" TextColor="#1565C0"/>
+                            <Entry x:Name="EntGrupa2" Placeholder="np. Dzieci" FontSize="13"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="Nazwa grupy wiekowej 3" FontSize="11" TextColor="#1565C0"/>
+                            <Entry x:Name="EntGrupa3" Placeholder="np. 0-3 lat" FontSize="13"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <Entry x:Name="EntGrupa4" Placeholder="Nazwa grupy wiekowej 4" FontSize="13"
+                               BackgroundColor="Transparent"
+                               TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                    </Frame>
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <Entry x:Name="EntGrupa5" Placeholder="Nazwa grupy wiekowej 5" FontSize="13"
+                               BackgroundColor="Transparent"
+                               TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                    </Frame>
+
+                    <Frame CornerRadius="8" Padding="12" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFF8E1, Dark=#2A2000}"
+                           BorderColor="{AppThemeBinding Light=#FFE082, Dark=#665500}">
+                        <Grid ColumnDefinitions="28,*">
+                            <Label Grid.Column="0" Text="ℹ️" FontSize="16" VerticalOptions="Start"/>
+                            <Label Grid.Column="1"
+                                   Text="Grupy wiekowe to kategorie umożliwiające dostosowanie usług do wieku. Można definiować ceny opłat dodatkowych dla podanych grup wiekowych. Podaj przynajmniej jedną grupę wiekową."
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light=#795548, Dark=#FFE082}"
+                                   LineBreakMode="WordWrap"/>
+                        </Grid>
+                    </Frame>
+
+                    <Button Text="zapisz zmiany"
+                            FontSize="15" FontAttributes="Bold"
+                            TextColor="White" BackgroundColor="#1E293B"
+                            CornerRadius="24" HeightRequest="50" WidthRequest="200"
+                            HorizontalOptions="Start" Clicked="OnZapisz"/>
+                </VerticalStackLayout>
+
+                <!-- TAB: drukaki -->
+                <VerticalStackLayout x:Name="TabDrukaki" IsVisible="False" Spacing="16">
+                    <Frame CornerRadius="8" Padding="12" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFF8E1, Dark=#2A2000}"
+                           BorderColor="{AppThemeBinding Light=#FFE082, Dark=#665500}">
+                        <Grid ColumnDefinitions="28,*">
+                            <Label Grid.Column="0" Text="ℹ️" FontSize="16" VerticalOptions="Start"/>
+                            <Label Grid.Column="1"
+                                   Text="Skontaktuj się z nami i skonfiguruj drukarki, aby móc drukować dokumenty z systemu."
+                                   FontSize="13"
+                                   TextColor="{AppThemeBinding Light=#795548, Dark=#FFE082}"
+                                   LineBreakMode="WordWrap"/>
+                        </Grid>
+                    </Frame>
+                    <Button Text="zapisz zmiany"
+                            FontSize="15" FontAttributes="Bold"
+                            TextColor="White" BackgroundColor="#1E293B"
+                            CornerRadius="24" HeightRequest="50" WidthRequest="200"
+                            HorizontalOptions="Start" Clicked="OnZapisz"/>
+                </VerticalStackLayout>
+
+                <!-- TAB: smart locks -->
+                <VerticalStackLayout x:Name="TabSmartLocks" IsVisible="False" Spacing="14">
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <Entry x:Name="EntTTlockLogin" Placeholder="TTlock login" FontSize="13"
+                               BackgroundColor="Transparent"
+                               TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                    </Frame>
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <Entry x:Name="EntTTlockHaslo" Placeholder="TTlock hasło"
+                               IsPassword="True" FontSize="13"
+                               BackgroundColor="Transparent"
+                               TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                    </Frame>
+                    <Button Text="zapisz zmiany"
+                            FontSize="15" FontAttributes="Bold"
+                            TextColor="White" BackgroundColor="#1E293B"
+                            CornerRadius="24" HeightRequest="50" WidthRequest="200"
+                            HorizontalOptions="Start" Clicked="OnZapisz"/>
+                </VerticalStackLayout>
+
+                <!-- TAB: mapa -->
+                <VerticalStackLayout x:Name="TabMapa" IsVisible="False" Spacing="14">
+                    <Frame CornerRadius="8" Padding="12" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFF8E1, Dark=#2A2000}"
+                           BorderColor="{AppThemeBinding Light=#FFE082, Dark=#665500}">
+                        <Grid ColumnDefinitions="28,*">
+                            <Label Grid.Column="0" Text="ℹ️" FontSize="16" VerticalOptions="Start"/>
+                            <Label Grid.Column="1"
+                                   Text="Wpisz miejscowość, aby znaleźć ją na mapie, a następnie przeciągnij znacznik do odpowiedniego miejsca."
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light=#795548, Dark=#FFE082}"
+                                   LineBreakMode="WordWrap"/>
+                        </Grid>
+                    </Frame>
+
+                    <Frame CornerRadius="8" Padding="12,4" HasShadow="False"
+                           BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                           BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                        <VerticalStackLayout>
+                            <Label Text="Wpisz miejscowość, aby znaleźć na mapie" FontSize="11" TextColor="#1565C0"/>
+                            <Entry x:Name="EntMapaMiejscowosc" Placeholder="np. Warszawa" FontSize="13"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame CornerRadius="8" Padding="0" HasShadow="False"
+                           HeightRequest="200"
+                           BackgroundColor="{AppThemeBinding Light=#B2DFDB, Dark=#1A3A3A}"
+                           BorderColor="{AppThemeBinding Light=#80CBC4, Dark=#26A69A}">
+                        <Label Text="🗺️  Mapa (integracja Leaflet/Google Maps)"
+                               FontSize="13"
+                               TextColor="{AppThemeBinding Light=#37474F, Dark=#90A4AE}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                    </Frame>
+
+                    <Grid ColumnDefinitions="*,12,*">
+                        <Frame Grid.Column="0" CornerRadius="8" Padding="12,4" HasShadow="False"
+                               BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                               BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                            <VerticalStackLayout>
+                                <Label Text="Szerokość geograficzna" FontSize="11" TextColor="#1565C0"/>
+                                <Entry x:Name="EntLat" Text="0.00" Keyboard="Numeric" FontSize="13"
+                                       BackgroundColor="Transparent"
+                                       TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                        <Frame Grid.Column="2" CornerRadius="8" Padding="12,4" HasShadow="False"
+                               BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}"
+                               BorderColor="{AppThemeBinding Light=#D0D0D0, Dark=#444}">
+                            <VerticalStackLayout>
+                                <Label Text="Długość geograficzna" FontSize="11" TextColor="#1565C0"/>
+                                <Entry x:Name="EntLng" Text="0.00" Keyboard="Numeric" FontSize="13"
+                                       BackgroundColor="Transparent"
+                                       TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
+
+                    <Button Text="zapisz zmiany"
+                            FontSize="15" FontAttributes="Bold"
+                            TextColor="White" BackgroundColor="#1E293B"
+                            CornerRadius="24" HeightRequest="50" WidthRequest="200"
+                            HorizontalOptions="Start" Clicked="OnZapisz"/>
+                </VerticalStackLayout>
+
+            </Grid>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

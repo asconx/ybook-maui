@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Ustawienia.UzytkownicyIRolePage"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="60,*,Auto,Auto" Padding="0">
+
+        <!-- HEADER -->
+        <Grid BackgroundColor="#F5F5F5" Padding="16,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <HorizontalStackLayout VerticalOptions="Center" Spacing="8">
+                <Label Text="Użytkownicy i role" FontSize="18" FontAttributes="Bold"/>
+            </HorizontalStackLayout>
+
+        </Grid>
+
+        <!-- USERS LIST -->
+        <CollectionView Grid.Row="1"
+                        x:Name="UsersCollection"
+                        Margin="0,10"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="12" Margin="10,5" BorderColor="#E0E0E0" CornerRadius="8">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                <Label Text="{Binding Email}" FontSize="12" TextColor="#777" />
+                            </VerticalStackLayout>
+
+                            <Label Grid.Column="1" Text="{Binding Role}" VerticalOptions="Center" HorizontalOptions="End" TextColor="#666" />
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- ROLES LABEL + LIST -->
+        <VerticalStackLayout Grid.Row="2" Padding="16,8" Spacing="6">
+            <Label Text="Role" FontAttributes="Bold" />
+            <CollectionView x:Name="RolesCollection" HeightRequest="140" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10" Margin="4,4" CornerRadius="8" HasShadow="False" BorderColor="#E0E0E0">
+                            <Label Text="{Binding}" />
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+
+        <!-- ADD ROLE BUTTON -->
+        <HorizontalStackLayout Grid.Row="3" Padding="16" HorizontalOptions="FillAndExpand">
+            <Button x:Name="BtnAddRole"
+                    Text="Dodaj rolę"
+                    BackgroundColor="#1565C0"
+                    TextColor="White"
+                    Clicked="OnAddRoleClicked"
+                    HorizontalOptions="Center"/>
+        </HorizontalStackLayout>
+
+    </Grid>
+</ContentPage>

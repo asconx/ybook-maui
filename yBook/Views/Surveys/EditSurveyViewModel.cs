@@ -5,28 +5,38 @@ using yBook.Services;
 
 namespace yBook.Views.Surveys;
 
-[QueryProperty(nameof(SurveyId), "id")]
+[QueryProperty(nameof(SurveyIdRaw), "id")]
 public partial class EditSurveyViewModel : ObservableObject
 {
     private readonly ISurveyService _surveyService;
 
     [ObservableProperty]
-    private Guid surveyId = Guid.Empty;
+    private string surveyIdRaw = string.Empty;
+
+    private int _surveyId = 0;
+
+    // Aspekty
+    [ObservableProperty] private string aspect1 = string.Empty;
+    [ObservableProperty] private string aspect2 = string.Empty;
+    [ObservableProperty] private string aspect3 = string.Empty;
+    [ObservableProperty] private string aspect4 = string.Empty;
+    [ObservableProperty] private string aspect5 = string.Empty;
+    [ObservableProperty] private string aspect6 = string.Empty;
+    [ObservableProperty] private string aspect7 = string.Empty;
+
+    // Pytania
+    [ObservableProperty] private string question1 = string.Empty;
+    [ObservableProperty] private string question2 = string.Empty;
+    [ObservableProperty] private string question3 = string.Empty;
+
+    [ObservableProperty] private bool isLoading = false;
+    [ObservableProperty] private bool isNewSurvey = true;
 
     [ObservableProperty]
-    private string title = string.Empty;
-
-    [ObservableProperty]
-    private string description = string.Empty;
-
-    [ObservableProperty]
-    private bool isLoading = false;
-
-    [ObservableProperty]
-    private bool isNewSurvey = true;
-
-    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasError))]
     private string errorMessage = string.Empty;
+
+    public bool HasError => !string.IsNullOrEmpty(ErrorMessage);
 
     private Survey? _currentSurvey;
 
@@ -35,29 +45,41 @@ public partial class EditSurveyViewModel : ObservableObject
         _surveyService = surveyService;
     }
 
-    public override async void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
+    partial void OnSurveyIdRawChanged(string value)
     {
-        base.OnPropertyChanged(e);
-
-        if (e.PropertyName == nameof(SurveyId) && SurveyId != Guid.Empty)
+        if (int.TryParse(value, out var id) && id > 0)
         {
-            await LoadSurvey();
+            _surveyId = id;
+            IsNewSurvey = false;
+            _ = LoadSurveyAsync();
+        }
+        else
+        {
+            _surveyId = 0;
+            IsNewSurvey = true;
         }
     }
 
-    private async Task LoadSurvey()
+    private async Task LoadSurveyAsync()
     {
         try
         {
             IsLoading = true;
             ErrorMessage = string.Empty;
-            IsNewSurvey = false;
 
-            _currentSurvey = await _surveyService.GetSurveyByIdAsync(SurveyId);
+            _currentSurvey = await _surveyService.GetSurveyByIdAsync(_surveyId);
             if (_currentSurvey != null)
             {
-                Title = _currentSurvey.Title;
-                Description = _currentSurvey.Description;
+                Aspect1 = _currentSurvey.Aspect1;
+                Aspect2 = _currentSurvey.Aspect2;
+                Aspect3 = _currentSurvey.Aspect3;
+                Aspect4 = _currentSurvey.Aspect4;
+                Aspect5 = _currentSurvey.Aspect5;
+                Aspect6 = _currentSurvey.Aspect6;
+                Aspect7 = _currentSurvey.Aspect7;
+                Question1 = _currentSurvey.Question1;
+                Question2 = _currentSurvey.Question2;
+                Question3 = _currentSurvey.Question3;
             }
         }
         catch (Exception ex)
@@ -71,11 +93,11 @@ public partial class EditSurveyViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task SaveSurvey()
+    private async Task SaveSurveyAsync()
     {
-        if (string.IsNullOrWhiteSpace(Title))
+        if (string.IsNullOrWhiteSpace(Aspect1))
         {
-            ErrorMessage = "Tytuł ankiety jest wymagany";
+            ErrorMessage = "Aspect 1 jest wymagany";
             return;
         }
 
@@ -86,24 +108,38 @@ public partial class EditSurveyViewModel : ObservableObject
 
             bool success;
 
-            if (IsNewSurvey || SurveyId == Guid.Empty)
+            if (IsNewSurvey || _surveyId == 0)
             {
-                var newSurvey = new Survey
+                success = await _surveyService.AddSurveyAsync(new Survey
                 {
-                    Title = Title,
-                    Description = Description
-                };
-                success = await _surveyService.AddSurveyAsync(newSurvey);
+                    Aspect1 = Aspect1,
+                    Aspect2 = Aspect2,
+                    Aspect3 = Aspect3,
+                    Aspect4 = Aspect4,
+                    Aspect5 = Aspect5,
+                    Aspect6 = Aspect6,
+                    Aspect7 = Aspect7,
+                    Question1 = Question1,
+                    Question2 = Question2,
+                    Question3 = Question3
+                });
             }
             else
             {
-                var updatedSurvey = new Survey
+                success = await _surveyService.UpdateSurveyAsync(new Survey
                 {
-                    Id = SurveyId,
-                    Title = Title,
-                    Description = Description
-                };
-                success = await _surveyService.UpdateSurveyAsync(updatedSurvey);
+                    Id = _surveyId,
+                    Aspect1 = Aspect1,
+                    Aspect2 = Aspect2,
+                    Aspect3 = Aspect3,
+                    Aspect4 = Aspect4,
+                    Aspect5 = Aspect5,
+                    Aspect6 = Aspect6,
+                    Aspect7 = Aspect7,
+                    Question1 = Question1,
+                    Question2 = Question2,
+                    Question3 = Question3
+                });
             }
 
             if (success)
@@ -127,7 +163,7 @@ public partial class EditSurveyViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task Cancel()
+    private async Task CancelAsync()
     {
         await Shell.Current.GoToAsync("..");
     }

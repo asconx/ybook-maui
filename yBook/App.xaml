@@ -1,4 +1,4 @@
-﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+<?xml version = "1.0" encoding = "UTF-8" ?>
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:yBook"
@@ -11,9 +11,16 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
-            <converters:BoolToIconConverter x:Key="BoolToIconConverter"/>
+
+            <!-- Istniejące konwertery -->
+            <converters:BoolToColorConverter    x:Key="BoolToColorConverter"/>
+            <converters:BoolToIconConverter     x:Key="BoolToIconConverter"/>
             <converters:BoolToIconColorConverter x:Key="BoolToIconColorConverter"/>
+
+            <!-- Nowe konwertery dla Surveys -->
+            <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter"/>
+            <converters:InvertedBoolConverter   x:Key="InvertedBoolConverter"/>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

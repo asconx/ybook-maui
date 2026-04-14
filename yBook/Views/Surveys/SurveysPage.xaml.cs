@@ -1,5 +1,3 @@
-using yBook.Views.Surveys;
-
 namespace yBook.Views.Surveys;
 
 public partial class SurveysPage : ContentPage
@@ -13,9 +11,7 @@ public partial class SurveysPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        if (BindingContext is SurveysViewModel viewModel)
-        {
-            await viewModel.LoadSurveysCommand.ExecuteAsync(null);
-        }
+        if (BindingContext is SurveysViewModel vm)
+            await vm.FetchSurveysFromApiCommand.ExecuteAsync(null);
     }
 }

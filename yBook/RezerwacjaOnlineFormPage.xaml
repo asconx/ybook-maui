@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Blokady.RezerwacjaOnlineFormPage"
+             Title="Nowa rezerwacja online">
+
+    <Grid RowDefinitions="56,*">
+
+        <!-- HEADER — strzałka + tytuł jak w panelu webowym -->
+        <Grid Grid.Row="0"
+              BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+              Padding="8,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="48"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <BoxView Grid.ColumnSpan="2" VerticalOptions="End"
+                     HeightRequest="1" BackgroundColor="#E0E0E0"/>
+            <Button Grid.Column="0" Text="‹" FontSize="24"
+                    TextColor="{AppThemeBinding Light=#455A64, Dark=#90A4AE}"
+                    BackgroundColor="Transparent"
+                    Clicked="OnAnulujClicked"/>
+            <Label Grid.Column="1" x:Name="TytulLabel"
+                   Text="Nowa rezerwacja online"
+                   FontSize="15" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"
+                   VerticalOptions="Center"/>
+        </Grid>
+
+        <ScrollView Grid.Row="1"
+                    BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+            <VerticalStackLayout Padding="16" Spacing="12">
+
+                <!-- ── WIERSZ 1: Kolory ── -->
+                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
+                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                       BorderColor="#E8E8E8">
+                    <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="10">
+
+                        <!-- Kolor podstawowy -->
+                        <VerticalStackLayout Grid.Column="0" Spacing="4">
+                            <Label Text="Kolor podstawowy" FontSize="11" TextColor="#90A4AE"/>
+                            <Grid ColumnDefinitions="*,24" HeightRequest="36">
+                                <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                        StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="8,0">
+                                    <Entry x:Name="KolorPodstawowyEntry" Text="#ac9b7f"
+                                           FontSize="13" BackgroundColor="Transparent"/>
+                                </Border>
+                                <Border Grid.Column="1"
+                                        x:Name="KolorPodstawowyPodglad"
+                                        BackgroundColor="#ac9b7f"
+                                        StrokeShape="RoundRectangle 4"
+                                        WidthRequest="24" HeightRequest="24"
+                                        VerticalOptions="Center"/>
+                            </Grid>
+                        </VerticalStackLayout>
+
+                        <!-- Kolor tła -->
+                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                            <Label Text="Kolor tła" FontSize="11" TextColor="#90A4AE"/>
+                            <Grid ColumnDefinitions="*,24" HeightRequest="36">
+                                <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                        StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="8,0">
+                                    <Entry x:Name="KolorTlaEntry" Text="#f3f0cd"
+                                           FontSize="13" BackgroundColor="Transparent"/>
+                                </Border>
+                                <Border Grid.Column="1"
+                                        x:Name="KolorTlaPodglad"
+                                        BackgroundColor="#f3f0cd"
+                                        StrokeShape="RoundRectangle 4"
+                                        WidthRequest="24" HeightRequest="24"
+                                        VerticalOptions="Center"/>
+                            </Grid>
+                        </VerticalStackLayout>
+
+                        <!-- Kolor przycisku -->
+                        <VerticalStackLayout Grid.Column="2" Spacing="4">
+                            <Label Text="Kolor przycisku" FontSize="11" TextColor="#90A4AE"/>
+                            <Grid ColumnDefinitions="*,24" HeightRequest="36">
+                                <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                        StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="8,0">
+                                    <Entry x:Name="KolorPrzyciskuEntry" Text="#192436"
+                                           FontSize="13" BackgroundColor="Transparent"/>
+                                </Border>
+                                <Border Grid.Column="1"
+                                        x:Name="KolorPrzyciskuPodglad"
+                                        BackgroundColor="#192436"
+                                        StrokeShape="RoundRectangle 4"
+                                        WidthRequest="24" HeightRequest="24"
+                                        VerticalOptions="Center"/>
+                            </Grid>
+                        </VerticalStackLayout>
+
+                        <!-- Kolor tekstu przycisku -->
+                        <VerticalStackLayout Grid.Column="3" Spacing="4">
+                            <Label Text="Kolor tekstu przycisku" FontSize="11" TextColor="#90A4AE"/>
+                            <Grid ColumnDefinitions="*,24" HeightRequest="36">
+                                <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                        StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="8,0">
+                                    <Entry x:Name="KolorTekstuEntry" Text="#ffffff"
+                                           FontSize="13" BackgroundColor="Transparent"/>
+                                </Border>
+                                <Border Grid.Column="1"
+                                        x:Name="KolorTekstuPodglad"
+                                        BackgroundColor="#ffffff"
+                                        StrokeShape="RoundRectangle 4"
+                                        Stroke="#E0E0E0"
+                                        WidthRequest="24" HeightRequest="24"
+                                        VerticalOptions="Center"/>
+                            </Grid>
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </Frame>
+
+                <!-- ── WIERSZ 2: Czcionka, Nazwa przedpłaty, Rozliczenie, Slug, Ile dni ── -->
+                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
+                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                       BorderColor="#E8E8E8">
+                    <Grid ColumnDefinitions="*,*,*,*,80" ColumnSpacing="10">
+
+                        <VerticalStackLayout Grid.Column="0" Spacing="4">
+                            <Label Text="Czcionka" FontSize="11" TextColor="#90A4AE"/>
+                            <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                    StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="6,0">
+                                <Picker x:Name="CzcionkaPicker" FontSize="13">
+                                    <Picker.Items>
+                                        <x:String>DM Sans</x:String>
+                                        <x:String>Roboto</x:String>
+                                        <x:String>Open Sans</x:String>
+                                        <x:String>Lato</x:String>
+                                        <x:String>Montserrat</x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                            <Label Text="Nazwa przedpłaty" FontSize="11" TextColor="#90A4AE"/>
+                            <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                    StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="8,0">
+                                <Entry x:Name="NazwaPrzedplatyEntry" Placeholder="Zadatek"
+                                       FontSize="13" BackgroundColor="Transparent"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="2" Spacing="4">
+                            <Label Text="Rozliczenie" FontSize="11" TextColor="#90A4AE"/>
+                            <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                    StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="6,0">
+                                <Picker x:Name="RozliczeniePicker" FontSize="13">
+                                    <Picker.Items>
+                                        <x:String>Na miejscu</x:String>
+                                        <x:String>7 dni przed przyjazdem</x:String>
+                                        <x:String>14 dni przed przyjazdem</x:String>
+                                        <x:String>30 dni przed przyjazdem</x:String>
+                                        <x:String>Przy rezerwacji</x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="3" Spacing="4">
+                            <Label Text="Slug" FontSize="11" TextColor="#90A4AE"/>
+                            <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                    StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="8,0">
+                                <Entry x:Name="SlugEntry" Placeholder="Slug"
+                                       FontSize="13" BackgroundColor="Transparent"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="4" Spacing="4">
+                            <Label Text="Ile dni przed rez." FontSize="11" TextColor="#90A4AE"/>
+                            <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                    StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="8,0">
+                                <Entry x:Name="IleDniEntry" Text="1" Keyboard="Numeric"
+                                       FontSize="13" BackgroundColor="Transparent"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </Frame>
+
+                <!-- ── Domyślne daty ── -->
+                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
+                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                       BorderColor="#E8E8E8">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Domyślne daty" FontSize="13" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="Data od" FontSize="11" TextColor="#90A4AE"/>
+                                <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                        StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="10,4">
+                                    <DatePicker x:Name="TerminOdPicker" Format="yyyy-MM-dd" FontSize="13"/>
+                                </Border>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Data do" FontSize="11" TextColor="#90A4AE"/>
+                                <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                        StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="10,4">
+                                    <DatePicker x:Name="TerminDoPicker" Format="yyyy-MM-dd" FontSize="13"/>
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- ── Wybierz obiekt ── -->
+                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
+                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                       BorderColor="#E8E8E8">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Wybierz obiekt" FontSize="13" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
+                        <FlexLayout x:Name="PokojeContainer"
+                                    Wrap="Wrap" Direction="Row"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- ── Grupowanie ── -->
+                <Frame CornerRadius="10" Padding="14,10" HasShadow="False"
+                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                       BorderColor="#E8E8E8">
+                    <HorizontalStackLayout Spacing="10">
+                        <Switch x:Name="GrupowanieSwitch"/>
+                        <Label Text="Grupuj kwatery po standardzie"
+                               VerticalOptions="Center" FontSize="13"
+                               TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
+                    </HorizontalStackLayout>
+                </Frame>
+
+                <!-- ── Konto finansowe + statusy ── -->
+                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
+                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                       BorderColor="#E8E8E8">
+                    <VerticalStackLayout Spacing="10">
+
+                        <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="6,0">
+                            <Picker x:Name="KontoFinansowePicker"
+                                    Title="Wybierz konto finansowe" FontSize="13">
+                                <Picker.Items>
+                                    <x:String>Konto główne</x:String>
+                                    <x:String>Konto dodatkowe</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+
+                        <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="6,0">
+                            <Picker x:Name="StatusWstepnyPicker"
+                                    Title="Wybierz status rezerwacji wst..." FontSize="13">
+                                <Picker.Items>
+                                    <x:String>Oczekująca</x:String>
+                                    <x:String>Potwierdzona</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+
+                        <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                                StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="6,0">
+                            <Picker x:Name="StatusNastepnyPicker"
+                                    Title="Wybierz status rezerwacji naty..." FontSize="13">
+                                <Picker.Items>
+                                    <x:String>Oczekująca</x:String>
+                                    <x:String>Potwierdzona</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- ── Opcja faktury ── -->
+                <Frame CornerRadius="10" Padding="14,10" HasShadow="False"
+                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                       BorderColor="#E8E8E8">
+                    <HorizontalStackLayout Spacing="10">
+                        <Switch x:Name="OpcjaFakturySwitch"/>
+                        <Label Text="Istnieje opcja wystawienia faktury"
+                               VerticalOptions="Center" FontSize="13"
+                               TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
+                    </HorizontalStackLayout>
+                </Frame>
+
+                <!-- ── Dodatkowe pola ── -->
+                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
+                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                       BorderColor="#E8E8E8">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Dodatkowe pola" FontSize="13" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
+                        <HorizontalStackLayout Spacing="8">
+                            <CheckBox x:Name="TypPojazdCheck"/>
+                            <Label Text="Typ pojazdu" VerticalOptions="Center" FontSize="13"
+                                   TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="8">
+                            <CheckBox x:Name="NrRejestrCheck"/>
+                            <Label Text="Numer rejestracyjny pojazdu" VerticalOptions="Center" FontSize="13"
+                                   TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="8">
+                            <CheckBox x:Name="KrajCheck"/>
+                            <Label Text="Kraj zamieszkania" VerticalOptions="Center" FontSize="13"
+                                   TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- ── Typ formularza ── -->
+                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
+                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                       BorderColor="#E8E8E8">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Typ formularza" FontSize="13" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
+                        <HorizontalStackLayout Spacing="20">
+                            <HorizontalStackLayout Spacing="6">
+                                <RadioButton x:Name="RadioWypelnienie" Value="Wypełnienie"
+                                             GroupName="TypFormularza" IsChecked="True"/>
+                                <Label Text="Wypełnienie" VerticalOptions="Center" FontSize="13"
+                                       TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Spacing="6">
+                                <RadioButton Value="Obramowanie" GroupName="TypFormularza"/>
+                                <Label Text="Obramowanie" VerticalOptions="Center" FontSize="13"
+                                       TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Spacing="6">
+                                <RadioButton Value="Zaokrąglenia" GroupName="TypFormularza"/>
+                                <Label Text="Zaokrąglenia" VerticalOptions="Center" FontSize="13"
+                                       TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Spacing="6">
+                                <RadioButton Value="Kwadratowe" GroupName="TypFormularza"/>
+                                <Label Text="Kwadratowe" VerticalOptions="Center" FontSize="13"
+                                       TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
+                            </HorizontalStackLayout>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- ── Treść zgody ── -->
+                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
+                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                       BorderColor="#E8E8E8">
+                    <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
+                            StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="10,8">
+                        <Editor x:Name="TrescZgodyEditor"
+                                Placeholder="Treść dodatkowej wymaganej zgody"
+                                FontSize="13"
+                                HeightRequest="70"
+                                BackgroundColor="Transparent"/>
+                    </Border>
+                </Frame>
+
+                <!-- ── Skrypt / Szablony — info ── -->
+                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
+                       BackgroundColor="{AppThemeBinding Light=#E3F2FD, Dark=#0D1442}"
+                       BorderColor="#90CAF9">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Skrypt do wstawienia na stronę"
+                               FontSize="13" FontAttributes="Bold"
+                               TextColor="#1565C0"/>
+                        <Label x:Name="LblSkrypt"
+                               Text="— (zapisz, aby wygenerować skrypt) —"
+                               FontSize="11"
+                               TextColor="#1976D2"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- ── Szablony ── -->
+                <Frame CornerRadius="10" Padding="0" HasShadow="False"
+                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                       BorderColor="#E8E8E8">
+                    <VerticalStackLayout Spacing="0">
+                        <Grid ColumnDefinitions="*,*,*,*">
+                            <Button Grid.Column="0" x:Name="BtnSzablon1"
+                                    Text="SZABLON 1" FontSize="12"
+                                    BackgroundColor="#1565C0" TextColor="White"
+                                    CornerRadius="0" HeightRequest="40"
+                                    Clicked="OnSzablonClicked" CommandParameter="1"/>
+                            <Button Grid.Column="1" x:Name="BtnSzablon2"
+                                    Text="SZABLON 2" FontSize="12"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"
+                                    CornerRadius="0" HeightRequest="40"
+                                    Clicked="OnSzablonClicked" CommandParameter="2"/>
+                            <Button Grid.Column="2" x:Name="BtnSzablon3"
+                                    Text="SZABLON 3" FontSize="12"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"
+                                    CornerRadius="0" HeightRequest="40"
+                                    Clicked="OnSzablonClicked" CommandParameter="3"/>
+                            <Button Grid.Column="3" x:Name="BtnSzablon4"
+                                    Text="SZABLON 4" FontSize="12"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"
+                                    CornerRadius="0" HeightRequest="40"
+                                    Clicked="OnSzablonClicked" CommandParameter="4"/>
+                        </Grid>
+                        <!-- Podgląd aktywnego szablonu -->
+                        <BoxView HeightRequest="1" BackgroundColor="#E0E0E0"/>
+                        <Label x:Name="LblSzablonPodglad"
+                               Text="Szablon 1 — aktywny"
+                               FontSize="12" TextColor="#90A4AE"
+                               Padding="14,10"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- ── Przycisk Zapisz ── -->
+                <Button Text="Zapisz"
+                        BackgroundColor="#1A1A1A"
+                        TextColor="White"
+                        FontSize="14" FontAttributes="Bold"
+                        CornerRadius="20"
+                        HeightRequest="44"
+                        Margin="0,4,0,24"
+                        Clicked="OnZapiszClicked"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

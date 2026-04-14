@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Kasa"
+             BackgroundColor="#F1F6F7"
+             Padding="16">
+
+  <VerticalStackLayout Spacing="20">
+
+    <!-- Top banner with start time and finish button -->
+    <Frame BackgroundColor="#FCEAD9" CornerRadius="4" Padding="16" HasShadow="False">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <Label Text="08:45"
+               FontAttributes="Bold"
+               FontSize="24"
+               TextColor="#111"
+               VerticalOptions="Center"
+               Grid.Column="0" />
+
+        <Label Text="Czas rozpoczęcia zmiany." 
+               TextColor="#333" 
+               VerticalOptions="Center"
+               Grid.Column="1"
+               Margin="12,0" />
+
+        <Button Text="zakończ zmianę"
+                BackgroundColor="#79C4C7"
+                TextColor="White"
+                Padding="14,6"
+                CornerRadius="20"
+                HorizontalOptions="End"
+                VerticalOptions="Center"
+                Grid.Column="2" />
+      </Grid>
+    </Frame>
+
+    <!-- History card -->
+    <Frame BackgroundColor="White" CornerRadius="4" Padding="0" HasShadow="False">
+      <VerticalStackLayout>
+        <Label Text="Historia zmian"
+               Margin="12"
+               FontFamily="Courier New"
+               TextColor="#333" />
+
+        <BoxView HeightRequest="1" Color="#EEE" />
+
+        <StackLayout Padding="12">
+          <HorizontalStackLayout Spacing="12">
+            <Button Text="raport szczegółowy"
+                    BackgroundColor="#F8E3E1"
+                    TextColor="#333"
+                    CornerRadius="20"
+                    Padding="12,6" />
+
+            <Button Text="raport uproszczony"
+                    BackgroundColor="#F8E3E1"
+                    TextColor="#333"
+                    CornerRadius="20"
+                    Padding="12,6" />
+          </HorizontalStackLayout>
+        </StackLayout>
+
+        <BoxView HeightRequest="1" Color="#EEE" />
+
+        <!-- Header row -->
+        <Grid Padding="12" ColumnSpacing="8">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+
+          <Label Text="Data rozpoczęcia zmiany" Grid.Column="0" FontAttributes="Bold" HorizontalOptions="Start" />
+          <Label Text="Data zakończenia zmiany" Grid.Column="1" FontAttributes="Bold" HorizontalOptions="Start" />
+          <Label Text="Gotówka" Grid.Column="2" FontAttributes="Bold" HorizontalOptions="End" />
+          <Label Text="Przelewy" Grid.Column="3" FontAttributes="Bold" HorizontalOptions="End" />
+        </Grid>
+
+        <BoxView HeightRequest="1" Color="#EEE" />
+
+        <!-- Example data row -->
+        <Grid Padding="12" ColumnSpacing="8">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+
+          <Label Text="2026-04-08 08:45:42" Grid.Column="0" HorizontalOptions="Start" />
+          <Label Text="-" Grid.Column="1" HorizontalOptions="Start" />
+          <Label Text="0.00" Grid.Column="2" HorizontalOptions="End" />
+          <Label Text="0.00" Grid.Column="3" HorizontalOptions="End" />
+        </Grid>
+
+        <BoxView HeightRequest="1" Color="#EEE" />
+
+        <HorizontalStackLayout HorizontalOptions="End" Padding="12" Spacing="8">
+          <Label Text="Wierszy na stronę:" VerticalOptions="Center" />
+          <Picker WidthRequest="60">
+            <Picker.Items>
+              <x:String>5</x:String>
+              <x:String>10</x:String>
+            </Picker.Items>
+          </Picker>
+          <Label Text="1-1 z 1" VerticalOptions="Center" />
+        </HorizontalStackLayout>
+
+      </VerticalStackLayout>
+    </Frame>
+
+  </VerticalStackLayout>
+
+</ContentPage>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Cenniki.CennikiListaPage"
+             Title="Cenniki">
+
+    <VerticalStackLayout Padding="16" Spacing="12">
+        <Button Text="Dodaj modyfikator ceny"
+                x:Name="BtnAdd"
+                Clicked="OnAddClicked"
+                BackgroundColor="#1565C0"
+                TextColor="White" />
+
+        <CollectionView x:Name="CennikiList"
+                        SelectionMode="None"
+                        HeightRequest="500">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="0,6" HasShadow="False" BackgroundColor="#fff">
+                        <VerticalStackLayout Spacing="4">
+                            <HorizontalStackLayout Spacing="12">
+                                <Button Text="✏️" Clicked="OnEditClicked" />
+                                <Button Text="🗑️" Clicked="OnDeleteClicked" />
+                                <Label Text="{Binding Name}" FontAttributes="Bold" VerticalOptions="Center" />
+                                <Label Text="{Binding Amount, StringFormat='{0} zł'}" TextColor="#1565C0" VerticalOptions="Center" HorizontalOptions="EndAndExpand" />
+                            </HorizontalStackLayout>
+
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="{Binding ApplyFromDate, StringFormat='Od: {0}'}"
+                                       FontSize="12"
+                                       TextColor="#666" />
+                                <Label Text="{Binding ApplyToDate, StringFormat='Do: {0}'}"
+                                       FontSize="12"
+                                       TextColor="#666" />
+                            </HorizontalStackLayout>
+
+                            <Label Text="{Binding Description}"
+                                   FontSize="12"
+                                   TextColor="#888"
+                                   IsVisible="{Binding HasDescription}" />
+
+                            <HorizontalStackLayout Spacing="6">
+                                <Label Text="Obowiązkowy"
+                                       FontSize="11"
+                                       TextColor="White"
+                                       BackgroundColor="#e53935"
+                                       Padding="4,2"
+                                       IsVisible="{Binding IsMandatory}" />
+                                <Label Text="Usługa"
+                                       FontSize="11"
+                                       TextColor="White"
+                                       BackgroundColor="#43a047"
+                                       Padding="4,2"
+                                       IsVisible="{Binding IsService}" />
+                                <Label Text="Procentowy"
+                                       FontSize="11"
+                                       TextColor="White"
+                                       BackgroundColor="#fb8c00"
+                                       Padding="4,2"
+                                       IsVisible="{Binding IsPercentAmount}" />
+                                <Label Text="Na osobę"
+                                       FontSize="11"
+                                       TextColor="White"
+                                       BackgroundColor="#8e24aa"
+                                       Padding="4,2"
+                                       IsVisible="{Binding IsPerPerson}" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Label x:Name="EmptyLabel"
+               Text="Brak modyfikatorów ceny."
+               IsVisible="False"
+               HorizontalOptions="Center"
+               VerticalOptions="CenterAndExpand" />
+    </VerticalStackLayout>
+</ContentPage>

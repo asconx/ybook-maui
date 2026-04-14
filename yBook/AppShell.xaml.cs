@@ -5,8 +5,13 @@ using yBook.Views.Finanse;
 using yBook.Views.ICalendar;
 using yBook.Views.Klienci;
 using yBook.Views.Przyjazdy;
+using yBook.Views.Rabaty;
+using yBook.Views.Surveys;
+using yBook.Views.Ustawienia;
+using yBook.Views.Kalendarz;
 using yBook.Views.Uzytkownicy;
 using yBook.Views.Rabaty;
+using yBook.Views.Przyjazdy;
 
 namespace yBook
 {
@@ -22,6 +27,13 @@ namespace yBook
 
             // Sprawdź sesję asynchronicznie po załadowaniu Shell
             Loaded += OnShellLoaded;
+            // Synchronizacja dostępności przy starcie
+            Loaded += async (s, e) =>
+            {
+                // Przykład: automatyczna synchronizacja przy starcie
+                // Możesz wywołać synchronizację globalnie lub tylko dla wybranych stron
+                // await new PrzyjazdWyjazdPage().SyncFromApi();
+            };
         }
 
         // ── Sprawdzenie sesji przy starcie ─────────────────────────────────────
@@ -30,9 +42,6 @@ namespace yBook
         {
             var isLoggedIn = await _auth.IsAuthenticatedAsync();
 
-            // ── Rejestracja tras finansowych ──────────────────────────────────
-            Routing.RegisterRoute("Dokumenty", typeof(DokumentyPage));
-            Routing.RegisterRoute("Klienci", typeof(KlienciPage));
             if (isLoggedIn)
                 await GoToAsync("//MainPage");
             else
@@ -47,29 +56,38 @@ namespace yBook
             Routing.RegisterRoute("LoginPage", typeof(Views.Auth.LoginPage));
 
             // Finanse
-            Routing.RegisterRoute("Dokumenty",        typeof(DokumentyPage));
-            Routing.RegisterRoute("KontaFinansowe",   typeof(KontaFinansowePage));
+            Routing.RegisterRoute("Dokumenty", typeof(DokumentyPage));
+            Routing.RegisterRoute("KontaFinansowe", typeof(KontaFinansowePage));
             Routing.RegisterRoute("RejestrPlatnosci", typeof(RejestrPlatnosciPage));
-            Routing.RegisterRoute("ImportMT940",      typeof(ImportMT940Page));
+            Routing.RegisterRoute("ImportMT940", typeof(ImportMT940Page));
 
             // Inne
-            Routing.RegisterRoute("ICalendar",    typeof(ICalendarPage));
+            Routing.RegisterRoute("ICalendar", typeof(ICalendarPage));
             Routing.RegisterRoute("UslugiOplaty", typeof(UslugiOplaty));
-            Routing.RegisterRoute("Cenniki",      typeof(CennikPage));
-            Routing.RegisterRoute("RabatyPage",   typeof(RabatyPage));
-            Routing.RegisterRoute("BlokadyPage",  typeof(BlokadyPage));
-            Routing.RegisterRoute("ICalendar",        typeof(ICalendarPage));
-            Routing.RegisterRoute("UslugiOplaty",     typeof(yBook.Views.Ceny.UslugiOplaty));
             Routing.RegisterRoute("Cenniki", typeof(CennikPage));
             Routing.RegisterRoute("RabatyPage", typeof(RabatyPage));
             Routing.RegisterRoute("BlokadyPage", typeof(BlokadyPage));
             Routing.RegisterRoute("PrzyjazdWyjazdPage", typeof(PrzyjazdWyjazdPage));
+            Routing.RegisterRoute("GrupoweSms", typeof(GrupoweSmsPage));
+
+            //Powiadomienia
+            Routing.RegisterRoute(nameof(PowiadomieniaPage), typeof(PowiadomieniaPage));
+
+            // Klienci
+            Routing.RegisterRoute("Klienci", typeof(Views.Klienci.KlienciPage));
+            // Klienci — zarejestruj nazwę zgodną z nameof(KlienciPage) używanym w GoToAsync
+            Routing.RegisterRoute("KlienciPage", typeof(KlienciPage));
+
             // Użytkownicy
             Routing.RegisterRoute("UzytkownicyLista", typeof(Uzytkownicy1Page));
 
-            // ── Tu dodasz pozostałe trasy w kolejnych etapach ─────────────────
-            // Routing.RegisterRoute("Recepcja",     typeof(RecepcjaPage));
-            // Routing.RegisterRoute("Rezerwacje",   typeof(RezerwacjePage));
+            // Kalendarz
+            Routing.RegisterRoute("KalendarzPage", typeof(Views.Kalendarz.KalendarzPage));
+
+            // Surveys
+            Routing.RegisterRoute("SurveysPage",    typeof(SurveysPage));
+            Routing.RegisterRoute("EditSurveyPage", typeof(EditSurveyPage));
+
         }
     }
 }

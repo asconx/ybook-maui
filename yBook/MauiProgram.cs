@@ -3,6 +3,7 @@ using yBook.Services;
 using yBook.ViewModels;
 using yBook.Views.Auth;
 using yBook.Views.Rabaty;
+using yBook.Views.Surveys;
 using yBook.Views.Ustawienia;
 
 namespace yBook
@@ -23,14 +24,15 @@ namespace yBook
             // ── HTTP Client ───────────────────────────────────────────────────
             builder.Services.AddSingleton<HttpClient>();
 
-            // ── Services (Singleton — żyją przez cały czas działania aplikacji)
+            // ── Services ─────────────────────────────────────────────────────
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<ISurveyService, SurveyService>();
+            builder.Services.AddSingleton<IPanelService, PanelService>();
 
-            // ── Dodaj tę linię:
+            // ── Shell ─────────────────────────────────────────────────────────
             builder.Services.AddSingleton<AppShell>();
 
-            // ── ViewModels (Transient — nowa instancja przy każdej nawigacji)
+            // ── ViewModels ────────────────────────────────────────────────────
             builder.Services.AddTransient<LoginViewModel>();
             builder.Services.AddTransient<SurveysViewModel>();
             builder.Services.AddTransient<EditSurveyViewModel>();
@@ -40,6 +42,10 @@ namespace yBook
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<RabatyPage>();
             builder.Services.AddTransient<PokojePage>();
+            builder.Services.AddTransient<PokojEdycjaPage>();
+            builder.Services.AddTransient<SurveysPage>();
+            builder.Services.AddTransient<EditSurveyPage>();
+            builder.Services.AddTransient<yBook.Views.Kalendarz.KalendarzPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
