@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
+
 namespace yBook.Views.Ustawienia
 {
     public partial class DaneObiektuPage : ContentPage
@@ -57,6 +63,9 @@ namespace yBook.Views.Ustawienia
 
         void BudujTaby()
         {
+            // Use named fields generated from XAML
+            var tabBar = TabBar;
+
             _tabs = new List<TabDef>
             {
                 new("dane podstawowe",      TabDanePodstawowe),
@@ -102,7 +111,7 @@ namespace yBook.Views.Ustawienia
                 });
 
                 _tabLabels.Add(lbl);
-                TabBar.Add(col);
+                tabBar.Add(col);
             }
 
             SelectTab(0);
@@ -110,6 +119,8 @@ namespace yBook.Views.Ustawienia
 
         void SelectTab(int idx)
         {
+            var tabBar = TabBar;
+
             for (int i = 0; i < _tabs.Count; i++)
             {
                 bool active = i == idx;
@@ -122,7 +133,7 @@ namespace yBook.Views.Ustawienia
                 lbl.FontAttributes = active ? FontAttributes.None : FontAttributes.None;
 
                 // Underline
-                var col = (VerticalStackLayout)TabBar.Children[i];
+                var col = (VerticalStackLayout)tabBar.Children[i];
                 var underline = (BoxView)col.Children[1];
                 underline.BackgroundColor = active
                     ? Color.FromArgb("#1565C0")
@@ -136,15 +147,18 @@ namespace yBook.Views.Ustawienia
 
         void BudujAkcjeCheckIn()
         {
+            var flexZ = FlexZameldowanie;
+            var flexW = FlexWymeldowanie;
+
             foreach (var (label, on) in AkcjeZameldowanie)
             {
                 _zameldowanieState[label] = on;
-                FlexZameldowanie.Add(BudujChip(label, on, _zameldowanieState));
+                flexZ?.Add(BudujChip(label, on, _zameldowanieState));
             }
             foreach (var (label, on) in AkcjeWymeldowanie)
             {
                 _wymeldowanieState[label] = on;
-                FlexWymeldowanie.Add(BudujChip(label, on, _wymeldowanieState));
+                flexW?.Add(BudujChip(label, on, _wymeldowanieState));
             }
         }
 
