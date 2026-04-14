@@ -202,6 +202,11 @@ namespace yBook.Controls
                                .DisplayAlert("yBook", $"Wkrótce: {page}", "OK");
                     break;
 
+                // ── Rejestr akcji ─────────
+                case "RejestrAkcji":
+                    await Shell.Current.GoToAsync("ListaLogow");
+                    break;
+
 
             }
         }

@@ -11,7 +11,7 @@ using yBook.Views.Ustawienia;
 using yBook.Views.Kalendarz;
 using yBook.Views.Uzytkownicy;
 using yBook.Views.Rabaty;
-
+using yBook.Views.Raporty;
 namespace yBook
 {
     public partial class AppShell : Shell
@@ -79,6 +79,10 @@ namespace yBook
             // Surveys
             Routing.RegisterRoute("SurveysPage",    typeof(SurveysPage));
             Routing.RegisterRoute("EditSurveyPage", typeof(EditSurveyPage));
+
+
+            // Raporty
+            Routing.RegisterRoute("ListaLogow", typeof(ListaLogowPage));
 
         }
     }
