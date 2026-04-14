@@ -31426,24 +31426,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Adminn\\.nuget\\packages\\": {},
+    "C:\\Users\\AdamG4TP\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Adminn\\Documents\\ybook-updated\\yBook\\yBook.csproj",
+      "projectUniqueName": "C:\\Users\\AdamG4TP\\Documents\\ybook-maui\\yBook\\yBook.csproj",
       "projectName": "yBook",
-      "projectPath": "C:\\Users\\Adminn\\Documents\\ybook-updated\\yBook\\yBook.csproj",
-      "packagesPath": "C:\\Users\\Adminn\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Adminn\\Documents\\ybook-updated\\yBook\\obj\\",
+      "projectPath": "C:\\Users\\AdamG4TP\\Documents\\ybook-maui\\yBook\\yBook.csproj",
+      "packagesPath": "C:\\Users\\AdamG4TP\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\AdamG4TP\\Documents\\ybook-maui\\yBook\\obj\\",
       "projectStyle": "PackageReference",
       "crossTargeting": true,
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Adminn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\AdamG4TP\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],

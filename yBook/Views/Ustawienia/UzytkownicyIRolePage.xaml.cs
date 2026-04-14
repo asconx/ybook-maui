@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Maui.Controls;
 using yBook.Models;
+using yBook.Services;
 
 namespace yBook.Views.Ustawienia
 {

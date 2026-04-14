@@ -27,16 +27,6 @@
         Title="Rabaty"
         ContentTemplate="{DataTemplate rabaty:RabatyPage}"
         Route="RabatyPage"/>
-
-    <ShellContent
-        Title="Pokoje i apartamenty"
-        ContentTemplate="{DataTemplate ustawienia:PokojePage}"
-        Route="PokojePage"/>
-
-    <ShellContent
-        Title="Dane obiektu"
-        ContentTemplate="{DataTemplate ustawienia:DaneObiektuPage}"
-        Route="DaneObiektu"/>
     
 
 </Shell>

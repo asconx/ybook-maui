@@ -139,12 +139,12 @@ namespace yBook.Controls
                     await Shell.Current.GoToAsync("//RabatyPage");
                     break;
                 case "DaneObiektu":
-                    await Shell.Current.GoToAsync("//DaneObiektu");
+                    await Shell.Current.GoToAsync("DaneObiektu");
                     break;
 
                 // —— Strona Pokoje —————————————————————————————————————————————
                 case "Pokoje":
-                    await Shell.Current.GoToAsync("//PokojePage");
+                    await Shell.Current.GoToAsync("PokojePage");
                     break;
                 // —— Strona Powiadomienia —————————————————————————————————————————————
                 case "Powiadomienia":

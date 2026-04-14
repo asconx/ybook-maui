@@ -62,6 +62,10 @@ namespace yBook
             Routing.RegisterRoute("PrzyjazdWyjazdPage", typeof(PrzyjazdWyjazdPage));
             Routing.RegisterRoute("GrupoweSms", typeof(GrupoweSmsPage));
 
+            // Ustawienia
+            Routing.RegisterRoute("PokojePage", typeof(PokojePage));
+            Routing.RegisterRoute("DaneObiektu", typeof(DaneObiektuPage));
+
             //Powiadomienia
             Routing.RegisterRoute(nameof(PowiadomieniaPage), typeof(PowiadomieniaPage));
 
