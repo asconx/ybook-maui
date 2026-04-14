@@ -30,6 +30,19 @@ namespace yBook.Views.Kalendarz
             Header.HamburgerClicked += (_, _) => Drawer.Open();
             _pokoje = MockDane();
             Render();
+            // subscribe to reservation added events
+            yBook.Services.CalendarEvents.ReservationAdded += OnReservationAdded;
+        }
+
+        void OnReservationAdded(KalendarzRezerwacja rez, int roomId)
+        {
+            // find room
+            var pokoj = _pokoje.FirstOrDefault(p => p.Id == roomId);
+            if (pokoj is null) return;
+            // add reservation
+            pokoj.Rezerwacje.Add(rez);
+            // re-render calendar (on main thread)
+            MainThread.BeginInvokeOnMainThread(() => Render());
         }
 
         // ── Mock ───────────────────────────────────────────────────────────────
@@ -314,6 +327,18 @@ namespace yBook.Views.Kalendarz
                     blok.Content = row;
 
                     AbsoluteLayout.SetLayoutBounds(blok, new Rect(bx, by, bw, BookH));
+                    // Make reservation block tappable to open details
+                    var tap = new TapGestureRecognizer();
+                    tap.Tapped += (_, __) =>
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Tapped reservation {rez.Id}");
+                        ShowReservationDetails(rez);
+                    };
+                    blok.GestureRecognizers.Add(tap);
+                    // also allow tapping the inner row
+                    var innerTap = new TapGestureRecognizer();
+                    innerTap.Tapped += (_, __) => ShowReservationDetails(rez);
+                    row.GestureRecognizers.Add(innerTap);
                     CalendarGrid.Children.Add(blok);
                 }
             }
@@ -429,6 +454,103 @@ namespace yBook.Views.Kalendarz
                 PopupRezerwacjeList.Children.Add(
                     new Label { Text = "Brak rezerwacji", FontSize = 12, TextColor = Color.FromArgb("#999") });
 
+            PopupOverlay.IsVisible = true;
+        }
+
+        // ── Pokaż szczegóły rezerwacji (side panel w popupie) ──────────────
+        void ShowReservationDetails(KalendarzRezerwacja rez)
+        {
+            // Zbuduj prosty widok szczegółów w PopupPanel
+            var root = new VerticalStackLayout { Padding = 20, Spacing = 10 };
+
+            root.Add(new Label { Text = $"Rezerwacja ({rez.Id})", FontSize = 17, FontAttributes = FontAttributes.Bold });
+            root.Add(new Label { Text = $"Okres: {rez.DataOd:yyyy-MM-dd} – {rez.DataDo:yyyy-MM-dd}", FontSize = 12 });
+            root.Add(new Label { Text = $"Źródło: ICAL:booking{rez.Id}", FontSize = 12 });
+
+            // Dodaj nowy termin
+            var pickerStatus = new Picker { Title = "Status" };
+            pickerStatus.ItemsSource = new List<string> { "Nowa", "Potwierdzona", "Zameldowana", "Anulowana" };
+            var entryUwagi = new Entry { Placeholder = "Uwagi" };
+            var entryInfo = new Entry { Placeholder = "Informacje do powiadomienia" };
+            var btnAddTerm = new Button { Text = "Dodaj termin" };
+            btnAddTerm.Clicked += (_, _) => DisplayAlert("Dodano termin", $"Status: {pickerStatus.SelectedItem}\nUwagi: {entryUwagi.Text}", "OK");
+
+            root.Add(new Label { Text = "Dodaj nowy termin", FontAttributes = FontAttributes.Bold });
+            root.Add(pickerStatus);
+            root.Add(entryUwagi);
+            root.Add(entryInfo);
+            root.Add(btnAddTerm);
+
+            // Parking
+            var pickerVehicle = new Picker { Title = "Typ pojazdu" };
+            pickerVehicle.ItemsSource = new List<string> { "Osobowy", "Motocykl", "Dostawczy" };
+            var entryPlate = new Entry { Placeholder = "Numer rejestracyjny" };
+            var dpPark = new DatePicker { Date = DateTime.Today };
+            var tpPark = new TimePicker { Time = TimeSpan.FromHours(12) };
+            var btnSavePark = new Button { Text = "Zapisz parking" };
+            btnSavePark.Clicked += (_, _) => DisplayAlert("Parking", $"Pojazd: {pickerVehicle.SelectedItem}\nRej: {entryPlate.Text}\nTermin: {dpPark.Date + tpPark.Time}", "OK");
+
+            root.Add(new Label { Text = "Parking", FontAttributes = FontAttributes.Bold });
+            root.Add(pickerVehicle);
+            root.Add(entryPlate);
+            root.Add(dpPark);
+            root.Add(tpPark);
+            root.Add(btnSavePark);
+
+            // Meldunek
+            var cb1 = new CheckBox(); var cb2 = new CheckBox(); var cb3 = new CheckBox();
+            root.Add(new Label { Text = "Meldunek", FontAttributes = FontAttributes.Bold });
+            root.Add(new Label { Text = "Akcje związane z zameldowaniem" });
+            root.Add(new HorizontalStackLayout { Children = { new Label { Text = "Sprawdzenie rezerwacji" }, cb1 } });
+            root.Add(new HorizontalStackLayout { Children = { new Label { Text = "Klucz" }, cb2 } });
+            root.Add(new HorizontalStackLayout { Children = { new Label { Text = "Wyjaśnianie zasad obiektu" }, cb3 } });
+            var btnKarta = new Button { Text = "Pobierz kartę" };
+            var btnZamelduj = new Button { Text = "Zamelduj" };
+            btnKarta.Clicked += (_, _) => DisplayAlert("Karta", "Pobieranie karty...", "OK");
+            btnZamelduj.Clicked += (_, _) => DisplayAlert("Zamelduj", "Gość zostanie zameldowany.", "OK");
+            root.Add(new HorizontalStackLayout { Spacing = 8, Children = { btnKarta, btnZamelduj } });
+
+            // Podsumowanie finansowe (proste)
+            decimal sumN = 500m; decimal extra = 50m; decimal total = sumN + extra;
+            var lblN = new Label { Text = $"Suma za noclegi: {sumN:C0}" };
+            var lblExtra = new Label { Text = $"Opłaty dodatkowe: {extra:C0}" };
+            var entryRab = new Entry { Placeholder = "%", Keyboard = Keyboard.Numeric };
+            var lblRabPLN = new Label { Text = "Rabat (PLN): 0" };
+            entryRab.TextChanged += (_, __) =>
+            {
+                if (decimal.TryParse(entryRab.Text, out var p))
+                {
+                    var rab = Math.Round(total * p / 100m, 2);
+                    lblRabPLN.Text = $"Rabat (PLN): {rab:C0}";
+                }
+                else lblRabPLN.Text = "Rabat (PLN): 0";
+            };
+            var entryPre = new Entry { Placeholder = "Przedpłata", Keyboard = Keyboard.Numeric };
+            var dpPre = new DatePicker { Date = DateTime.Today };
+            var btnAddPay = new Button { Text = "Dodaj wpłatę" };
+            btnAddPay.Clicked += (_, _) => DisplayAlert("Wpłata", $"Dodano wpłatę: {entryPre.Text}", "OK");
+            var btnObciazenia = new Button { Text = "Obciążenia" };
+            btnObciazenia.Clicked += (_, _) => DisplayAlert("Obciążenia", "Historia wpłat...", "OK");
+
+            root.Add(new Label { Text = "Podsumowanie", FontAttributes = FontAttributes.Bold });
+            root.Add(lblN);
+            root.Add(lblExtra);
+            root.Add(new HorizontalStackLayout { Children = { new Label { Text = "Rabat (%)" }, entryRab, lblRabPLN } });
+            root.Add(new HorizontalStackLayout { Children = { new Label { Text = "Przedpłata" }, entryPre, dpPre } });
+            root.Add(new HorizontalStackLayout { Spacing = 8, Children = { btnAddPay, btnObciazenia } });
+
+            // Akcje końcowe
+            var btnArchiw = new Button { Text = "Archiwizuj" };
+            var btnZapisz = new Button { Text = "Zapisz" };
+            var btnPow = new Button { Text = "Powiadomienie" };
+            btnArchiw.Clicked += (_, _) => DisplayAlert("Archiwizuj", "Zarchiwizowano.", "OK");
+            btnZapisz.Clicked += (_, _) => DisplayAlert("Zapisz", "Zapisano.", "OK");
+            btnPow.Clicked += (_, _) => DisplayAlert("Powiadomienie", "Wysłano.", "OK");
+            root.Add(new HorizontalStackLayout { Spacing = 8, Children = { btnArchiw, btnZapisz, btnPow } });
+
+            // Zamień zawartość PopupPanel i pokaż
+            PopupPanel.Content = new ScrollView { Content = root };
+            PopupTitle.Text = $"Rezerwacja {rez.Id}";
             PopupOverlay.IsVisible = true;
         }
 

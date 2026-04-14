@@ -87,17 +87,249 @@
             </HorizontalStackLayout>
         </ScrollView>
         <CollectionView 
-            Grid.Row="2">
+            Grid.Row="2"
+            x:Name="AppointmentsList"
+            ItemsSource="{Binding Reservations}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <HorizontalStackLayout>
-                        <Button/>
-                        <Button/>
-                        <Label/>
-                    </HorizontalStackLayout>
+                    <Frame Padding="8" Margin="6" HasShadow="True" BackgroundColor="#F5A623" CornerRadius="6">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnAppointmentTapped" CommandParameter="{Binding .}" />
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Id, StringFormat='Rezerwacja ({0})'}" FontAttributes="Bold" TextColor="Black"/>
+                            <Label Text="{Binding DateCreated}" FontSize="12" TextColor="Black"/>
+                        </VerticalStackLayout>
+                    </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <!-- Reservation details side panel overlay -->
+        <AbsoluteLayout Grid.Row="0" Grid.RowSpan="4" IsVisible="False" x:Name="ReservationPanelRoot">
+            <BoxView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Color="#80000000" />
+
+            <Frame AbsoluteLayout.LayoutBounds="1,0,360,1" AbsoluteLayout.LayoutFlags="HeightProportional,PositionProportional" CornerRadius="0" Padding="0" HasShadow="True" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}" x:Name="ReservationPanel">
+                <ScrollView>
+                    <VerticalStackLayout Padding="12" Spacing="10">
+                        <VerticalStackLayout Spacing="10">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label x:Name="LblReservationHeader" Text="Rezerwacja" FontAttributes="Bold" FontSize="18" VerticalOptions="Center" />
+                                <Button Text="✕" Clicked="OnCloseReservationPanel" Grid.Column="1" BackgroundColor="Transparent" BorderColor="Transparent"/>
+                            </Grid>
+
+                            <HorizontalStackLayout Spacing="8">
+                                <Border BackgroundColor="#E6E6E6" Stroke="Transparent" Padding="8,4" StrokeShape="RoundRectangle 6">
+                                    <Label x:Name="LblDateCreated" Text="utworzono: 2026-04-09 18:16:04" FontSize="12" />
+                                </Border>
+                                <Border BackgroundColor="#E6E6E6" Stroke="Transparent" Padding="8,4" StrokeShape="RoundRectangle 6">
+                                    <Label x:Name="LblSource" Text="źródło: ICAL:booking2" FontSize="12" />
+                                </Border>
+                            </HorizontalStackLayout>
+
+                            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                                <Border BackgroundColor="Black" Padding="10,6" StrokeShape="RoundRectangle 20">
+                                    <HorizontalStackLayout Spacing="8">
+                                        <Label Text="👤" TextColor="White" />
+                                        <Label Text="booking2: CLOSED – Not available" TextColor="White" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                                <Button Text="✎" BackgroundColor="Transparent" BorderColor="Transparent"/>
+                                <Border BackgroundColor="#F5C842" Padding="10,6" StrokeShape="RoundRectangle 16">
+                                    <Label Text="📞 11111111" TextColor="#1A1A1A" />
+                                </Border>
+                            </HorizontalStackLayout>
+
+                            <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                <Label Text="🔗" />
+                                <Label Text="dołącz termin" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+
+                            <BoxView HeightRequest="1" Color="#E0E0E0" />
+                            <Label Text="Termin 1" HorizontalOptions="Center" TextColor="#3AACA2" />
+
+                            <Border BackgroundColor="#FBE3E3" Stroke="Transparent" StrokeShape="RoundRectangle 20" Padding="10" HorizontalOptions="Center" Margin="0,6">
+                                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                    <Label Text="+" FontSize="18" />
+                                    <Label Text="dodaj termin" />
+                                </HorizontalStackLayout>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Dodaj nowy termin (zastępuje Expander) -->
+                        <Frame BorderColor="#EEE" Padding="6">
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Dodaj nowy termin" FontAttributes="Bold" />
+                                <Label Text="Status"/>
+                                <Picker x:Name="PickerStatus" Title="Wybierz status"/>
+                                <Label Text="Uwagi"/>
+                                <Entry x:Name="EntryNotes" Placeholder="Uwagi"/>
+                                <Label Text="Informacje do powiadomienia"/>
+                                <Entry x:Name="EntryInfoForNotify" Placeholder="Informacje do powiadomienia"/>
+                                <Button Text="Dodaj termin" Clicked="OnAddTermClicked"/>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Wysłane powiadomienia - collapsible -->
+                        <Frame BorderColor="#EEE" Padding="0">
+                            <VerticalStackLayout>
+                                <Grid Padding="12" ColumnDefinitions="*,Auto">
+                                    <Label Text="Wysłane powiadomienia" FontAttributes="Bold" VerticalOptions="Center"/>
+                                    <Label x:Name="LblNotificationsChevron" Text="˅" Grid.Column="1" VerticalOptions="Center">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnToggleNotifications"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Grid>
+                                <VerticalStackLayout x:Name="NotificationsContainer" Padding="12">
+                                    <CollectionView x:Name="CvNotifications" HeightRequest="120">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Label Text="{Binding}"/>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Rejestr akcji - collapsible -->
+                        <Frame BorderColor="#EEE" Padding="0">
+                            <VerticalStackLayout>
+                                <Grid Padding="12" ColumnDefinitions="*,Auto">
+                                    <Label Text="Rejestr akcji" FontAttributes="Bold" VerticalOptions="Center"/>
+                                    <Label x:Name="LblActionLogChevron" Text="˅" Grid.Column="1" VerticalOptions="Center">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnToggleActionLog"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Grid>
+                                <VerticalStackLayout x:Name="ActionLogContainer" Padding="12">
+                                    <CollectionView x:Name="CvActionLog" HeightRequest="160">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Frame Padding="10" Margin="0,6" BackgroundColor="#FAFAFA" BorderColor="#EEE">
+                                                    <VerticalStackLayout>
+                                                        <HorizontalStackLayout Spacing="8">
+                                                            <BoxView Color="#F5C842" WidthRequest="10" HeightRequest="10" CornerRadius="5" VerticalOptions="Center"/>
+                                                            <Label Text="{Binding Date}" FontSize="12" TextColor="#888"/>
+                                                        </HorizontalStackLayout>
+                                                        <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="14"/>
+                                                        <Label Text="{Binding Details}" FontSize="12" TextColor="#666"/>
+                                                    </VerticalStackLayout>
+                                                </Frame>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Parking -->
+                        <Frame BorderColor="#EEE" Padding="0">
+                            <VerticalStackLayout>
+                                <Grid Padding="12" ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout>
+                                        <Label Text="Parking" FontAttributes="Bold" />
+                                        <Label Text="Rejestracja pojazdów" FontSize="12" TextColor="#888"/>
+                                    </VerticalStackLayout>
+                                    <Label x:Name="LblParkingChevron" Text="˅" Grid.Column="1" VerticalOptions="Center">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnToggleParking"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Grid>
+                                <VerticalStackLayout x:Name="ParkingContainer" Padding="12" BackgroundColor="#F3F7F8">
+                                    <Label Text="Typ pojazdu"/>
+                                    <Picker x:Name="PickerVehicleType" Title="Wybierz typ"/>
+                                    <Label Text="Numer rejestracyjny pojazdu"/>
+                                    <Entry x:Name="EntryPlate" Placeholder="Numer rejestracyjny pojazdu"/>
+                                    <Label Text="Wybierz termin"/>
+                                    <Frame Padding="10" BackgroundColor="White" BorderColor="#DDD">
+                                        <Label x:Name="LblParkingTerm" Text="2026-04-09 - 2026-04-12"/>
+                                    </Frame>
+                                    <HorizontalStackLayout HorizontalOptions="End">
+                                        <Button Text="zapisz" Clicked="OnSaveParkingClicked" BackgroundColor="#3AACA2" TextColor="White" CornerRadius="20"/>
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Meldunek -->
+                        <Frame BorderColor="#EEE" Padding="6">
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="Meldunek" FontAttributes="Bold" />
+                                <Label Text="Akcje związane z zameldowaniem"/>
+                                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                    <CheckBox x:Name="CbCheckReservation" />
+                                    <Label Text="Sprawdzenie rezerwacji" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                    <CheckBox x:Name="CbKey" />
+                                    <Label Text="Klucz" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                    <CheckBox x:Name="CbRules" />
+                                    <Label Text="Wyjaśnianie zasad obiektu" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout Spacing="8">
+                                    <Button Text="Pobierz kartę" Clicked="OnDownloadCardClicked"/>
+                                    <Button Text="Zamelduj" Clicked="OnCheckInClicked"/>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Podsumowanie finansowe -->
+                        <Frame BorderColor="#DDD" Padding="8">
+                            <VerticalStackLayout Spacing="8">
+                                <Label Text="Podsumowanie" FontAttributes="Bold" />
+                                <HorizontalStackLayout>
+                                    <Label Text="Suma za noclegi" />
+                                    <Label x:Name="LblNoclegiSum" HorizontalOptions="EndAndExpand" />
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout>
+                                    <Label Text="Opłaty dodatkowe" />
+                                    <Label x:Name="LblExtraFees" HorizontalOptions="EndAndExpand" />
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout VerticalOptions="Center">
+                                    <Label Text="Rabat (%)" VerticalOptions="Center"/>
+                                    <Entry x:Name="EntryDiscountPercent" WidthRequest="80" TextChanged="OnDiscountChanged" Keyboard="Numeric"/>
+                                    <Label Text="Rabat (PLN)" VerticalOptions="Center"/>
+                                    <Label x:Name="LblDiscountPln" HorizontalOptions="EndAndExpand" />
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout VerticalOptions="Center">
+                                    <Label Text="Przedpłata" VerticalOptions="Center"/>
+                                    <Entry x:Name="EntryPrepayment" WidthRequest="120" Keyboard="Numeric"/>
+                                    <DatePicker x:Name="DpPrepaymentDate" />
+                                </HorizontalStackLayout>
+
+                                <BoxView HeightRequest="1" Color="#CCC"/>
+                                <HorizontalStackLayout>
+                                    <Label Text="Cena za całość -" />
+                                    <Label x:Name="LblTotalPrice" HorizontalOptions="EndAndExpand" />
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout>
+                                    <Label Text="Pozostało do zapłaty" />
+                                    <Label x:Name="LblRemaining" HorizontalOptions="EndAndExpand" />
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout Spacing="8">
+                                    <Button Text="Dodaj wpłatę" Clicked="OnAddPaymentClicked"/>
+                                    <Button Text="Obciążenia" Clicked="OnChargesClicked"/>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <HorizontalStackLayout Spacing="8">
+                            <Button Text="Archiwizuj" Clicked="OnArchiveClicked"/>
+                            <Button Text="Zapisz" Clicked="OnSaveClicked"/>
+                            <Button Text="Powiadomienie" Clicked="OnNotifyClicked"/>
+                        </HorizontalStackLayout>
+
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Frame>
+        </AbsoluteLayout>
 
             <ctrl:DrawerMenu Grid.Row="0" Grid.RowSpan="4"
                          x:Name="Drawer" ZIndex="50"/>
