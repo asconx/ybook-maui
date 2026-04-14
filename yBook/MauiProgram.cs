@@ -27,6 +27,7 @@ namespace yBook
             // ── Services ─────────────────────────────────────────────────────
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<ISurveyService, SurveyService>();
+            builder.Services.AddSingleton<IBlockadeService, BlockadeService>();
 
             // ── Shell ─────────────────────────────────────────────────────────
             builder.Services.AddSingleton<AppShell>();
