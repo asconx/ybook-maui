@@ -1,20 +1,43 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using yBook.Helpers;
 using yBook.Models;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.Maui.Controls;
 using yBook.Services;
+using yBook.Views.Blokady;
 
 namespace yBook.Views.Przyjazdy;
 
 public partial class PrzyjazdWyjazdPage : ContentPage
 {
-    public class PokojGrid
+    public class PokojGrid : INotifyPropertyChanged
     {
         public int Id { get; set; }
         public string Nazwa { get; set; }
         public ObservableCollection<PrzyjazdWyjazd> Dni { get; set; } = new();
+
+        private string _rezerwajeLabel = string.Empty;
+        public string RezerwajeLabel
+        {
+            get => _rezerwajeLabel;
+            set
+            {
+                if (_rezerwajeLabel != value)
+                {
+                    _rezerwajeLabel = value;
+                    OnPropertyChanged(nameof(RezerwajeLabel));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     ObservableCollection<DateTime> dni = new();
@@ -47,32 +70,42 @@ public partial class PrzyjazdWyjazdPage : ContentPage
 
         InitRoomsOnce();
         _authService = IPlatformApplication.Current.Services.GetService<IAuthService>();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
         LoadAndSyncData();
     }
 
     async void LoadAndSyncData()
     {
         _token = await _authService.GetTokenAsync();
+
+        if (string.IsNullOrEmpty(_token))
+            return;
+
         await SyncFromApi();
     }
 
     async Task SyncFromApi()
     {
         if (string.IsNullOrEmpty(_token)) return;
+
         var apiData = await PokojeRepo.FetchArrivalDepartureAvailabilityAsync(_token, selectedYear, selectedMonth);
-        // Loguj wszystkie room_id z API
-        foreach (var rec in apiData)
-            System.Diagnostics.Debug.WriteLine($"API: room_id={rec.RoomId}, day={rec.Day}, can_arrive={rec.CanArrive}, can_depart={rec.CanDepart}");
-        // Loguj wszystkie pokoje z repozytorium
-        foreach (var pokoj in PokojeRepo.Lista)
-            System.Diagnostics.Debug.WriteLine($"REPO: Id={pokoj.Id}, Nazwa={pokoj.Nazwa}");
-        // Mapowanie danych z API do pokoje/dni
+
+        // Mapowanie danych z API
         dni.Clear();
         var start = new DateTime(selectedYear, selectedMonth, 1);
         int daysInMonth = DateTime.DaysInMonth(selectedYear, selectedMonth);
         for (int i = 0; i < daysInMonth; i++)
             dni.Add(start.AddDays(i));
         DaysList.ItemsSource = dni;
+
+        // Załaduj rezerwacje ze strony rezerwacji
+        var rezerwacje = RezerwacjeOnlinePage.StaticRezerwacje.ToList();
+        var stays = await PokojeRepo.FetchStaysAsync(_token);
+
         pokoje.Clear();
         foreach (var pokoj in PokojeRepo.Lista)
         {
@@ -91,7 +124,7 @@ public partial class PrzyjazdWyjazdPage : ContentPage
                     przyjazd = found.CanArrive == 1;
                     wyjazd = found.CanDepart == 1;
                 }
-                System.Diagnostics.Debug.WriteLine($"room_id={pokoj.Id}, day={d:yyyy-MM-dd}, can_arrive={przyjazd}, can_depart={wyjazd}");
+
                 grid.Dni.Add(new PrzyjazdWyjazd
                 {
                     PokojId = pokoj.Id,
@@ -102,6 +135,10 @@ public partial class PrzyjazdWyjazdPage : ContentPage
                     AvailabilityId = found?.Id
                 });
             }
+
+            // Ustaw label rezerwacji dla pokoju
+            grid.RezerwajeLabel = GenerateRezerwacjeLabel(pokoj.Id, pokoj.Nazwa, rezerwacje, stays, selectedYear, selectedMonth);
+
             pokoje.Add(grid);
         }
         RoomsList.ItemsSource = pokoje;
@@ -276,5 +313,47 @@ public partial class PrzyjazdWyjazdPage : ContentPage
             CanDepart = item.WyjazdMozliwy
         };
         await PokojeRepo.PostSingleAvailabilityAsync(_token, post);
+    }
+
+    /// <summary>
+    /// Wygeneruj etykietę pokazującą zarezerwowane okresy dla pokoju
+    /// </summary>
+    private string GenerateRezerwacjeLabel(int pokojId, string pokojNazwa, List<RezerwacjaOnline> rezerwacje, List<yBook.Models.Stay> stays, int rok, int miesiac)
+    {
+        var labels = new List<string>();
+
+        // Dodaj rezerwacje ze strony rezerwacji
+        var filteredRez = rezerwacje
+            .Where(r => string.Equals(r.TypPokoju, pokojNazwa, StringComparison.OrdinalIgnoreCase) &&
+                        ((r.DataPrzyjazdu.Year == rok && r.DataPrzyjazdu.Month == miesiac) ||
+                         (r.DataWyjazdu.Year == rok && r.DataWyjazdu.Month == miesiac)))
+            .ToList();
+
+        foreach (var rez in filteredRez.OrderBy(r => r.DataPrzyjazdu))
+        {
+            labels.Add($"📅 {rez.PelneNazwisko} ({rez.DataPrzyjazdu:dd.MM} – {rez.DataWyjazdu:dd.MM})");
+        }
+
+        // Dodaj rezerwacje z API (stays)
+        if (stays != null && stays.Any())
+        {
+            var roomStays = stays.Where(s => s.RoomId == pokojId).ToList();
+            foreach (var stay in roomStays.OrderBy(s => s.CheckinDate))
+            {
+                if (DateTime.TryParse(stay.CheckinDate, out var checkin) && DateTime.TryParse(stay.CheckoutDate, out var checkout))
+                {
+                    if ((checkin.Year == rok && checkin.Month == miesiac) ||
+                        (checkout.Year == rok && checkout.Month == miesiac))
+                    {
+                        labels.Add($"🏨 Pobyt ({checkin:dd.MM} – {checkout:dd.MM})");
+                    }
+                }
+            }
+        }
+
+        if (!labels.Any())
+            return "— Brak rezerwacji";
+
+        return string.Join(" • ", labels);
     }
 }

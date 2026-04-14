@@ -114,11 +114,19 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
 
-                            <VerticalStackLayout Spacing="4">
+                            <VerticalStackLayout Spacing="6">
 
                                 <Label Text="{Binding Nazwa}"
                                        FontAttributes="Bold"
                                        FontSize="14"/>
+
+                                <!-- REZERWACJE -->
+                                <Label Text="{Binding RezerwajeLabel}"
+                                       FontSize="12"
+                                       TextColor="#E91E63"
+                                       FontAttributes="Bold"
+                                       Margin="0,0,0,4"/>
+
 
                                 <!-- GRID: dni + prawa legenda -->
                                 <Grid ColumnDefinitions="*,120">
