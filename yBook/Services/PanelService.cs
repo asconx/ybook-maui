@@ -18,25 +18,28 @@ public class PanelService : IPanelService
     private readonly HttpClient _httpClient;
     private readonly IAuthService _authService;
 
-    // Spróbuj te endpointy w kolejności
-    private static readonly string[] PossibleEndpoints = new[]
+    // MAUI sam wstrzyknie HttpClient zarejestrowany w MauiProgram.cs
+    public PanelService(IAuthService authService, HttpClient httpClient)
     {
-        "https://panel.ybook.pl/rooms",            // ✅ PRAWIDŁOWY!
+        _authService = authService;
+        _httpClient = httpClient;
+    }
+
+    // Primary endpoint - official API
+    private readonly string _baseEndpoint = "https://api.ybook.pl/entity/room";
+
+    // Fallback endpoints if primary fails
+    private static readonly string[] FallbackEndpoints = new[]
+    {
+        "https://panel.ybook.pl/rooms",
         "https://panel.ybook.pl/api/rooms",
         "https://panel.ybook.pl/api/kwatery",
         "https://panel.ybook.pl/kwatery",
         "https://panel.ybook.pl/api/v1/rooms",
         "https://panel.ybook.pl/api/properties/rooms",
-        "https://api.ybook.pl/entity/room",        // Powrót do starego
     };
 
-    private string _currentEndpoint = "https://panel.ybook.pl/api/rooms";
-
-    public PanelService(IAuthService authService)
-    {
-        _authService = authService;
-        _httpClient = new HttpClient();
-    }
+  
 
     private async Task<string> GetAuthTokenAsync()
     {
@@ -57,66 +60,167 @@ public class PanelService : IPanelService
     {
         try
         {
+            System.Diagnostics.Debug.WriteLine("[PanelService] ==================== GET POKOJE START ====================");
+
             if (!await _authService.IsAuthenticatedAsync())
+            {
+                System.Diagnostics.Debug.WriteLine("[PanelService] ✗ User is not authenticated");
                 throw new UnauthorizedAccessException("Użytkownik nie jest zalogowany");
+            }
+
+            System.Diagnostics.Debug.WriteLine("[PanelService] ✓ User authenticated");
 
             var token = await GetAuthTokenAsync();
+            System.Diagnostics.Debug.WriteLine($"[PanelService] ✓ Token retrieved (length: {token.Length})");
 
-            // Spróbuj każdy endpoint
-            Exception lastException = null;
-            foreach (var endpoint in PossibleEndpoints)
+            // Try primary endpoint first
+            System.Diagnostics.Debug.WriteLine($"[PanelService] Attempting primary endpoint: {_baseEndpoint}");
+            try
             {
+                var request = CreateRequest(HttpMethod.Get, _baseEndpoint, token);
+                var response = await _httpClient.SendAsync(request);
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                System.Diagnostics.Debug.WriteLine($"[PanelService] Primary endpoint response status: {response.StatusCode}");
+                System.Diagnostics.Debug.WriteLine($"[PanelService] Response size: {responseContent.Length} bytes");
+                System.Diagnostics.Debug.WriteLine($"[PanelService] Response preview: {responseContent.Substring(0, Math.Min(300, responseContent.Length))}...");
+
+                if (response.IsSuccessStatusCode && !string.IsNullOrEmpty(responseContent))
+                {
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    List<PanelRoom>? result = null;
+
+                    System.Diagnostics.Debug.WriteLine("[PanelService] Parsing response...");
+
+                    // API returns: { items: [...], total: N }
+                    if (responseContent.StartsWith("{"))
+                    {
+                        System.Diagnostics.Debug.WriteLine("[PanelService] Response is a wrapped object, extracting data...");
+                        var wrapper = JsonSerializer.Deserialize<JsonElement>(responseContent, options);
+
+                        // Try items property first (most common)
+                        if (wrapper.TryGetProperty("items", out var items) && items.ValueKind == System.Text.Json.JsonValueKind.Array)
+                        {
+                            System.Diagnostics.Debug.WriteLine("[PanelService] ✓ Found 'items' array");
+                            result = JsonSerializer.Deserialize<List<PanelRoom>>(items.GetRawText(), options);
+                        }
+                        // Try data property as fallback
+                        else if (wrapper.TryGetProperty("data", out var data) && data.ValueKind == System.Text.Json.JsonValueKind.Array)
+                        {
+                            System.Diagnostics.Debug.WriteLine("[PanelService] ✓ Found 'data' array");
+                            result = JsonSerializer.Deserialize<List<PanelRoom>>(data.GetRawText(), options);
+                        }
+
+                        // Log total count if available
+                        if (wrapper.TryGetProperty("total", out var total))
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[PanelService] API reported total: {total.GetInt32()}");
+                        }
+                    }
+                    else if (responseContent.StartsWith("["))
+                    {
+                        System.Diagnostics.Debug.WriteLine("[PanelService] Response is a direct array");
+                        result = JsonSerializer.Deserialize<List<PanelRoom>>(responseContent, options);
+                    }
+
+                    if (result != null && result.Count > 0)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[PanelService] ✓ Successfully parsed {result.Count} rooms");
+                        var mappedRooms = result.Select(MapToPiok).ToList();
+
+                        // Log first few rooms
+                        foreach (var room in mappedRooms.Take(5))
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[PanelService]   - Room ID: {room.Id}, Name: {room.Nazwa}, Available: {room.CzyDostepny}, People: {room.MaxOsobLiczbą}");
+                        }
+                        if (mappedRooms.Count > 5)
+                            System.Diagnostics.Debug.WriteLine($"[PanelService]   ... and {mappedRooms.Count - 5} more rooms");
+
+                        System.Diagnostics.Debug.WriteLine("[PanelService] ==================== GET POKOJE COMPLETE (PRIMARY) ====================");
+                        return mappedRooms;
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[PanelService] ✗ Primary endpoint failed: {ex.GetType().Name}: {ex.Message}");
+            }
+
+            // Try fallback endpoints
+            System.Diagnostics.Debug.WriteLine("[PanelService] Trying fallback endpoints...");
+            Exception lastException = null;
+            int fallbackIndex = 0;
+            foreach (var endpoint in FallbackEndpoints)
+            {
+                fallbackIndex++;
                 try
                 {
-                    _currentEndpoint = endpoint;
+                    System.Diagnostics.Debug.WriteLine($"[PanelService] [{fallbackIndex}/{FallbackEndpoints.Length}] Trying fallback: {endpoint}");
                     var request = CreateRequest(HttpMethod.Get, endpoint, token);
                     var response = await _httpClient.SendAsync(request);
-
                     var responseContent = await response.Content.ReadAsStringAsync();
-                    System.Diagnostics.Debug.WriteLine($"[PanelService] Endpoint: {endpoint}");
-                    System.Diagnostics.Debug.WriteLine($"[PanelService] Status: {response.StatusCode}");
-                    System.Diagnostics.Debug.WriteLine($"[PanelService] Response: {responseContent.Substring(0, Math.Min(200, responseContent.Length))}");
 
-                    if (response.IsSuccessStatusCode && responseContent.StartsWith("[") || responseContent.StartsWith("{"))
+                    System.Diagnostics.Debug.WriteLine($"[PanelService] Fallback response status: {response.StatusCode}");
+
+                    if (response.IsSuccessStatusCode && !string.IsNullOrEmpty(responseContent))
                     {
-                        // Udało się!
                         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                        List<PanelRoom> result = null;
+                        List<PanelRoom>? result = null;
 
-                        // Spróbuj jako lista
+                        // Try as list
                         if (responseContent.StartsWith("["))
                         {
+                            System.Diagnostics.Debug.WriteLine("[PanelService] Parsing as array");
                             result = JsonSerializer.Deserialize<List<PanelRoom>>(responseContent, options);
                         }
                         else if (responseContent.StartsWith("{"))
                         {
-                            // Spróbuj jako wrapper z "data", "items", "rooms"
+                            System.Diagnostics.Debug.WriteLine("[PanelService] Parsing as wrapped object");
+                            // Try wrapper properties (items first, then data, then rooms)
                             var wrapper = JsonSerializer.Deserialize<JsonElement>(responseContent, options);
-                            if (wrapper.TryGetProperty("data", out var data))
-                                result = JsonSerializer.Deserialize<List<PanelRoom>>(data.GetRawText(), options);
-                            else if (wrapper.TryGetProperty("items", out var items))
+                            if (wrapper.TryGetProperty("items", out var items))
+                            {
+                                System.Diagnostics.Debug.WriteLine("[PanelService] Found 'items' property");
                                 result = JsonSerializer.Deserialize<List<PanelRoom>>(items.GetRawText(), options);
+                            }
+                            else if (wrapper.TryGetProperty("data", out var data))
+                            {
+                                System.Diagnostics.Debug.WriteLine("[PanelService] Found 'data' property");
+                                result = JsonSerializer.Deserialize<List<PanelRoom>>(data.GetRawText(), options);
+                            }
                             else if (wrapper.TryGetProperty("rooms", out var rooms))
+                            {
+                                System.Diagnostics.Debug.WriteLine("[PanelService] Found 'rooms' property");
                                 result = JsonSerializer.Deserialize<List<PanelRoom>>(rooms.GetRawText(), options);
+                            }
                         }
 
-                        if (result != null)
-                            return result.Select(MapToPiok).ToList();
+                        if (result != null && result.Count > 0)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"[PanelService] ✓ Successfully parsed {result.Count} rooms from fallback endpoint");
+                            var mappedRooms = result.Select(MapToPiok).ToList();
+                            System.Diagnostics.Debug.WriteLine("[PanelService] ==================== GET POKOJE COMPLETE (FALLBACK) ====================");
+                            return mappedRooms;
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
                     lastException = ex;
-                    System.Diagnostics.Debug.WriteLine($"[PanelService] Failed endpoint {endpoint}: {ex.Message}");
-                    continue;
+                    System.Diagnostics.Debug.WriteLine($"[PanelService] ✗ Fallback {fallbackIndex} failed: {ex.GetType().Name}: {ex.Message}");
                 }
             }
 
+            System.Diagnostics.Debug.WriteLine($"[PanelService] ✗ All endpoints failed. Last error: {lastException?.Message}");
+            System.Diagnostics.Debug.WriteLine("[PanelService] ==================== GET POKOJE FAILED ====================");
             throw new Exception($"Nie udało się połączyć z API. Ostatni błąd: {lastException?.Message}");
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"[PanelService] GetPokoje Error: {ex}");
+            System.Diagnostics.Debug.WriteLine($"[PanelService] ✗ CRITICAL ERROR: {ex.GetType().Name}: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"[PanelService] Stack trace: {ex.StackTrace}");
+            System.Diagnostics.Debug.WriteLine("[PanelService] ==================== GET POKOJE FAILED (CRITICAL) ====================");
             throw new Exception($"Błąd pobierania pokojów: {ex.Message}", ex);
         }
     }
@@ -129,7 +233,7 @@ public class PanelService : IPanelService
                 throw new UnauthorizedAccessException("Użytkownik nie jest zalogowany");
 
             var token = await GetAuthTokenAsync();
-            var request = CreateRequest(HttpMethod.Get, $"{_currentEndpoint}/{id}", token);
+            var request = CreateRequest(HttpMethod.Get, $"{_baseEndpoint}/{id}", token);
 
             var response = await _httpClient.SendAsync(request);
             if (!response.IsSuccessStatusCode)
@@ -155,7 +259,7 @@ public class PanelService : IPanelService
                 throw new UnauthorizedAccessException("Użytkownik nie jest zalogowany");
 
             var token = await GetAuthTokenAsync();
-            var request = CreateRequest(HttpMethod.Post, _currentEndpoint, token);
+            var request = CreateRequest(HttpMethod.Post, _baseEndpoint, token);
 
             var panelRoom = MapFromPokoj(pokoj);
             var json = JsonSerializer.Serialize(panelRoom);
@@ -185,7 +289,7 @@ public class PanelService : IPanelService
                 throw new UnauthorizedAccessException("Użytkownik nie jest zalogowany");
 
             var token = await GetAuthTokenAsync();
-            var request = CreateRequest(HttpMethod.Put, $"{_currentEndpoint}/{id}", token);
+            var request = CreateRequest(HttpMethod.Put, $"{_baseEndpoint}/{id}", token);
 
             var panelRoom = MapFromPokoj(pokoj);
             var json = JsonSerializer.Serialize(panelRoom);
@@ -208,7 +312,7 @@ public class PanelService : IPanelService
                 throw new UnauthorizedAccessException("Użytkownik nie jest zalogowany");
 
             var token = await GetAuthTokenAsync();
-            var request = CreateRequest(HttpMethod.Delete, $"{_currentEndpoint}/{id}", token);
+            var request = CreateRequest(HttpMethod.Delete, $"{_baseEndpoint}/{id}", token);
 
             var response = await _httpClient.SendAsync(request);
             return response.IsSuccessStatusCode;
@@ -270,29 +374,53 @@ public class PanelService : IPanelService
     }
 }
 
-// Modele dla API panel.ybook.pl
+// Modele dla API api.ybook.pl/entity/room
 public class PanelRoom
 {
     public int Id { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
     public int? OrganizationId { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("property_id")]
     public int? PropertyId { get; set; }
-    public string DateModified { get; set; }
-    public string Name { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("date_modified")]
+    public string? DateModified { get; set; }
+
+    public string? Name { get; set; }
+
     public int? Type { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("is_available")]
     public int IsAvailable { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("max_number_of_people")]
     public int? MaxNumberOfPeople { get; set; }
 
     // Area może być string lub int - musimy obsługiwać oba
     [System.Text.Json.Serialization.JsonConverter(typeof(StringToIntConverter))]
     public int? Area { get; set; }
 
-    public string Description { get; set; }
-    public string ShortName { get; set; }
+    public string? Description { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("short_name")]
+    public string? ShortName { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("default_price")]
     public int? DefaultPrice { get; set; }
-    public string Color { get; set; }
-    public string Standard { get; set; }
+
+    public string? Color { get; set; }
+
+    public string? Standard { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("min_number_of_people")]
     public int? MinNumberOfPeople { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("lock_id")]
     public int? LockId { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("calendar_position")]
     public int? CalendarPosition { get; set; }
 }
 

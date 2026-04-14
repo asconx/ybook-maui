@@ -93,6 +93,8 @@ namespace yBook
 
             // Surveys
             Routing.RegisterRoute("SurveysPage",    typeof(SurveysPage));
+            Routing.RegisterRoute(nameof(PokojePage), typeof(PokojePage));
+            Routing.RegisterRoute(nameof(PokojEdycjaPage), typeof(PokojEdycjaPage));
             Routing.RegisterRoute("EditSurveyPage", typeof(EditSurveyPage));
 
 

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-       <TargetFrameworks>net10.0-android;net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
+	   <TargetFrameworks>net10.0-android;net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
@@ -19,6 +19,7 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<!-- Suppress null-safety and non-nullable field warnings from InitializeComponent and other generated code -->
 
 		<!-- Display name -->
 		<ApplicationTitle>yBook</ApplicationTitle>
@@ -66,9 +67,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\Raporty\ListaLogowPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<ProjectReference Include="yBook.Domain\yBook.Domain.csproj" />
+		<ProjectReference Include="yBook.Application\yBook.Application.csproj" />
+		<ProjectReference Include="yBook.Infrastructure\yBook.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Prevent MAUI app project from compiling unit tests in subfolders -->
+		<Compile Remove="yBook.Application.Tests\**\*.cs" />
+		<!-- Prevent nested class-library projects from being compiled as part of MAUI app -->
+		<Compile Remove="yBook.Application\**\*.cs" />
+		<Compile Remove="yBook.Domain\**\*.cs" />
+		<Compile Remove="yBook.Infrastructure\**\*.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Views\Surveys\EditSurveyPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

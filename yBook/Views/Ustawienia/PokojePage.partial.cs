@@ -19,40 +19,42 @@ public partial class PokojePage
     // Handler for the edit (✎) tap inside the CollectionView item template
     private async void OnZmienSzczegolyTapped(object sender, EventArgs e)
     {
-        if (sender is VisualElement el)
+        if (sender is VisualElement el && el.BindingContext is Pokoj item)
         {
-            var item = el.BindingContext as Pokoj;
-            if (item == null) return;
-
-            var edycjaPage = new PokojEdycjaPage(item);
-            await Navigation.PushAsync(edycjaPage);
+            await Shell.Current.GoToAsync(nameof(PokojEdycjaPage), new Dictionary<string, object>
+            {
+                { "Pokoj", item }
+            });
         }
     }
 
     // Handler for the delete (🗑) tap inside the CollectionView item template
     private async void OnDeleteTapped(object sender, EventArgs e)
     {
-        if (sender is VisualElement el)
+        if (sender is VisualElement el && el.BindingContext is Pokoj item)
         {
-            var item = el.BindingContext;
-            if (item == null)
-            {
-                await this.DisplayAlert("Błąd", "Nie można znaleźć elementu.", "OK");
-                return;
-            }
+            // 1. Pytamy o potwierdzenie
+            bool confirm = await DisplayAlert("Usuń", $"Czy na pewno usunąć {item.Nazwa}?", "Tak", "Nie");
+            if (!confirm) return;
 
-            bool confirm = await this.DisplayAlert("Usuń", "Czy na pewno usunąć ten element?", "Tak", "Nie");
-            if (!confirm)
-                return;
+            try
+            {
+                // 2. Wywołujemy API do usunięcia pokoju
+                bool success = await _panelService.DeletePokoj(item.Id);
 
-            if (PokojList?.ItemsSource is IList list)
-            {
-                list.Remove(item);
+                if (success)
+                {
+                    // 3. Usuwamy pokój z listy widocznej na ekranie
+                    pokoje.Remove(item);
+                }
+                else
+                {
+                    await this.DisplayAlert("Błąd", "Serwer odrzucił żądanie usunięcia.", "OK");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                // If ItemsSource is not an IList, just notify for now
-                await this.DisplayAlert("Usunięto", "Element został usunięty (jeśli to możliwe).", "OK");
+                await this.DisplayAlert("Błąd połączenia", ex.Message, "OK");
             }
         }
     }

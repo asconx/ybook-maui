@@ -1,24 +1,26 @@
 using System.Collections.ObjectModel;
-using System.Text.Json;
+using Microsoft.Maui.Controls;
 using yBook.Models;
 using yBook.Services;
+using yBook.ViewModels;
 
 namespace yBook.Views.Ustawienia;
 
 public partial class PokojePage : ContentPage
 {
-    ObservableCollection<Pokoj> pokoje = new();
+    private readonly PokojeViewModel _viewModel;
     private readonly IPanelService _panelService;
-    private readonly IAuthService _authService;
+    private ObservableCollection<Pokoj> pokoje => _viewModel.Pokoje;
 
-    public PokojePage(IAuthService authService, IPanelService panelService)
+    public PokojePage(IPanelService panelService, PokojeViewModel viewModel)
     {
         InitializeComponent();
 
-        _authService = authService;
         _panelService = panelService;
+        _viewModel = viewModel;
 
-        PokojList.ItemsSource = pokoje;
+        BindingContext = _viewModel;
+        PokojList.ItemsSource = _viewModel.Pokoje;
     }
 
     protected override async void OnAppearing()
@@ -31,33 +33,35 @@ public partial class PokojePage : ContentPage
     {
         try
         {
-            var pokojList = await _panelService.GetPokoje();
+            await _viewModel.LoadAsync();
 
-            pokoje.Clear();
-            foreach (var pokoj in pokojList)
+            if (_viewModel.Pokoje.Count == 0)
             {
-                pokoje.Add(pokoj);
+                await DisplayAlert("Brak danych", "Nie znaleziono żadnych pokojów", "OK");
             }
         }
-        catch (UnauthorizedAccessException)
+        catch (UnauthorizedAccessException ex)
         {
-            await DisplayAlert("Błąd", "Brak autoryzacji. Zaloguj się ponownie.", "OK");
+            System.Diagnostics.Debug.WriteLine($"[PokojePage] ✗ AUTHORIZATION ERROR: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine("[PokojePage] Session expired, redirecting to login...");
+            await DisplayAlert("Logowanie", "Twoja sesja wygasła. Zaloguj się ponownie.", "OK");
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Błąd", $"Nie udało się załadować pokojów: {ex.Message}", "OK");
+            System.Diagnostics.Debug.WriteLine($"[PokojePage] ✗ ERROR: {ex.GetType().Name}: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"[PokojePage] Stack trace: {ex.StackTrace}");
+            System.Diagnostics.Debug.WriteLine("[PokojePage] ==================== LOAD POKOJE FAILED ====================");
+            await DisplayAlert("Błąd API", ex.Message, "OK");
         }
     }
 
-    // 👆 TAP → DETAILS
     async void OnPokojTapped(object sender, TappedEventArgs e)
     {
-        var frame = sender as Frame;
-        var pokoj = frame?.BindingContext as Pokoj;
-        if (pokoj == null) return;
+        if (sender is not Border border || border.BindingContext is not Pokoj pokoj)
+            return;
 
-        string action = await DisplayActionSheet(
-            pokoj.Nazwa,
+        string? action = await DisplayActionSheet(
+            pokoj.Nazwa ?? "Bez nazwy",
             "Anuluj",
             null,
             "Pokaż szczegóły");
@@ -65,12 +69,18 @@ public partial class PokojePage : ContentPage
         if (action == "Pokaż szczegóły")
         {
             await DisplayAlert(
-                pokoj.Nazwa,
+                pokoj.Nazwa ?? "Pokój",
                 $"Maksimum osób: {pokoj.MaxOsobLiczbą}\n" +
                 $"Powierzchnia: {pokoj.Powierzchnia}m²\n" +
                 $"Dostępny: {(pokoj.CzyDostepny ? "Tak" : "Nie")}\n\n" +
-                $"{pokoj.Opis}",
+                $"{pokoj.Opis ?? "Brak opisu"}",
                 "OK");
         }
+    }
+
+    async void OnRefreshRequested(object sender, EventArgs e)
+    {
+        await LoadPokoje();
+        RefreshControl.IsRefreshing = false;
     }
 }

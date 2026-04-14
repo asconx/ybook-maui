@@ -2,14 +2,33 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Layouts;
+using yBook.Helpers;
 using yBook.Models;
 using yBook.Services;
-
+using Pokoj = yBook.Models.Pokoj;
 namespace yBook.Views.Ustawienia;
 
+[QueryProperty(nameof(Pokoj), "Pokoj")]
 public partial class PokojEdycjaPage : ContentPage
 {
-    private Pokoj _pokoj;
+    private Pokoj _pokoj; // Upewnij się, że nazywa się tak, a nie _wybranyPokoj
+
+    public Pokoj WybranyPokoj
+    {
+        get => _pokoj;
+        set
+        {
+            _pokoj = value;
+            if (_pokoj != null)
+            {
+                _isEditMode = true;
+                LoadDataToUI();
+            }
+        }
+    }
+
+
+
     private bool _isEditMode = false;
     private IPanelService _panelService;
     private int _activeTabIndex = 0;
@@ -230,7 +249,40 @@ public partial class PokojEdycjaPage
         EntryMetraz.Text = _pokoj.Powierzchnia;
     }
 
-    private async void OnSaveClicked(object sender, EventArgs e) => await Navigation.PopAsync();
+    private async void OnSaveClicked(object sender, EventArgs e)
+    {
+        // 1. Zbierz dane z pól UI do obiektu _pokoj
+        _pokoj.Nazwa = EntryNazwa.Text;
+        _pokoj.MaxOsobLiczbą = int.TryParse(EntryMaxOsoby.Text, out var m) ? m : 0;
+        _pokoj.Powierzchnia = EntryMetraz.Text;
+        // ... dopisz resztę pól (Cena, Opis itp.)
+
+        try
+        {
+            bool success;
+            if (_isEditMode)
+            {
+                // Edycja istniejącego
+                success = await _panelService.UpdatePokoj(_pokoj.Id, _pokoj);
+            }
+            else
+            {
+                // Dodawanie nowego
+                var nowy = await _panelService.CreatePokoj(_pokoj);
+                success = nowy != null;
+            }
+
+            if (success)
+            {
+                await DisplayAlert("Sukces", "Dane zostały zapisane na serwerze.", "OK");
+                await Navigation.PopAsync(); // Wróć do listy
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Błąd zapisu", ex.Message, "OK");
+        }
+    }
 }
 
 public static class ButtonExtensions

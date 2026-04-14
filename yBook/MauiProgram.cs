@@ -1,4 +1,7 @@
 using Microsoft.Extensions.Logging;
+using yBook.Application.Ports;
+using yBook.Application.UseCases;
+using yBook.Infrastructure.Repositories;
 using yBook.Services;
 using yBook.ViewModels;
 using yBook.Views.Auth;
@@ -29,7 +32,23 @@ namespace yBook
             builder.Services.AddSingleton<ISurveyService, SurveyService>();
             builder.Services.AddSingleton<IBlockadeService, BlockadeService>();
             builder.Services.AddSingleton<IPanelService, PanelService>();
-            builder.Services.AddSingleton<ISmsService, SmsService>(sp => new SmsService(sp.GetRequiredService<IAuthService>(), sp.GetRequiredService<HttpClient>()));
+            builder.Services.AddSingleton<IRoomPhotoService, RoomPhotoService>();
+            builder.Services.AddSingleton<IAuthenticatedImageService, AuthenticatedImageService>();
+            builder.Services.AddSingleton<IAuthRepository, AuthRepositoryAdapter>();
+            builder.Services.AddSingleton<IRoomRepository, ApiRoomRepository>();
+            builder.Services.AddSingleton<IRoomPhotoRepository, ApiRoomPhotoRepository>();
+            builder.Services.AddSingleton<IRoomBedRepository, ApiRoomBedRepository>();
+            builder.Services.AddSingleton<IPropertyRepository, ApiPropertyRepository>();
+            builder.Services.AddSingleton<IRoomPriceModifierRepository, ApiRoomPriceModifierRepository>();
+            builder.Services.AddSingleton<IFileRepository, ApiFileRepository>();
+            builder.Services.AddTransient<LoginUserUseCase>();
+            builder.Services.AddTransient<GetRoomsUseCase>();
+            builder.Services.AddTransient<GetRoomPhotoUseCase>();
+            builder.Services.AddTransient<GetRoomBedsUseCase>();
+            builder.Services.AddTransient<GetPropertiesUseCase>();
+            builder.Services.AddTransient<GetRoomPriceModifiersUseCase>();
+            builder.Services.AddTransient<DownloadRoomImageUseCase>();
+            builder.Services.AddTransient<GetRoomsWithImagesUseCase>();
 
             // ── Shell ─────────────────────────────────────────────────────────
             builder.Services.AddSingleton<AppShell>();
@@ -38,6 +57,7 @@ namespace yBook
             builder.Services.AddTransient<LoginViewModel>();
             builder.Services.AddTransient<SurveysViewModel>();
             builder.Services.AddTransient<EditSurveyViewModel>();
+            builder.Services.AddTransient<PokojeViewModel>();
 
             // ── Pages ─────────────────────────────────────────────────────────
             builder.Services.AddTransient<LoginPage>();
