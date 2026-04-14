@@ -12,6 +12,8 @@ using yBook.Views.Kalendarz;
 using yBook.Views.Uzytkownicy;
 using yBook.Views.Rabaty;
 using yBook.Views.Raporty;
+using yBook.Views.Przyjazdy;
+
 namespace yBook
 {
     public partial class AppShell : Shell
@@ -26,6 +28,13 @@ namespace yBook
 
             // Sprawdź sesję asynchronicznie po załadowaniu Shell
             Loaded += OnShellLoaded;
+            // Synchronizacja dostępności przy starcie
+            Loaded += async (s, e) =>
+            {
+                // Przykład: automatyczna synchronizacja przy starcie
+                // Możesz wywołać synchronizację globalnie lub tylko dla wybranych stron
+                // await new PrzyjazdWyjazdPage().SyncFromApi();
+            };
         }
 
         // ── Sprawdzenie sesji przy starcie ─────────────────────────────────────
@@ -53,9 +62,12 @@ namespace yBook
             Routing.RegisterRoute("RejestrPlatnosci", typeof(RejestrPlatnosciPage));
             Routing.RegisterRoute("ImportMT940", typeof(ImportMT940Page));
 
-            // Inne
-            Routing.RegisterRoute("ICalendar", typeof(ICalendarPage));
-            Routing.RegisterRoute("UslugiOplaty", typeof(UslugiOplaty));
+			// ceny
+			Routing.RegisterRoute("UslugiOplaty", typeof(UslugiOplaty));
+			Routing.RegisterRoute("UslugiOplatyDodawanie", typeof(UslugiOplatyDodawanie)); //UslugiOplaty helper page
+
+			// Inne
+			Routing.RegisterRoute("ICalendar", typeof(ICalendarPage));
             Routing.RegisterRoute("Cenniki", typeof(CennikPage));
             Routing.RegisterRoute("RabatyPage", typeof(RabatyPage));
             Routing.RegisterRoute("BlokadyPage", typeof(BlokadyPage));
@@ -64,6 +76,9 @@ namespace yBook
 
             //Powiadomienia
             Routing.RegisterRoute(nameof(PowiadomieniaPage), typeof(PowiadomieniaPage));
+
+            //Statusy
+            Routing.RegisterRoute(nameof(StatusyPage), typeof(StatusyPage));
 
             // Klienci
             Routing.RegisterRoute("Klienci", typeof(Views.Klienci.KlienciPage));

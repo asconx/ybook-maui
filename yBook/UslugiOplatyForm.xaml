@@ -1,0 +1,72 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Ceny.UslugiOplatyDodawanie"
+             NavigationPage.HasNavigationBar="False">
+
+	<ScrollView>
+		<VerticalStackLayout Padding="20" Spacing="12">
+
+			<!-- NAZWA -->
+			<Label Text="Nazwa" />
+			<Entry x:Name="NameEntry" Placeholder="Podaj nazwę" />
+
+			<!-- RODZAJ -->
+			<Label Text="Rodzaj" />
+			<Picker x:Name="RodzajPicker" Title="Wybierz rodzaj">
+				<Picker.Items>
+					<x:String>Opłata dzienna</x:String>
+					<x:String>Jednorazowa</x:String>
+				</Picker.Items>
+			</Picker>
+
+			<!-- TYP -->
+			<Label Text="Typ" />
+			<Picker x:Name="TypPicker" Title="Wybierz typ">
+				<Picker.Items>
+					<x:String>Dodatkowa usługa</x:String>
+					<x:String>Obowiązkowa opłata</x:String>
+				</Picker.Items>
+			</Picker>
+
+			<!-- CENA -->
+			<Label Text="Ceny" />
+
+			<Button Text="Dodaj cenę" Clicked="OnAddCenaClicked"/>
+			<VerticalStackLayout x:Name="CenyContainer" Spacing="5"/>
+
+			<!-- DATA OD -->
+			<Label Text="Data od" />
+
+			<HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+				<DatePicker x:Name="DataOdPicker" IsEnabled="{Binding Source={x:Reference NoDataOdSwitch}, Converter={StaticResource InverseBool}}"/>
+				<Switch x:Name="NoDataOdSwitch" Toggled="OnNoDataOdToggled"/>
+				<Label Text="brak" VerticalTextAlignment="Center"/>
+			</HorizontalStackLayout>
+
+			<!-- DATA DO -->
+			<Label Text="Data do" />
+
+			<HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+				<DatePicker x:Name="DataDoPicker" IsEnabled="{Binding Source={x:Reference NoDataDoSwitch}, Converter={StaticResource InverseBool}}"/>
+				<Switch x:Name="NoDataDoSwitch" Toggled="OnNoDataDoToggled"/>
+				<Label Text="brak" VerticalTextAlignment="Center"/>
+			</HorizontalStackLayout>
+
+			<!-- OPIS -->
+			<Label Text="Opis" />
+			<Editor x:Name="OpisEditor"
+                    HeightRequest="100"
+                    Placeholder="Opcjonalny opis..." />
+
+			<!-- BUTTONY -->
+			<Button Text="Zapisz"
+                    Clicked="OnSaveClicked" />
+
+			<Button Text="Anuluj"
+                    Clicked="OnCancelClicked"
+                    BackgroundColor="Gray"
+                    TextColor="White"/>
+
+		</VerticalStackLayout>
+	</ScrollView>
+</ContentPage>

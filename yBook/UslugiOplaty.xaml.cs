@@ -1,30 +1,41 @@
-using System.Collections.ObjectModel;
-using yBook.Models;
-
 namespace yBook.Views.Ceny;
 
 public partial class UslugiOplaty : ContentPage
 {
-    List<Usluga> _all = new();
-    string? _typ = null;
+	// =========================================
+	//                VARIABLES
+	// =========================================
+	private List<Usluga> _all = new();
+	private string? _typ = null;
+	
+	// =========================================
+	//                   START
+	// =========================================
+	public UslugiOplaty()
+	{
+		InitializeComponent();
+	}
 
-    public UslugiOplaty()
-    {
-        InitializeComponent();
-    }
+	private bool _initialized = false;
+	protected override void OnAppearing()
+	{
+		base.OnAppearing();
 
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
+		if (!_initialized)
+		{
+			_all.AddRange(MockData());
+			_initialized = true;
+		}
 
-        _all = MockData();
-        ApplyFilter();
-    }
+		ApplyFilter();
+	}
 
-    void OnSearchChanged(object sender, TextChangedEventArgs e)
-        => ApplyFilter();
+	// =========================================
+	//                    EVENTS
+	// =========================================
+	void OnSearchChanged(object sender, TextChangedEventArgs e) => ApplyFilter();
 
-    async void OnTypTapped(object sender, EventArgs e)
+	async void OnTypTapped(object sender, EventArgs e)
     {
         var options = new[] { "Wszystkie", "Opłata dzienna", "Jednorazowa" };
         var res = await DisplayActionSheet("Typ", "Anuluj", null, options);
@@ -37,7 +48,43 @@ public partial class UslugiOplaty : ContentPage
         ApplyFilter();
     }
 
-    void ApplyFilter()
+	async void OnDodajClicked(object sender, EventArgs e)
+	{
+		var page = new UslugiOplatyDodawanie(new Usluga(), modif: false, () => { ApplyFilter(); });
+		await Shell.Current.Navigation.PushAsync(page);
+	}
+	async void OnModifClicked(object sender, TappedEventArgs e)
+	{
+		var item = e.Parameter as Usluga;
+
+		if (item == null) return;
+
+		var page = new UslugiOplatyDodawanie(
+			item,
+			modif: true,
+			() => { ApplyFilter(); }
+		);
+
+		await Shell.Current.Navigation.PushAsync(page);
+	}
+	public void Dodaj(Usluga usluga)
+    {
+        _all.Add(usluga);
+    }
+	void OnDeleteClicked(object sender, TappedEventArgs e)
+	{
+		var item = e.Parameter as Usluga;
+
+		if (item == null) return;
+
+		_all.Remove(item);
+		ApplyFilter();
+	}
+
+	// =========================================
+	//             PRIVATE METHODS
+	// =========================================
+	private void ApplyFilter()
     {
         var q = Search.Text?.ToLower() ?? "";
 
@@ -49,14 +96,7 @@ public partial class UslugiOplaty : ContentPage
         Lista.ItemsSource = result;
         LblCount.Text = result.Count.ToString();
     }
-
-    async void OnDodajClicked(object sender, EventArgs e)
-    {
-        await DisplayAlert("Info", "Dodawanie wkrótce", "OK");
-    }
-
-    // MOCK
-    List<Usluga> MockData()
+    private List<Usluga> MockData()
     {
         return new List<Usluga>
         {

@@ -22,7 +22,7 @@ namespace yBook.Controls
 
         public Action<object, object> HamburgerClicked { get; internal set; }
 
-        
+
 
         public DrawerMenu()
         {
@@ -146,9 +146,19 @@ namespace yBook.Controls
                 case "Pokoje":
                     await Shell.Current.GoToAsync("//PokojePage");
                     break;
+
+                // —— Strona Użytkownicy i Role —————————————————————————————————
+                case "UzytkownicyIRolePage":
+                    await Shell.Current.GoToAsync("UzytkownicyIRolePage");
+                    break;
+
                 // —— Strona Powiadomienia —————————————————————————————————————————————
                 case "Powiadomienia":
                     await Shell.Current.GoToAsync(nameof(PowiadomieniaPage));
+                    break;
+                // —— Strona Statusy —————————————————————————————————————————————
+                case "Statusy":
+                    await Shell.Current.GoToAsync(nameof(StatusyPage));
                     break;
 
                 case "Uzytkownicy":
