@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:yBook.Controls"
+             x:Class="yBook.Views.Recepcja.RecepcjaPage">
+
+    <Grid RowDefinitions="60,*">
+
+        <!-- HEADER -->
+        <ctrl:PageHeader Grid.Row="0"
+                         Title="Recepcja"
+                         Icon="🔑"
+                         ShowBack="True"/>
+
+        <!-- ZAWARTOŚĆ -->
+        <Grid Grid.Row="1"
+              RowDefinitions="Auto,Auto,*"
+              BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+
+            <!-- ZAKŁADKI -->
+            <Grid Grid.Row="0"
+                  Padding="16,12,16,0"
+                  ColumnDefinitions="Auto,Auto,*"
+                  BackgroundColor="Transparent">
+
+                <Label Grid.Column="0"
+                       x:Name="LblTab1"
+                       Text="zameldowany"
+                       FontSize="14"
+                       TextColor="#1565C0"
+                       FontAttributes="Bold"
+                       Margin="0,0,24,0"
+                       VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnTabTapped" CommandParameter="zameldowany"/>
+                    </Label.GestureRecognizers>
+                </Label>
+
+                <Label Grid.Column="1"
+                       x:Name="LblTab2"
+                       Text="niezameldowany"
+                       FontSize="14"
+                       TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"
+                       VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnTabTapped" CommandParameter="niezameldowany"/>
+                    </Label.GestureRecognizers>
+                </Label>
+
+                <BoxView Grid.Column="2" HorizontalOptions="End"/>
+            </Grid>
+
+            <!-- LINIA SEPARATORA -->
+            <BoxView Grid.Row="0"
+                     Margin="0,42,0,0"
+                     HeightRequest="2"
+                     BackgroundColor="#E0E0E0"/>
+
+            <!-- PASEK WYSZUKIWANIA -->
+            <Grid Grid.Row="1"
+                  Padding="16,12"
+                  BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+
+                <Border CornerRadius="20" Padding="14,8" BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2A2A2A}">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <Label Grid.Column="0" Text="🔍" FontSize="16" VerticalOptions="Center" Margin="0,0,8,0"/>
+                        <Entry Grid.Column="1"
+                               x:Name="SearchEntry"
+                               Placeholder="Szukaj po ID lub danych klienta"
+                               PlaceholderColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"
+                               TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"
+                               BackgroundColor="Transparent"
+                               FontSize="13"
+                               TextChanged="OnSearchTextChanged"/>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- LISTA REZERWACJI (SCROLL POZIOMY) -->
+            <ScrollView Grid.Row="2"
+                        Orientation="Vertical"
+                        BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+                <VerticalStackLayout Padding="16,0" Spacing="0">
+
+                    <!-- Scroll poziomy kart -->
+                    <ScrollView Orientation="Horizontal" HeightRequest="240">
+                        <HorizontalStackLayout x:Name="RezerwacjeContainer"
+                                              Spacing="12"
+                                              Padding="0,12">
+                            <!-- Karty rezerwacji będą dodawane dynamicznie -->
+                        </HorizontalStackLayout>
+                    </ScrollView>
+
+                    <!-- Komunikat gdy brak rezerwacji -->
+                    <Label x:Name="LblBrakRezerwacji"
+                           Text="Brak rezerwacji do wyświetlenia"
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Margin="0,24"/>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

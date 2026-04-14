@@ -8,6 +8,7 @@
        xmlns:rabaty="clr-namespace:yBook.Views.Rabaty"
        xmlns:blokady="clr-namespace:yBook.Views.Blokady"
        xmlns:ustawienia="clr-namespace:yBook.Views.Ustawienia"
+       xmlns:recepcja="clr-namespace:yBook.Views.Recepcja"
        x:Class="yBook.AppShell"
        Shell.NavBarIsVisible="False"
        FlyoutBehavior="Disabled">
@@ -24,6 +25,11 @@
         Route="MainPage"/>
 
     <ShellContent
+        Title="Recepcja"
+        ContentTemplate="{DataTemplate recepcja:RecepcjaPage}"
+        Route="Recepcja"/>
+
+    <ShellContent
         Title="Rabaty"
         ContentTemplate="{DataTemplate rabaty:RabatyPage}"
         Route="RabatyPage"/>
@@ -37,6 +43,10 @@
         Title="Dane obiektu"
         ContentTemplate="{DataTemplate ustawienia:DaneObiektuPage}"
         Route="DaneObiektu"/>
-    
+
+    <ShellContent 
+        Title="RezerwacjaDetails" 
+        ContentTemplate="{DataTemplate recepcja:RezerwacjaDetailsPage}" 
+        Route="RezerwacjaDetails"/>
 
 </Shell>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Recepcja.RezerwacjaDetailsPage"
+             BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+
+    <Grid RowDefinitions="Auto,*,Auto" BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+        
+        <!-- HEADER Z POWROTEM -->
+        <Grid Grid.Row="0" Padding="12,8,16,8" ColumnDefinitions="Auto,*,Auto" Spacing="12" BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}" BorderStrokeThickness="0,1" BorderStroke="#E0E0E0">
+            <Button Grid.Column="0" 
+                    Text="&lt;"
+                    FontSize="24"
+                    BackgroundColor="Transparent"
+                    TextColor="{AppThemeBinding Light=#1565C0, Dark=#64B5F6}"
+                    Padding="8"
+                    Clicked="OnCloseClicked"
+                    CornerRadius="4"
+                    FontAttributes="Bold"/>
+            
+            <Label Grid.Column="1" 
+                   Text="Szczegoly rezerwacji"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light=#263238, Dark:#ECEFF1}"
+                   VerticalOptions="Center"/>
+            
+            <Button Grid.Column="2" 
+                    Text="X"
+                    FontSize="24"
+                    BackgroundColor="Transparent"
+                    TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"
+                    Padding="4"
+                    Clicked="OnCloseClicked"
+                    CornerRadius="4"
+                    FontAttributes="Bold"/>
+        </Grid>
+
+        <!-- ZAWARTOSC PRZEWIJALNA -->
+        <ScrollView Grid.Row="1" Padding="16,12">
+            <VerticalStackLayout Spacing="16">
+                
+                <!-- SEKCJA: DANE GOSCIA -->
+                <Border CornerRadius="12" Padding="16" BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2A2A2A}" BorderStroke="#E0E0E0" BorderStrokeThickness="1">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Dane goscia" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        
+                        <!-- Avatar + Imie i Nazwisko + Edit -->
+                        <Grid ColumnDefinitions="Auto,*,Auto" Spacing="12">
+                            <Border Grid.Column="0" CornerRadius="24" WidthRequest="48" HeightRequest="48" BackgroundColor="#1565C0">
+                                <Label Text="U" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" TextColor="White" FontAttributes="Bold"/>
+                            </Border>
+                            
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                <Label x:Name="LblPelneNazwisko" Text="Anna Nowak" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                                <Label x:Name="LblId" Text="Rezerwacja nr. 0572" FontSize="12" TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+                            </VerticalStackLayout>
+                            
+                            <Button Grid.Column="2" Text="V" FontSize="18" BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=#1565C0, Dark=#64B5F6}" Padding="8" CornerRadius="4" Clicked="OnEditClicked" FontAttributes="Bold"/>
+                        </Grid>
+                        
+                        <!-- Linia separator -->
+                        <BoxView HeightRequest="1" BackgroundColor="#E0E0E0" Margin="0,8"/>
+                        
+                        <!-- Email i Telefon -->
+                        <Grid ColumnDefinitions="*,*" Spacing="16">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="Email" FontSize="11" TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}" FontAttributes="Bold"/>
+                                <Label x:Name="LblEmail" Text="anna.nowak@example.com" FontSize="12" TextColor="{AppThemeBinding Light=#1565C0, Dark=#64B5F6}"/>
+                            </VerticalStackLayout>
+                            
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Telefon" FontSize="11" TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}" FontAttributes="Bold"/>
+                                <Label x:Name="LblTelefon" Text="501-501-501" FontSize="12" TextColor="{AppThemeBinding Light=#F57C00, Dark=#FFB74D}"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- SEKCJA: STATUS REZERWACJI -->
+                <Border CornerRadius="12" Padding="16" BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2A2A2A}" BorderStroke="#E0E0E0" BorderStrokeThickness="1">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Status rezerwacji" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        <Picker x:Name="PkrStatus" Title="Wybierz status" BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Rezerwacja wstepna</x:String>
+                                    <x:String>Potwierdzona</x:String>
+                                    <x:String>Oczekujaca</x:String>
+                                    <x:String>Anulowana</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- SEKCJA: TERMIN POBYTU -->
+                <Border CornerRadius="12" Padding="16" BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2A2A2A}" BorderStroke="#E0E0E0" BorderStrokeThickness="1">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Termin pobytu" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        
+                        <Grid ColumnDefinitions="*,*" Spacing="16">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="Od" FontSize="11" TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}" FontAttributes="Bold"/>
+                                <Label x:Name="LblDataPrzyjazdu" Text="2026-04-14" FontSize="12" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                            </VerticalStackLayout>
+                            
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Do" FontSize="11" TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}" FontAttributes="Bold"/>
+                                <Label x:Name="LblDataWyjazdu" Text="2026-04-22" FontSize="12" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                        
+                        <Grid ColumnDefinitions="*,*,*" Spacing="16">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="Liczba nocy" FontSize="11" TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}" FontAttributes="Bold"/>
+                                <Label x:Name="LblLiczbaNoci" Text="8 nocy" FontSize="12" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                            </VerticalStackLayout>
+                            
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Liczba gosci" FontSize="11" TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}" FontAttributes="Bold"/>
+                                <Label x:Name="LblLiczbaGosci" Text="2 osoby" FontSize="12" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                            </VerticalStackLayout>
+                            
+                            <VerticalStackLayout Grid.Column="2" Spacing="4">
+                                <Label Text="Typ pokoju" FontSize="11" TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}" FontAttributes="Bold"/>
+                                <Label x:Name="LblTypPokoju" Text="Deluxe 6" FontSize="12" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- SEKCJA: UWAGI -->
+                <Border CornerRadius="12" Padding="16" BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2A2A2A}" BorderStroke="#E0E0E0" BorderStrokeThickness="1">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Uwagi" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        <Editor x:Name="EditorUwagi" MinimumHeightRequest="80" FontSize="12" BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}" Placeholder="Dodaj uwagi..."/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- SEKCJA: PODSUMOWANIE FINANSOWE -->
+                <Border CornerRadius="12" Padding="16" BackgroundColor="{AppThemeBinding Light#FFF3E0, Dark=#2A2A2A}" BorderStroke="#FFE0B2" BorderStrokeThickness="1">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Podsumowanie" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                        
+                        <VerticalStackLayout Spacing="8">
+                            <Grid ColumnDefinitions="*,*" Spacing="16">
+                                <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                    <Label Text="Rozliczenie" FontSize="11" TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}" FontAttributes="Bold"/>
+                                    <Label x:Name="LblRozliczenie" Text="7 dni przed przyjazdem" FontSize="11" TextColor="{AppThemeBinding Light=#F57C00, Dark=#FFB74D}"/>
+                                </VerticalStackLayout>
+                                
+                                <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                    <Label Text="Przedplata" FontSize="11" TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}" FontAttributes="Bold"/>
+                                    <Label Text="300 PLN do 2026-05-22" FontSize="11" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                            
+                            <BoxView HeightRequest="1" BackgroundColor="#FFE0B2" Margin="0,4"/>
+                            
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="Wyslane powiadomienia" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                                <Label x:Name="LblPowiadomienia" Text="Email potwierdzajacy: 14-04-2026" FontSize="11" TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+                            </VerticalStackLayout>
+                            
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="Rejestr akcji" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"/>
+                                <Label x:Name="LblRejestr" Text="Rezerwacja utworzona 14-04-2026" FontSize="11" TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"/>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- FOOTER Z PRZYCISKAMI -->
+        <Grid Grid.Row="2" Padding="16" ColumnDefinitions="*,*" Spacing="12" BorderStrokeThickness="1,0,0,0" BorderStroke="#E0E0E0" BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+            <Button Grid.Column="0" Text="Archiwizuj" BackgroundColor="{AppThemeBinding Light=#E0E0E0, Dark=#424242}" TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}" CornerRadius="8" FontAttributes="Bold" Padding="12"/>
+            <Button Grid.Column="1" Text="Zapisz" BackgroundColor="#FFB84D" TextColor="#000000" CornerRadius="8" FontAttributes="Bold" Padding="12" Clicked="OnSaveClicked"/>
+        </Grid>
+    </Grid>
+</ContentPage>
