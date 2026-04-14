@@ -49,6 +49,7 @@ namespace yBook.Helpers
                 var request = new HttpRequestMessage(HttpMethod.Get, url);
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var response = await _httpClient.SendAsync(request);
+
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
@@ -101,6 +102,66 @@ namespace yBook.Helpers
                 System.Diagnostics.Debug.WriteLine($"[PokojeRepo] PostSingleAvailabilityAsync error: {ex.Message}");
                 return false;
             }
+        }
+
+        public static async Task<List<yBook.Models.Reservation>> FetchReservationsAsync(string token)
+        {
+            var result = new List<yBook.Models.Reservation>();
+            try
+            {
+                if (string.IsNullOrEmpty(token))
+                    return result;
+
+                const string reservationUrl = "https://api.ybook.pl/entity/reservation";
+                var request = new HttpRequestMessage(HttpMethod.Get, reservationUrl);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var response = await _httpClient.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var dto = JsonSerializer.Deserialize<yBook.Models.ReservationResponse>(json, options);
+
+                    if (dto?.Items != null)
+                        result.AddRange(dto.Items);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[PokojeRepo] FetchReservationsAsync error: {ex.Message}");
+            }
+            return result;
+        }
+
+        public static async Task<List<yBook.Models.Stay>> FetchStaysAsync(string token)
+        {
+            var result = new List<yBook.Models.Stay>();
+            try
+            {
+                if (string.IsNullOrEmpty(token))
+                    return result;
+
+                const string stayUrl = "https://api.ybook.pl/entity/stay";
+                var request = new HttpRequestMessage(HttpMethod.Get, stayUrl);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var response = await _httpClient.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var dto = JsonSerializer.Deserialize<yBook.Models.StayResponse>(json, options);
+
+                    if (dto?.Items != null)
+                        result.AddRange(dto.Items);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[PokojeRepo] FetchStaysAsync error: {ex.Message}");
+            }
+            return result;
         }
     }
 }
