@@ -118,6 +118,8 @@ namespace yBook.Controls
             {
                 // ── Strony finansów — gotowe ──────────────────────────────────
                 case "UslugiOplaty":
+                    await Shell.Current.GoToAsync("UslugiOplaty");
+                    break;
                 case "Dokumenty":
                 case "KontaFinansowe":
                 case "RejestrPlatnosci":
@@ -144,9 +146,19 @@ namespace yBook.Controls
                 case "Pokoje":
                     await Shell.Current.GoToAsync("//PokojePage");
                     break;
+
+                // —— Strona Użytkownicy i Role —————————————————————————————————
+                case "UzytkownicyIRolePage":
+                    await Shell.Current.GoToAsync("UzytkownicyIRolePage");
+                    break;
+
                 // —— Strona Powiadomienia —————————————————————————————————————————————
                 case "Powiadomienia":
                     await Shell.Current.GoToAsync(nameof(PowiadomieniaPage));
+                    break;
+                // —— Strona Statusy —————————————————————————————————————————————
+                case "Statusy":
+                    await Shell.Current.GoToAsync(nameof(StatusyPage));
                     break;
 
                 case "Uzytkownicy":
@@ -176,6 +188,10 @@ namespace yBook.Controls
                 case "Klienci":
                     await Shell.Current.GoToAsync(nameof(KlienciPage));
                     break;
+                // ── Grupowe SMS ───────────────────────────────────────────────
+                case "GrupoweSms":
+                    await Shell.Current.Navigation.PushAsync(new GrupoweSmsPage());
+                    break;
 
 
                 // ── Logout ────────────────────────────────────────────────────
@@ -195,6 +211,8 @@ namespace yBook.Controls
                     await Shell.Current.CurrentPage
                                .DisplayAlert("yBook", $"Wkrótce: {page}", "OK");
                     break;
+
+
             }
         }
     }

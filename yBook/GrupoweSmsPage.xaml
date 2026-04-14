@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:yBook.Controls"
+             x:Class="yBook.GrupoweSmsPage"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="60,*">
+
+        <ctrl:PageHeader Grid.Row="0"
+                         x:Name="Header"
+                         Title="Grupowe SMS"
+                         Icon="💬"
+                         ShowBack="True"/>
+
+        <ScrollView Grid.Row="1"
+                    BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
+            <VerticalStackLayout Padding="16" Spacing="16">
+
+                <!-- Nagłówek opisu -->
+                <Frame CornerRadius="14" Padding="16" HasShadow="True"
+                       BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Wyślij SMS do aktywnych rezerwacji"
+                               FontSize="16" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#1A237E, Dark=#90CAF9}"/>
+                        <Label x:Name="LblOpis"
+                               FontSize="13"
+                               TextColor="{AppThemeBinding Light=#607D8B, Dark=#90A4AE}"
+                               LineBreakMode="WordWrap"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Filtry -->
+                <Frame CornerRadius="14" Padding="16" HasShadow="True"
+                       BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Filtry rezerwacji"
+                               FontSize="14" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"/>
+
+                        <!-- Zameldowany / Niezameldowany -->
+                        <HorizontalStackLayout Spacing="24">
+                            <HorizontalStackLayout Spacing="8">
+                                <CheckBox x:Name="ChkZameldowany" IsChecked="True" Color="#1565C0"/>
+                                <Label Text="Zameldowany"
+                                       FontSize="13" VerticalOptions="Center"
+                                       TextColor="{AppThemeBinding Light=#455A64, Dark=#B0BEC5}"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Spacing="8">
+                                <CheckBox x:Name="ChkNiezameldowany" IsChecked="True" Color="#1565C0"/>
+                                <Label Text="Niezameldowany"
+                                       FontSize="13" VerticalOptions="Center"
+                                       TextColor="{AppThemeBinding Light=#455A64, Dark=#B0BEC5}"/>
+                            </HorizontalStackLayout>
+                        </HorizontalStackLayout>
+
+                        <!-- Wybór statusów -->
+                        <Border Stroke="{AppThemeBinding Light=#CFD8DC, Dark=#37474F}"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 10"
+                                Padding="10">
+                            <VerticalStackLayout Spacing="8">
+                                <Label Text="Wybierz statusy"
+                                       FontSize="11"
+                                       TextColor="{AppThemeBinding Light=#90A4AE, Dark=#607D8B}"/>
+
+                                <!-- Wiersz 1 -->
+                                <FlexLayout Wrap="Wrap" Direction="Row" Gap="6">
+                                    <Border x:Name="TagRezWstepna"
+                                            BackgroundColor="#FFF8E1"
+                                            Stroke="#FFD54F" StrokeThickness="1"
+                                            StrokeShape="RoundRectangle 16"
+                                            Padding="8,4">
+                                        <HorizontalStackLayout Spacing="4">
+                                            <Ellipse WidthRequest="10" HeightRequest="10"
+                                                     Fill="#FFA000" VerticalOptions="Center"/>
+                                            <Label Text="Rezerwacja wstępna" FontSize="12"
+                                                   TextColor="#E65100" VerticalOptions="Center"/>
+                                            <Label Text="✕" FontSize="11" TextColor="#E65100"
+                                                   VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="OnUsunStatus" CommandParameter="RezerwacjaWstepna"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </HorizontalStackLayout>
+                                    </Border>
+
+                                    <Border x:Name="TagOferta"
+                                            BackgroundColor="#FFF3E0"
+                                            Stroke="#FFB74D" StrokeThickness="1"
+                                            StrokeShape="RoundRectangle 16"
+                                            Padding="8,4">
+                                        <HorizontalStackLayout Spacing="4">
+                                            <Ellipse WidthRequest="10" HeightRequest="10"
+                                                     Fill="#FF9800" VerticalOptions="Center"/>
+                                            <Label Text="Oferta" FontSize="12"
+                                                   TextColor="#E65100" VerticalOptions="Center"/>
+                                            <Label Text="✕" FontSize="11" TextColor="#E65100"
+                                                   VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="OnUsunStatus" CommandParameter="Oferta"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </HorizontalStackLayout>
+                                    </Border>
+
+                                    <Border x:Name="TagPotwierdzona"
+                                            BackgroundColor="#E3F2FD"
+                                            Stroke="#64B5F6" StrokeThickness="1"
+                                            StrokeShape="RoundRectangle 16"
+                                            Padding="8,4">
+                                        <HorizontalStackLayout Spacing="4">
+                                            <Ellipse WidthRequest="10" HeightRequest="10"
+                                                     Fill="#1565C0" VerticalOptions="Center"/>
+                                            <Label Text="Rezerwacja potwierdzona" FontSize="12"
+                                                   TextColor="#0D47A1" VerticalOptions="Center"/>
+                                            <Label Text="✕" FontSize="11" TextColor="#0D47A1"
+                                                   VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="OnUsunStatus" CommandParameter="Potwierdzona"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </HorizontalStackLayout>
+                                    </Border>
+
+                                    <Border x:Name="TagRozliczona"
+                                            BackgroundColor="#ECEFF1"
+                                            Stroke="#90A4AE" StrokeThickness="1"
+                                            StrokeShape="RoundRectangle 16"
+                                            Padding="8,4">
+                                        <HorizontalStackLayout Spacing="4">
+                                            <Ellipse WidthRequest="10" HeightRequest="10"
+                                                     Fill="#607D8B" VerticalOptions="Center"/>
+                                            <Label Text="Rezerwacja rozliczona" FontSize="12"
+                                                   TextColor="#37474F" VerticalOptions="Center"/>
+                                            <Label Text="✕" FontSize="11" TextColor="#37474F"
+                                                   VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="OnUsunStatus" CommandParameter="Rozliczona"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </HorizontalStackLayout>
+                                    </Border>
+
+                                    <Border x:Name="TagAnulowanie"
+                                            BackgroundColor="#FFEBEE"
+                                            Stroke="#EF9A9A" StrokeThickness="1"
+                                            StrokeShape="RoundRectangle 16"
+                                            Padding="8,4">
+                                        <HorizontalStackLayout Spacing="4">
+                                            <Ellipse WidthRequest="10" HeightRequest="10"
+                                                     Fill="#E53935" VerticalOptions="Center"/>
+                                            <Label Text="Anulowanie rezerwacji" FontSize="12"
+                                                   TextColor="#B71C1C" VerticalOptions="Center"/>
+                                            <Label Text="✕" FontSize="11" TextColor="#B71C1C"
+                                                   VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="OnUsunStatus" CommandParameter="Anulowanie"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </HorizontalStackLayout>
+                                    </Border>
+
+                                    <Border x:Name="TagKodDostepu"
+                                            BackgroundColor="#E8F5E9"
+                                            Stroke="#81C784" StrokeThickness="1"
+                                            StrokeShape="RoundRectangle 16"
+                                            Padding="8,4">
+                                        <HorizontalStackLayout Spacing="4">
+                                            <Ellipse WidthRequest="10" HeightRequest="10"
+                                                     Fill="#43A047" VerticalOptions="Center"/>
+                                            <Label Text="Wysłano kod dostępu" FontSize="12"
+                                                   TextColor="#1B5E20" VerticalOptions="Center"/>
+                                            <Label Text="✕" FontSize="11" TextColor="#1B5E20"
+                                                   VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="OnUsunStatus" CommandParameter="KodDostepu"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </HorizontalStackLayout>
+                                    </Border>
+                                </FlexLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Treść wiadomości -->
+                <Frame CornerRadius="14" Padding="16" HasShadow="True"
+                       BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Treść wiadomości"
+                               FontSize="14" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#37474F, Dark=#ECEFF1}"/>
+
+                        <Border x:Name="BorderSms"
+                                Stroke="#CFD8DC" StrokeThickness="1"
+                                StrokeShape="RoundRectangle 10"
+                                Padding="12,8">
+                            <Editor x:Name="SmsEditor"
+                                    Placeholder="Wiadomość SMS"
+                                    PlaceholderColor="{AppThemeBinding Light=#90A4AE, Dark=#546E7A}"
+                                    FontSize="14"
+                                    MinimumHeightRequest="80"
+                                    AutoSize="TextChanges"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"
+                                    TextChanged="OnSmsTextChanged"/>
+                        </Border>
+
+                        <Label x:Name="LblBladSms"
+                               Text="Treść wiadomości jest wymagana"
+                               FontSize="12"
+                               TextColor="#E53935"
+                               IsVisible="False"/>
+
+                        <Label x:Name="LblLicznikZnakow"
+                               Text="0 / 160 znaków"
+                               FontSize="11"
+                               HorizontalOptions="End"
+                               TextColor="{AppThemeBinding Light=#90A4AE, Dark=#607D8B}"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Podgląd odbiorców -->
+                <Frame x:Name="FrameOdbiorcy"
+                       CornerRadius="14" Padding="16" HasShadow="False"
+                       BackgroundColor="#E3F2FD"
+                       IsVisible="False">
+                    <Grid ColumnDefinitions="32,*">
+                        <Label Grid.Column="0" Text="ℹ️" FontSize="18" VerticalOptions="Start"/>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label x:Name="LblOdbiorcy"
+                                   FontSize="13" FontAttributes="Bold" TextColor="#1565C0"/>
+                            <Label x:Name="LblBrakOdbiorcow"
+                                   Text="Brak aktywnych rezerwacji spełniających kryteria."
+                                   FontSize="12" TextColor="#1976D2"
+                                   IsVisible="False"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
+
+                <!-- Przycisk wyślij -->
+                <Button x:Name="BtnWyslij"
+                        Text="  wyślij sms"
+                        FontSize="15" FontAttributes="Bold"
+                        BackgroundColor="#607D8B"
+                        TextColor="White"
+                        CornerRadius="24"
+                        HeightRequest="52"
+                        HorizontalOptions="Start"
+                        Padding="20,0"
+                        Clicked="OnWyslijClicked"/>
+
+                <Label Text="yBook v2.0 · ybook.pl"
+                       FontSize="11" HorizontalOptions="Center"
+                       TextColor="{AppThemeBinding Light=#B0BEC5, Dark=#455A64}"
+                       Margin="0,4,0,16"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

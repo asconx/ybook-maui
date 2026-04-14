@@ -11,6 +11,16 @@
                 BackgroundColor="#1565C0"
                 TextColor="White" />
 
+        <!-- Nowa sekcja: filtr ról i przycisk do zarządzania rolami -->
+        <HorizontalStackLayout Spacing="8">
+            <Picker x:Name="RoleFilterPicker" WidthRequest="220" />
+            <Button x:Name="BtnManageRoles"
+                    Text="Zarządzaj rolami"
+                    Clicked="OnManageRolesClicked"
+                    BackgroundColor="#EEEEEE"
+                    TextColor="#222" />
+        </HorizontalStackLayout>
+
         <CollectionView x:Name="UsersList"
                         SelectionMode="None"
                         HeightRequest="400">

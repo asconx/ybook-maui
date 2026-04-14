@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ctrl="clr-namespace:yBook.Controls"
+             x:Class="yBook.Views.Ustawienia.UzytkownicyIRolePage"
+             BackgroundColor="White"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="60, Auto, *">
+
+        <!-- PAGE HEADER -->
+        <ctrl:PageHeader Grid.Row="0"
+                         Title="Użytkownicy i role"
+                         Icon="👥"
+                         ShowBack="True"/>
+
+        <!-- TABS -->
+        <Grid Grid.Row="1" Padding="16,12" ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="BtnUsersTab" 
+                    Text="Użytkownicy" 
+                    BackgroundColor="#1565C0"
+                    TextColor="White"
+                    Clicked="OnUsersTabClicked"
+                    Padding="20,8"
+                    CornerRadius="6"/>
+
+            <Button x:Name="BtnRolesTab"
+                    Grid.Column="1"
+                    Text="Role"
+                    BackgroundColor="#E0E0E0"
+                    TextColor="#333"
+                    Clicked="OnRolesTabClicked"
+                    Padding="20,8"
+                    CornerRadius="6"/>
+        </Grid>
+
+        <!-- CONTENT -->
+        <ScrollView Grid.Row="2">
+            <VerticalStackLayout>
+
+                <!-- USERS VIEW -->
+                <VerticalStackLayout x:Name="UsersView" Padding="16" Spacing="12">
+                    <Button Text="Zaproś użytkownika"
+                            x:Name="BtnInvite"
+                            Clicked="OnInviteClicked"
+                            BackgroundColor="#1565C0"
+                            TextColor="White"/>
+
+                    <CollectionView x:Name="UsersList"
+                                    SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="10" Margin="0,6" HasShadow="False" BackgroundColor="#fff" BorderColor="#E0E0E0">
+                                    <VerticalStackLayout Spacing="4">
+                                        <HorizontalStackLayout Spacing="12">
+                                            <Button Text="✏️" Clicked="OnEditClicked" Padding="8"/>
+                                            <Button Text="🗑️" Clicked="OnDeleteClicked" Padding="8"/>
+                                            <Label Text="{Binding Name}" FontAttributes="Bold" VerticalOptions="Center"/>
+                                            <Label Text="{Binding Role}" TextColor="#666" VerticalOptions="Center"/>
+                                            <Label Text="{Binding Email}" TextColor="#888" VerticalOptions="Center" HorizontalOptions="EndAndExpand"/>
+                                        </HorizontalStackLayout>
+                                        <Label Text="{Binding Phone}" FontSize="12" TextColor="#888"/>
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Label x:Name="EmptyUsersLabel" Text="Brak zaproszonych użytkowników." IsVisible="False" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <!-- ROLES VIEW -->
+                <VerticalStackLayout x:Name="RolesView" IsVisible="False" Padding="16" Spacing="12">
+                    <Button x:Name="BtnAddRole"
+                            Text="+ Dodaj nową rolę"
+                            BackgroundColor="#1565C0"
+                            TextColor="White"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            Padding="16,10"
+                            CornerRadius="6"
+                            Clicked="OnAddRoleClicked"/>
+
+                    <!-- Table Container -->
+                    <VerticalStackLayout Spacing="0">
+                        <!-- Header Row -->
+                        <Grid Padding="12" ColumnDefinitions="100,180,*" ColumnSpacing="12" BackgroundColor="#1565C0" CornerRadius="6,6,0,0">
+                            <Label Text="Akcje" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" FontSize="12"/>
+                            <Label Grid.Column="1" Text="Nazwa roli" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" FontSize="12"/>
+                            <Label Grid.Column="2" Text="Uprawnienia" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" FontSize="12"/>
+                        </Grid>
+
+                        <!-- Data Rows -->
+                        <CollectionView x:Name="RolesCollection" SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <VerticalStackLayout Padding="0" Spacing="0" BackgroundColor="White" Margin="0,0,0,1">
+                                        <Grid Padding="12" ColumnDefinitions="100,180,*" ColumnSpacing="12" BackgroundColor="White" BorderColor="#E8E8E8" BorderWidth="0,0,0,1">
+                                            <!-- Action Buttons -->
+                                            <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                                <Button Text="✏️" Clicked="OnEditRoleClicked" Padding="8" FontSize="14" CornerRadius="4" BackgroundColor="#E3F2FD" BorderColor="#1565C0" BorderWidth="1" WidthRequest="36" HeightRequest="36"/>
+                                                <Button Text="🗑️" Clicked="OnDeleteRoleClicked" Padding="8" FontSize="14" CornerRadius="4" BackgroundColor="#FFEBEE" BorderColor="#D32F2F" BorderWidth="1" WidthRequest="36" HeightRequest="36"/>
+                                            </HorizontalStackLayout>
+
+                                            <!-- Role Name -->
+                                            <Label Grid.Column="1" 
+                                                   Text="{Binding Name}" 
+                                                   FontAttributes="Bold"
+                                                   FontSize="14"
+                                                   VerticalOptions="Center"
+                                                   TextColor="#333"/>
+
+                                            <!-- Permissions (Scrollable) -->
+                                            <ScrollView Grid.Column="2" 
+                                                        Orientation="Horizontal"
+                                                        BackgroundColor="#F9F9F9"
+                                                        CornerRadius="4"
+                                                        Padding="8,6"
+                                                        HeightRequest="42">
+                                                <Label Text="{Binding PermissionsDisplay}" 
+                                                       FontSize="12" 
+                                                       TextColor="#555"
+                                                       VerticalOptions="Center"
+                                                       LineBreakMode="NoWrap"
+                                                       Padding="4,0"/>
+                                            </ScrollView>
+                                        </Grid>
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <!-- Empty State -->
+                        <Label x:Name="EmptyRolesLabel" 
+                               Text="Brak zdefiniowanych ról. Kliknij przycisk powyżej aby dodać nową rolę."
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               TextColor="#999"
+                               FontSize="12"
+                               IsVisible="False"
+                               Padding="20"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>
