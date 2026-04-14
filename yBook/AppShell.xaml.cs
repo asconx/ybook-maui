@@ -80,6 +80,9 @@ namespace yBook
             Routing.RegisterRoute("SurveysPage",    typeof(SurveysPage));
             Routing.RegisterRoute("EditSurveyPage", typeof(EditSurveyPage));
 
+            // Finanse
+            Routing.RegisterRoute("FinancialDocumentsPage", typeof(Views.Finanse.FinancialDocumentsPage));
+
         }
     }
 }

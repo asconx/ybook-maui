@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:yBook.Models"
+             x:Class="yBook.Views.Finanse.FinancialDocumentsPage"
+             Title="Raport usług i opłat">
+
+    <VerticalStackLayout Padding="12">
+        <HorizontalStackLayout Spacing="8">
+            <Button Text="Odśwież" Clicked="OnRefreshClicked" />
+            <Button Text="Dodaj" Clicked="OnAddClicked" />
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+            <Label Text="Data od:" VerticalOptions="Center"/>
+            <DatePicker x:Name="DatePickerStart" />
+            <Label Text="Data do:" VerticalOptions="Center"/>
+            <DatePicker x:Name="DatePickerEnd" />
+            <Button Text="Filtruj" Clicked="OnFilterClicked" />
+        </HorizontalStackLayout>
+
+        <CollectionView x:Name="DocsList" ItemsLayout="VerticalList">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="2*,80,80,80,140,120" Padding="8">
+                        <Label Grid.Column="0" Text="{Binding Description}" />
+                        <Label Grid.Column="1" Text="{Binding AmountGross}" />
+                        <Label Grid.Column="2" Text="{Binding AmountNet}" />
+                        <Label Grid.Column="3" Text="{Binding AmountVat}" />
+                        <Label Grid.Column="4" Text="{Binding Document.ClientName}" />
+                        <Label Grid.Column="5" Text="{Binding Document.DocumentNumber}" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>
