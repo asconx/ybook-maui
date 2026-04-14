@@ -5,6 +5,9 @@ namespace yBook.Views.Blokady;
 
 public partial class RezerwacjeOnlinePage : ContentPage
 {
+    // ── Statyczne repozytorium dostępne dla innych stron ──
+    public static ObservableCollection<RezerwacjaOnline> StaticRezerwacje { get; } = new();
+
     // ── Dane ──────────────────────────────────────────────────────────────────
 
     readonly ObservableCollection<RezerwacjaOnline> _wszystkie = new();
@@ -22,7 +25,7 @@ public partial class RezerwacjeOnlinePage : ContentPage
 
     void ZaladujPrzykladoweDane()
     {
-        _wszystkie.Add(new RezerwacjaOnline
+        var rez1 = new RezerwacjaOnline
         {
             Slug                = "villaorlowska",
             Grupowanie          = false,
@@ -36,7 +39,29 @@ public partial class RezerwacjeOnlinePage : ContentPage
             Email = "jan@example.com", Telefon = "+48 600 100 200",
             DataPrzyjazdu = new DateTime(2024, 8, 5),
             DataWyjazdu   = new DateTime(2024, 8, 11),
-        });
+            TypPokoju = "Mały pokój 1"  // Mapuj do istniejącej nazwy pokoju
+        };
+        _wszystkie.Add(rez1);
+        StaticRezerwacje.Add(rez1);
+
+        var rez2 = new RezerwacjaOnline
+        {
+            Slug                = "villaorlowska2",
+            Grupowanie          = false,
+            Czcionka            = "DM Sans",
+            PoczatkowyTerminOd  = new DateTime(2024, 8, 12),
+            PoczatkowyTerminDo  = new DateTime(2024, 8, 18),
+            NazwaPrzedplaty     = "50%",
+            OpcjaFaktury        = true,
+            Rozliczenie         = "3 dni przed przyjazdem",
+            Imie = "Anna", Nazwisko = "Nowak",
+            Email = "anna@example.com", Telefon = "+48 700 200 300",
+            DataPrzyjazdu = new DateTime(2024, 8, 12),
+            DataWyjazdu   = new DateTime(2024, 8, 18),
+            TypPokoju = "Pokój dwuosobowy typu Standard 2"  // Inna rezerwacja
+        };
+        _wszystkie.Add(rez2);
+        StaticRezerwacje.Add(rez2);
     }
 
     // ── Odświeżanie ───────────────────────────────────────────────────────────
@@ -75,6 +100,7 @@ public partial class RezerwacjeOnlinePage : ContentPage
         if (form.Wynik is not null)
         {
             _wszystkie.Add(form.Wynik);
+            StaticRezerwacje.Add(form.Wynik);
             OdswiezListe();
         }
     }
@@ -92,7 +118,15 @@ public partial class RezerwacjeOnlinePage : ContentPage
         if (form.Wynik is not null)
         {
             var idx = _wszystkie.IndexOf(rez);
-            if (idx >= 0) _wszystkie[idx] = form.Wynik;
+            if (idx >= 0)
+            {
+                _wszystkie[idx] = form.Wynik;
+
+                // Aktualizuj statyczne repozytorium
+                var staticIdx = StaticRezerwacje.IndexOf(rez);
+                if (staticIdx >= 0)
+                    StaticRezerwacje[staticIdx] = form.Wynik;
+            }
             OdswiezListe();
         }
     }
@@ -108,6 +142,7 @@ public partial class RezerwacjeOnlinePage : ContentPage
 
         if (!ok) return;
         _wszystkie.Remove(rez);
+        StaticRezerwacje.Remove(rez);
         OdswiezListe();
     }
 }

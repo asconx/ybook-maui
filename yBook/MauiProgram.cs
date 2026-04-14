@@ -27,6 +27,7 @@ namespace yBook
             // ── Services ─────────────────────────────────────────────────────
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<ISurveyService, SurveyService>();
+            builder.Services.AddSingleton<IBlockadeService, BlockadeService>();
             builder.Services.AddSingleton<IPanelService, PanelService>();
             builder.Services.AddSingleton<ISmsService, SmsService>(sp => new SmsService(sp.GetRequiredService<IAuthService>(), sp.GetRequiredService<HttpClient>()));
 

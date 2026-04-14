@@ -1,6 +1,3 @@
-using System.Collections.ObjectModel;
-using yBook.Models;
-
 namespace yBook.Views.Ceny;
 
 public partial class UslugiOplaty : ContentPage
@@ -8,9 +5,9 @@ public partial class UslugiOplaty : ContentPage
 	// =========================================
 	//                VARIABLES
 	// =========================================
-	List<Usluga> _all = new();
-    string? _typ = null;
-
+	private List<Usluga> _all = new();
+	private string? _typ = null;
+	
 	// =========================================
 	//                   START
 	// =========================================
@@ -18,13 +15,20 @@ public partial class UslugiOplaty : ContentPage
 	{
 		InitializeComponent();
 	}
-	protected override void OnAppearing()
-    {
-        base.OnAppearing();
 
-        _all.AddRange(MockData());
-        ApplyFilter();
-    }
+	private bool _initialized = false;
+	protected override void OnAppearing()
+	{
+		base.OnAppearing();
+
+		if (!_initialized)
+		{
+			_all.AddRange(MockData());
+			_initialized = true;
+		}
+
+		ApplyFilter();
+	}
 
 	// =========================================
 	//                    EVENTS
@@ -46,30 +50,39 @@ public partial class UslugiOplaty : ContentPage
 
 	async void OnDodajClicked(object sender, EventArgs e)
 	{
-		_all.Add(new Usluga()
-		{
-			Name = "Cassian",
-			Rodzaj = "Bestia",
-			Typ = "DND",
-			Ceny = new() { "67 zł" },
-			DataOd = "1-01-01",
-			DataDo = "9999-12-31",
-			Opis = "Lassian"
-		});
+		var page = new UslugiOplatyDodawanie(new Usluga(), modif: false, () => { ApplyFilter(); });
+		await Shell.Current.Navigation.PushAsync(page);
+	}
+	async void OnModifClicked(object sender, TappedEventArgs e)
+	{
+		var item = e.Parameter as Usluga;
 
+		if (item == null) return;
+
+		var page = new UslugiOplatyDodawanie(
+			item,
+			modif: true,
+			() => { ApplyFilter(); }
+		);
+
+		await Shell.Current.Navigation.PushAsync(page);
+	}
+	public void Dodaj(Usluga usluga)
+    {
+        _all.Add(usluga);
+    }
+	void OnDeleteClicked(object sender, TappedEventArgs e)
+	{
+		var item = e.Parameter as Usluga;
+
+		if (item == null) return;
+
+		_all.Remove(item);
 		ApplyFilter();
 	}
-	void OnDeleteClicked(object sender, EventArgs e)
-	{
-		if (sender is BindableObject bo &&
-			bo.BindingContext is Usluga item)
-		{
-			_all.Remove(item);
-			ApplyFilter();
-		}
-	}
+
 	// =========================================
-	//             PRIVATE ACTIONS
+	//             PRIVATE METHODS
 	// =========================================
 	private void ApplyFilter()
     {

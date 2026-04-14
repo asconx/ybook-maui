@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.ICalendar.AddCalendarPopup"
+             BackgroundColor="#80000000">
+
+    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+
+        <Border WidthRequest="300"
+                Padding="15"
+                BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+
+            <VerticalStackLayout Spacing="10">
+
+                <Entry Placeholder="Kwatera"
+                       x:Name="KwateraEntry"
+                       TextChanged="OnNameChanged"/>
+
+                <Entry Placeholder="Portal"
+                       x:Name="PortalEntry"/>
+                
+                <Entry Placeholder="Export link"
+                       x:Name="ExportLinkEntry"
+                       IsReadOnly="True"/>
+
+                <Entry Placeholder="Import link"
+                       x:Name="ImportLinkEntry"/>
+
+                <Button Text="Zapisz"
+                        Clicked="OnSaveClicked"/>
+
+                <Button Text="Anuluj"
+                        Clicked="OnCancelClicked"/>
+
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>
