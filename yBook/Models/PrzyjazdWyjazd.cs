@@ -8,6 +8,9 @@ namespace yBook.Models
         public string Pokoj { get; set; }
         public DateTime Data { get; set; }
 
+        // Powiązanie z API
+        public int? AvailabilityId { get; set; } // id rekordu z API (może być null dla lokalnych)
+
         bool przyjazdMozliwy = true;
         public bool PrzyjazdMozliwy
         {
