@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Uzytkownicy.RoleEditorPage"
+             BackgroundColor="#F5F5F5">
+
+    <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*" Padding="0" Margin="0">
+
+        <!-- Modal Header -->
+        <Grid Grid.Row="0" Padding="20" BackgroundColor="White" ColumnDefinitions="*,Auto">
+            <Label x:Name="HeaderLabel"
+                   Text="Dodaj nową rolę"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"/>
+            <Button Grid.Column="1" 
+                    Text="✕"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    BackgroundColor="Transparent"
+                    TextColor="#666"
+                    Clicked="OnCancelClicked"
+                    Padding="10,-10,0,0"/>
+        </Grid>
+
+        <!-- Content -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="15">
+
+                <!-- Role Name -->
+                <Label Text="Nazwa roli" FontSize="14" FontAttributes="Bold"/>
+                <Entry x:Name="RoleNameEntry"
+                       Placeholder="Nazwa roli"
+                       BackgroundColor="White"
+                       FontSize="14"/>
+
+                <!-- 2-Column Layout: Categories + Permissions -->
+                <Grid ColumnDefinitions="200,*" ColumnSpacing="15" Margin="0,20,0,0" HeightRequest="400">
+
+                    <!-- Left: Categories with RadioButtons -->
+                    <ScrollView Grid.Column="0" BackgroundColor="White" CornerRadius="8">
+                        <VerticalStackLayout x:Name="CategoriesContainer" Spacing="8" Padding="8"/>
+                    </ScrollView>
+
+                    <!-- Right: Permissions CheckBoxes -->
+                    <Frame Grid.Column="1" 
+                           BackgroundColor="White" 
+                           BorderColor="#E0E0E0" 
+                           CornerRadius="8" 
+                           Padding="12"
+                           HasShadow="False">
+                        <ScrollView>
+                            <VerticalStackLayout x:Name="PermissionsContainer" Spacing="8"/>
+                        </ScrollView>
+                    </Frame>
+                </Grid>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Bottom Buttons -->
+        <Grid Grid.Row="2" Padding="20" ColumnDefinitions="*,*" ColumnSpacing="10" BackgroundColor="White">
+            <Button Grid.Column="0"
+                    Text="Anuluj"
+                    BackgroundColor="#E0E0E0"
+                    TextColor="#333"
+                    FontSize="14"
+                    FontAttributes="Bold"
+                    Clicked="OnCancelClicked"/>
+            <Button Grid.Column="1"
+                    Text="Zapisz"
+                    BackgroundColor="#D4A574"
+                    TextColor="White"
+                    FontSize="14"
+                    FontAttributes="Bold"
+                    Clicked="OnSaveClicked"/>
+        </Grid>
+
+    </Grid>
+</ContentPage>
