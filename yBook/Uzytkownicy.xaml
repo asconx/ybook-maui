@@ -2,68 +2,163 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="yBook.Views.Uzytkownicy.UzytkownicyPage"
-             Title="Użytkownicy">
+             BackgroundColor="#F5F5F5">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="12">
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*" Padding="0" Margin="0">
 
-            <Label Text="Imię i nazwisko"/>
-            <Entry x:Name="NazwaEntry"/>
+        <!-- Modal Header -->
+        <Grid Grid.Row="0" Padding="20" BackgroundColor="White" ColumnDefinitions="*,Auto">
+            <Label Text="Dodaj nowego użytkownika"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"/>
+            <Button Grid.Column="1" 
+                    Text="✕"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    BackgroundColor="Transparent"
+                    TextColor="#666"
+                    Clicked="OnCancelClicked"
+                    Padding="10,-10,0,0"/>
+        </Grid>
 
-            <Label Text="Rola"/>
-            <Picker x:Name="RolaPicker">
-                <Picker.Items>
-                    <x:String>Administrator</x:String>
-                    <x:String>Manager</x:String>
-                    <x:String>Pracownik</x:String>
-                </Picker.Items>
-            </Picker>
+        <!-- Modal Content -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="15">
 
-            <Label Text="E-mail"/>
-            <Entry x:Name="EmailEntry" Keyboard="Email"/>
+                <!-- Name -->
+                <Label Text="Imię i nazwisko" FontSize="14" FontAttributes="Bold"/>
+                <Entry x:Name="NazwaEntry"
+                       Placeholder="Imię i nazwisko"
+                       BackgroundColor="White"
+                       FontSize="14"/>
 
-            <Label Text="Powiadomienia"/>
-            <HorizontalStackLayout>
-                <CheckBox x:Name="CbNowaPlatnosc"/>
-                <Label Text="Nowa płatność online" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
+                <!-- Role Picker -->
+                <Label Text="Stanowisko" FontSize="14" FontAttributes="Bold"/>
+                <Picker x:Name="RolaPicker"
+                        BackgroundColor="White"
+                        Title="Wybierz"
+                        FontSize="14">
+                    <Picker.Items>
+                        <x:String>Administrator</x:String>
+                        <x:String>Manager</x:String>
+                        <x:String>Pracownik</x:String>
+                    </Picker.Items>
+                </Picker>
 
-            <HorizontalStackLayout>
-                <CheckBox x:Name="CbWyslijPowiadomienieKlient"/>
-                <Label Text="Wysłanie powiadomienia dla klienta" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
+                <!-- Email -->
+                <Label Text="Adres email" FontSize="14" FontAttributes="Bold"/>
+                <Entry x:Name="EmailEntry"
+                       Placeholder="Adres email"
+                       Keyboard="Email"
+                       BackgroundColor="White"
+                       FontSize="14"/>
 
-            <HorizontalStackLayout>
-                <CheckBox x:Name="CbAnulowanieRezerwacji"/>
-                <Label Text="Anulowanie rezerwacji" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
+                <!-- Phone -->
+                <Label Text="Numer telefonu" FontSize="14" FontAttributes="Bold"/>
+                <Entry x:Name="TelefonEntry"
+                       Placeholder="Numer telefonu"
+                       Keyboard="Telephone"
+                       BackgroundColor="White"
+                       FontSize="14"/>
 
-            <HorizontalStackLayout>
-                <CheckBox x:Name="CbNowaRezerwacjaOnline"/>
-                <Label Text="Nowa rezerwacja online" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
+                <!-- Notifications Section -->
+                <Frame x:Name="NotificationsFrame"
+                       BackgroundColor="#E3F2FD"
+                       BorderColor="#1565C0"
+                       CornerRadius="8"
+                       Padding="0"
+                       Margin="0">
+                    <VerticalStackLayout Spacing="0">
+                        <!-- Header Button -->
+                        <Button x:Name="NotificationsToggleBtn"
+                                Text="Wybierz powiadomienia ▼"
+                                BackgroundColor="#E3F2FD"
+                                TextColor="#1565C0"
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                Padding="12"
+                                Margin="0"
+                                Clicked="OnNotificationsToggleClicked"
+                                BorderWidth="0"/>
 
-            <HorizontalStackLayout>
-                <CheckBox x:Name="CbSynchronizacjaRezerwacji"/>
-                <Label Text="Synchronizacja rezerwacji" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
+                        <!-- Notifications Content -->
+                        <VerticalStackLayout x:Name="NotificationsContent"
+                                            IsVisible="False"
+                                            Padding="12"
+                                            Spacing="12"
+                                            BackgroundColor="White">
 
-            <HorizontalStackLayout>
-                <CheckBox x:Name="CbUtworzenieNowejRezerwacji"/>
-                <Label Text="Utworzenie nowej rezerwacji" VerticalOptions="Center"/>
-            </HorizontalStackLayout>
+                            <!-- Utworzenie nowej rezerwacji -->
+                            <HorizontalStackLayout Spacing="12" Padding="0">
+                                <Switch x:Name="SwUtworzenieNowejRezerwacji"
+                                        VerticalOptions="Center"/>
+                                <Label Text="Utworzenie nowej rezerwacji"
+                                       VerticalOptions="Center"
+                                       FontSize="14"/>
+                            </HorizontalStackLayout>
 
-            <Label Text="Telefon"/>
-            <Entry x:Name="TelefonEntry" Keyboard="Telephone"/>
+                            <!-- Synchronizacja rezerwacji -->
+                            <HorizontalStackLayout Spacing="12" Padding="0">
+                                <Switch x:Name="SwSynchronizacjaRezerwacji"
+                                        VerticalOptions="Center"/>
+                                <Label Text="Synchronizacja rezerwacji"
+                                       VerticalOptions="Center"
+                                       FontSize="14"/>
+                            </HorizontalStackLayout>
 
-            <Button Text="Zapisz"
-                    BackgroundColor="#1565C0"
-                    TextColor="White"
-                    Clicked="OnSaveClicked"/>
+                            <!-- Nowa rezerwacja online -->
+                            <HorizontalStackLayout Spacing="12" Padding="0">
+                                <Switch x:Name="SwNowaRezerwacjaOnline"
+                                        VerticalOptions="Center"/>
+                                <Label Text="Nowa rezerwacja online"
+                                       VerticalOptions="Center"
+                                       FontSize="14"/>
+                            </HorizontalStackLayout>
 
-            <Button Text="Anuluj"
-                    Clicked="OnCancelClicked"/>
+                            <!-- Anulowanie rezerwacji -->
+                            <HorizontalStackLayout Spacing="12" Padding="0">
+                                <Switch x:Name="SwAnulowanieRezerwacji"
+                                        VerticalOptions="Center"/>
+                                <Label Text="Anulowanie rezerwacji"
+                                       VerticalOptions="Center"
+                                       FontSize="14"/>
+                            </HorizontalStackLayout>
 
-        </VerticalStackLayout>
-    </ScrollView>
+                            <!-- Wysłanie powiadomienia dla klienta -->
+                            <HorizontalStackLayout Spacing="12" Padding="0">
+                                <Switch x:Name="SwWyslijPowiadomienieKlient"
+                                        VerticalOptions="Center"/>
+                                <Label Text="Wysłanie powiadomienia dla klienta"
+                                       VerticalOptions="Center"
+                                       FontSize="14"/>
+                            </HorizontalStackLayout>
+
+                            <!-- Nowa płatność online -->
+                            <HorizontalStackLayout Spacing="12" Padding="0">
+                                <Switch x:Name="SwNowaPlatnosc"
+                                        VerticalOptions="Center"/>
+                                <Label Text="Nowa płatność online"
+                                       VerticalOptions="Center"
+                                       FontSize="14"/>
+                            </HorizontalStackLayout>
+
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Buttons -->
+                <Button Text="dodaj i wyślij zaproszenie"
+                        BackgroundColor="#D4A574"
+                        TextColor="White"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        Padding="12"
+                        Margin="0,10"
+                        Clicked="OnSaveClicked"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
 </ContentPage>

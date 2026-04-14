@@ -43,6 +43,9 @@ namespace yBook.Controls
 
         // ── Zdarzenia ─────────────────────────────────────────────────────────
 
+        /// <summary>Wywoływane gdy użytkownik kliknie przycisk wstecz lub hamburger.</summary>
+        public event EventHandler? BackClicked;
+
         /// <summary>Wywoływane gdy ShowBack=False i użytkownik kliknie hamburger.</summary>
         public event EventHandler? HamburgerClicked;
 
@@ -61,7 +64,7 @@ namespace yBook.Controls
         {
             if (ShowBack)
             {
-                // Wróć do poprzedniej strony w stosie Shell
+                // Wróć do poprzedniej strony
                 await Shell.Current.GoToAsync("..");
             }
             else

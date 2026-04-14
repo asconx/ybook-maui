@@ -12,6 +12,7 @@ namespace yBook.Views.Uzytkownicy
     public partial class UzytkownicyPage : ContentPage
     {
         private readonly User? _editingUser;
+        private bool _notificationsExpanded = false;
 
         public UzytkownicyPage(User? editingUser = null)
         {
@@ -28,13 +29,24 @@ namespace yBook.Views.Uzytkownicy
                 if (!string.IsNullOrEmpty(_editingUser.Role))
                     RolaPicker.SelectedItem = _editingUser.Role;
 
-                CbNowaPlatnosc.IsChecked = _editingUser.NowaPlatnosc;
-                CbWyslijPowiadomienieKlient.IsChecked = _editingUser.WyslijPowiadomienieKlient;
-                CbAnulowanieRezerwacji.IsChecked = _editingUser.AnulowanieRezerwacji;
-                CbNowaRezerwacjaOnline.IsChecked = _editingUser.NowaRezerwacjaOnline;
-                CbSynchronizacjaRezerwacji.IsChecked = _editingUser.SynchronizacjaRezerwacji;
-                CbUtworzenieNowejRezerwacji.IsChecked = _editingUser.UtworzenieNowejRezerwacji;
+                (FindByName("SwNowaPlatnosc") as Switch)!.IsToggled = _editingUser.NowaPlatnosc;
+                (FindByName("SwWyslijPowiadomienieKlient") as Switch)!.IsToggled = _editingUser.WyslijPowiadomienieKlient;
+                (FindByName("SwAnulowanieRezerwacji") as Switch)!.IsToggled = _editingUser.AnulowanieRezerwacji;
+                (FindByName("SwNowaRezerwacjaOnline") as Switch)!.IsToggled = _editingUser.NowaRezerwacjaOnline;
+                (FindByName("SwSynchronizacjaRezerwacji") as Switch)!.IsToggled = _editingUser.SynchronizacjaRezerwacji;
+                (FindByName("SwUtworzenieNowejRezerwacji") as Switch)!.IsToggled = _editingUser.UtworzenieNowejRezerwacji;
+
+                _notificationsExpanded = true;
+                (FindByName("NotificationsContent") as VerticalStackLayout)!.IsVisible = true;
+                (FindByName("NotificationsToggleBtn") as Button)!.Text = "Wybierz powiadomienia ?";
             }
+        }
+
+        void OnNotificationsToggleClicked(object sender, EventArgs e)
+        {
+            _notificationsExpanded = !_notificationsExpanded;
+            (FindByName("NotificationsContent") as VerticalStackLayout)!.IsVisible = _notificationsExpanded;
+            (FindByName("NotificationsToggleBtn") as Button)!.Text = _notificationsExpanded ? "Wybierz powiadomienia ?" : "Wybierz powiadomienia ?";
         }
 
         async void OnSaveClicked(object sender, EventArgs e)
@@ -45,12 +57,12 @@ namespace yBook.Views.Uzytkownicy
                 Role = RolaPicker.SelectedItem?.ToString(),
                 Email = EmailEntry.Text?.Trim(),
                 Phone = TelefonEntry.Text?.Trim(),
-                NowaPlatnosc = CbNowaPlatnosc.IsChecked,
-                WyslijPowiadomienieKlient = CbWyslijPowiadomienieKlient.IsChecked,
-                AnulowanieRezerwacji = CbAnulowanieRezerwacji.IsChecked,
-                NowaRezerwacjaOnline = CbNowaRezerwacjaOnline.IsChecked,
-                SynchronizacjaRezerwacji = CbSynchronizacjaRezerwacji.IsChecked,
-                UtworzenieNowejRezerwacji = CbUtworzenieNowejRezerwacji.IsChecked
+                NowaPlatnosc = (FindByName("SwNowaPlatnosc") as Switch)!.IsToggled,
+                WyslijPowiadomienieKlient = (FindByName("SwWyslijPowiadomienieKlient") as Switch)!.IsToggled,
+                AnulowanieRezerwacji = (FindByName("SwAnulowanieRezerwacji") as Switch)!.IsToggled,
+                NowaRezerwacjaOnline = (FindByName("SwNowaRezerwacjaOnline") as Switch)!.IsToggled,
+                SynchronizacjaRezerwacji = (FindByName("SwSynchronizacjaRezerwacji") as Switch)!.IsToggled,
+                UtworzenieNowejRezerwacji = (FindByName("SwUtworzenieNowejRezerwacji") as Switch)!.IsToggled
             };
 
             if (string.IsNullOrWhiteSpace(user.Name) || string.IsNullOrWhiteSpace(user.Email))

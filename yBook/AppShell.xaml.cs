@@ -80,6 +80,10 @@ namespace yBook
             Routing.RegisterRoute("SurveysPage",    typeof(SurveysPage));
             Routing.RegisterRoute("EditSurveyPage", typeof(EditSurveyPage));
 
+            // Ustawienia
+            Routing.RegisterRoute("PokojePage", typeof(PokojePage));
+            Routing.RegisterRoute("UzytkownicyIRolePage", typeof(UzytkownicyIRolePage));
+
         }
     }
 }

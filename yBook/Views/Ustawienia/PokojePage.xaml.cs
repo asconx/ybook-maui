@@ -21,6 +21,15 @@ public partial class PokojePage : ContentPage
         PokojList.ItemsSource = pokoje;
     }
 
+    protected override bool OnBackButtonPressed()
+    {
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            await Shell.Current.GoToAsync("..");
+        });
+        return true;
+    }
+
     protected override async void OnAppearing()
     {
         base.OnAppearing();
