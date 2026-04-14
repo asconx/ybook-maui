@@ -10,6 +10,8 @@ using yBook.Views.Surveys;
 using yBook.Views.Ustawienia;
 using yBook.Views.Kalendarz;
 using yBook.Views.Uzytkownicy;
+using yBook.Views.Rabaty;
+using yBook.Views.Przyjazdy;
 
 namespace yBook
 {
@@ -25,6 +27,13 @@ namespace yBook
 
             // Sprawdź sesję asynchronicznie po załadowaniu Shell
             Loaded += OnShellLoaded;
+            // Synchronizacja dostępności przy starcie
+            Loaded += async (s, e) =>
+            {
+                // Przykład: automatyczna synchronizacja przy starcie
+                // Możesz wywołać synchronizację globalnie lub tylko dla wybranych stron
+                // await new PrzyjazdWyjazdPage().SyncFromApi();
+            };
         }
 
         // ── Sprawdzenie sesji przy starcie ─────────────────────────────────────
