@@ -185,17 +185,18 @@ namespace yBook.Services
         {
             try
             {
-                var orgId = _auth.CurrentUser?.OrganizationId;
-                var url   = orgId.HasValue
-                    ? $"{BaseUrl}/organizations/{orgId}/accounts"
-                    : $"{BaseUrl}/accounts";
-
+                var url  = $"{BaseUrl}/entity/account";
                 var req  = await BuildRequest(HttpMethod.Get, url);
                 var resp = await _http.SendAsync(req);
 
-                if (!resp.IsSuccessStatusCode) return MockFinanse.Konta();
+                if (!resp.IsSuccessStatusCode)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[FinanseService.GetKonta] HTTP {resp.StatusCode}");
+                    return MockFinanse.Konta();
+                }
 
                 var json = await resp.Content.ReadAsStringAsync();
+                System.Diagnostics.Debug.WriteLine($"[FinanseService.GetKonta] Response: {json.Substring(0, Math.Min(300, json.Length))}");
                 var raw  = ParseList<ApiKonto>(json);
                 return raw.Select(MapKonto).ToList();
             }
@@ -208,10 +209,7 @@ namespace yBook.Services
 
         public async Task<KontoFinansowe> CreateKontoAsync(KontoFinansowe k)
         {
-            var orgId = _auth.CurrentUser?.OrganizationId;
-            var url   = orgId.HasValue
-                ? $"{BaseUrl}/organizations/{orgId}/accounts"
-                : $"{BaseUrl}/accounts";
+            var url = $"{BaseUrl}/entity/account";
 
             var body = new
             {
@@ -235,10 +233,7 @@ namespace yBook.Services
         {
             try
             {
-                var orgId = _auth.CurrentUser?.OrganizationId;
-                var url   = orgId.HasValue
-                    ? $"{BaseUrl}/organizations/{orgId}/accounts/{id}"
-                    : $"{BaseUrl}/accounts/{id}";
+                var url = $"{BaseUrl}/entity/account/{id}";
 
                 var req  = await BuildRequest(HttpMethod.Delete, url);
                 var resp = await _http.SendAsync(req);
@@ -323,13 +318,13 @@ namespace yBook.Services
 
         private static KontoFinansowe MapKonto(ApiKonto a) => new()
         {
-            Id      = a.Id?.ToString() ?? "",
-            Nazwa   = a.Name ?? "",
-            Typ     = ParseTypKonta(a.Type),
-            Numer   = a.Number ?? a.AccountNumber ?? "—",
-            Saldo   = a.Balance ?? a.CurrentBalance ?? 0m,
-            Waluta  = a.Currency ?? "PLN",
-            Aktywne = a.Active ?? true
+            Id             = a.Id?.ToString() ?? "",
+            Nazwa          = a.Name ?? "",
+            Typ            = ParseTypKonta(a.TypeInt),
+            OrganizationId = a.OrganizationId ?? 0,
+            UserId         = a.UserId ?? 0,
+            DateModified   = a.DateModified ?? "",
+            Aktywne        = true
         };
 
         private static TypPlatnosci ParseTypPlatnosci(string? t) => t?.ToLower() switch
@@ -351,12 +346,12 @@ namespace yBook.Services
             _                               => TypDokumentu.Faktura
         };
 
-        private static TypKonta ParseTypKonta(string? t) => t?.ToLower() switch
+        private static TypKonta ParseTypKonta(int? t) => t switch
         {
-            "bankowe"   or "bank"    => TypKonta.Bankowe,
-            "gotowkowe" or "cash"    => TypKonta.Gotowkowe,
-            "karta"     or "card"    => TypKonta.Karta,
-            _                        => TypKonta.Inne
+            0 => TypKonta.Gotowkowe,
+            1 => TypKonta.Bankowe,
+            2 => TypKonta.Karta,
+            _ => TypKonta.Inne
         };
     }
 }

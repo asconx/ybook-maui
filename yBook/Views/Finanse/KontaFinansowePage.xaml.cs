@@ -1,25 +1,57 @@
 using yBook.Models;
+using yBook.Services;
 
 namespace yBook.Views.Finanse
 {
     public partial class KontaFinansowePage : ContentPage
     {
-        List<KontoFinansowe> _all = new();
-        TypKonta? _filterTyp = null;
+        private readonly IFinanseService _svc;
+        private List<KontoFinansowe> _all = new();
+        private TypKonta? _filterTyp = null;
 
         static readonly double[] ColWidths = { 180, 120, 200, 130 };
 
-        public KontaFinansowePage()
+        public KontaFinansowePage(IFinanseService finanseService)
         {
             InitializeComponent();
+            _svc = finanseService;
             Header.HamburgerClicked += (_, _) => Drawer.Open();
         }
 
-        protected override void OnAppearing()
+        // Fallback bez DI
+        public KontaFinansowePage()
+        {
+            InitializeComponent();
+            _svc = IPlatformApplication.Current!.Services.GetService<IFinanseService>()
+                   ?? new FinanseService(
+                          IPlatformApplication.Current.Services.GetRequiredService<IAuthService>());
+            Header.HamburgerClicked += (_, _) => Drawer.Open();
+        }
+
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
-            _all = MockFinanse.Konta();
-            ApplyFilter();
+            await LoadAsync();
+        }
+
+        private async Task LoadAsync()
+        {
+            ShowLoader(true);
+            try
+            {
+                _all = await _svc.GetKontaAsync();
+                ApplyFilter();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[KontaFinansowePage] {ex.Message}");
+                _all = MockFinanse.Konta();
+                ApplyFilter();
+            }
+            finally
+            {
+                ShowLoader(false);
+            }
         }
 
         async void OnTypDropdownTapped(object? sender, TappedEventArgs e)
@@ -38,10 +70,10 @@ namespace yBook.Views.Finanse
             {
                 _filterTyp = wynik switch
                 {
-                    "Bankowe"    => TypKonta.Bankowe,
-                    "Gotówkowe"  => TypKonta.Gotowkowe,
-                    "Karta"      => TypKonta.Karta,
-                    _            => TypKonta.Inne
+                    "Bankowe"   => TypKonta.Bankowe,
+                    "Gotówkowe" => TypKonta.Gotowkowe,
+                    "Karta"     => TypKonta.Karta,
+                    _           => TypKonta.Inne
                 };
                 LblTypFilter.Text = wynik;
             }
@@ -64,5 +96,17 @@ namespace yBook.Views.Finanse
         }
 
         void OnRowScrolled(object? sender, ScrolledEventArgs e) { /* reserved */ }
+
+        private void ShowLoader(bool show)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                if (Loader is not null)
+                {
+                    Loader.IsRunning = show;
+                    Loader.IsVisible = show;
+                }
+            });
+        }
     }
 }

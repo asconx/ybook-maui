@@ -39,22 +39,34 @@ namespace yBook.Models
 
     public class KontoFinansowe
     {
-        public string   Id      { get; init; } = "";
-        public string   Nazwa   { get; init; } = "";
-        public TypKonta Typ     { get; init; }
-        public string   Numer   { get; init; } = "";
-        public decimal  Saldo   { get; init; }
-        public string   Waluta  { get; init; } = "PLN";
-        public bool     Aktywne { get; init; } = true;
+        public string   Id             { get; init; } = "";
+        public string   Nazwa          { get; init; } = "";
+        public TypKonta Typ            { get; init; }
+        public int      OrganizationId { get; init; }
+        public int      UserId         { get; init; }
+        public string   DateModified   { get; init; } = "";
+        public bool     Aktywne        { get; init; } = true;
 
-        public string TypEmoji   => Typ switch
+        // Pola opcjonalne (nie zwracane przez API, ale mogą być używane lokalnie)
+        public string   Numer          { get; init; } = "—";
+        public decimal  Saldo          { get; init; }
+        public string   Waluta         { get; init; } = "PLN";
+
+        public string TypLabel => Typ switch
+        {
+            TypKonta.Bankowe   => "Bank",
+            TypKonta.Gotowkowe => "Gotówka",
+            TypKonta.Karta     => "Karta",
+            _                  => "Inne"
+        };
+        public string TypEmoji => Typ switch
         {
             TypKonta.Bankowe   => "🏦",
             TypKonta.Gotowkowe => "💵",
             TypKonta.Karta     => "💳",
             _                  => "💼"
         };
-        public string SaldoStr   => $"{Saldo:N2} {Waluta}";
+        public string SaldoStr   => Saldo != 0 ? $"{Saldo:N2} {Waluta}" : "—";
         public Color  SaldoColor => Saldo >= 0
             ? Color.FromArgb("#43A047")
             : Color.FromArgb("#E53935");
@@ -209,15 +221,23 @@ namespace yBook.Models
 
     internal class ApiKonto
     {
-        public object?  Id             { get; set; }
-        public string?  Name           { get; set; }
-        public string?  Type           { get; set; }
-        public string?  Number         { get; set; }
-        public string?  AccountNumber  { get; set; }
-        public decimal? Balance        { get; set; }
-        public decimal? CurrentBalance { get; set; }
-        public string?  Currency       { get; set; }
-        public bool?    Active         { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public int? Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization_id")]
+        public int? OrganizationId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("date_modified")]
+        public string? DateModified { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("user_id")]
+        public int? UserId { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+        public int? TypeInt { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("name")]
+        public string? Name { get; set; }
     }
 
 }
