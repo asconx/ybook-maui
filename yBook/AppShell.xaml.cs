@@ -10,7 +10,6 @@ using yBook.Views.Surveys;
 using yBook.Views.Ustawienia;
 using yBook.Views.Kalendarz;
 using yBook.Views.Uzytkownicy;
-using yBook.Views.Rabaty;
 
 namespace yBook
 {
@@ -64,6 +63,9 @@ namespace yBook
 
             //Powiadomienia
             Routing.RegisterRoute(nameof(PowiadomieniaPage), typeof(PowiadomieniaPage));
+
+            //Statusy
+            Routing.RegisterRoute(nameof(StatusyPage), typeof(StatusyPage));
 
             // Klienci
             Routing.RegisterRoute("Klienci", typeof(Views.Klienci.KlienciPage));

@@ -38,5 +38,10 @@
         ContentTemplate="{DataTemplate ustawienia:DaneObiektuPage}"
         Route="DaneObiektu"/>
     
+    <ShellContent
+        Title="Statusy"
+        ContentTemplate="{DataTemplate ustawienia:StatusyPage}"
+        Route="StatusyPage"/>
+    
 
 </Shell>
