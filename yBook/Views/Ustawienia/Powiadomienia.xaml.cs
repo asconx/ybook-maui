@@ -1,17 +1,19 @@
 using System.Collections.ObjectModel;
 using yBook.Models;
 using yBook.Views.Blokady;
+using yBook.Views.Rabaty;
 
 namespace yBook.Views.Ustawienia;
 
 public partial class PowiadomieniaPage : ContentPage
 {
-    public ObservableCollection<PowiadomienieItem> Powiadomienia { get; set; }
+    public ObservableCollection<PowiadomienieItem> Powiadomienia = new ObservableCollection<PowiadomienieItem>();
 
     public PowiadomieniaPage()
     {
         InitializeComponent();
 
+        amountList.Text = Powiadomienia.Count.ToString();
         Powiadomienia = new ObservableCollection<PowiadomienieItem>
         {
             new() {
@@ -61,12 +63,18 @@ public partial class PowiadomieniaPage : ContentPage
 
     private void Edyt(object sender, EventArgs e)
     {
-       
+        var frame = sender as Frame;
+        var powiad = frame?.BindingContext as PowiadomienieItem;
+        var page = new PowiadomieniaFormPage();
+        
     }
 
     private void Usun(object sender, EventArgs e)
     {
-     
+        var frame = sender as Frame;
+        var powiad = frame?.BindingContext as PowiadomienieItem;
+        if (powiad == null) return;
+        Powiadomienia.Remove(powiad);
     }
 }
 
