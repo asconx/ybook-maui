@@ -19,7 +19,7 @@
                        Padding="6,2"
                        CornerRadius="10"
                        HasShadow="False">
-                    <Label Text="5" FontSize="12"/>
+                    <Label Text="5" FontSize="12" x:Name="amountList"/>
                 </Frame>
             </HorizontalStackLayout>
 
@@ -29,7 +29,8 @@
                     TextColor="White"
                     CornerRadius="20"
                     HeightRequest="36"
-                    Padding="16,0"/>
+                    Padding="16,0"
+                    Clicked="Dodaj"/>
         </Grid>
 
         <!-- LISTA -->
@@ -47,21 +48,20 @@
                         <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
 
                             <!-- IKONY -->
-                            <HorizontalStackLayout Spacing="8">
-                                <Frame BackgroundColor="#80CBC4"
+                            <VerticalStackLayout Spacing="8">
+                                <Button BackgroundColor="#80CBC4"
                                        Padding="8"
-                                       CornerRadius="20"
-                                       HasShadow="False">
-                                    <Label Text="✏️"/>
-                                </Frame>
+                                       CornerRadius="10"
+                                       Text="✏️"
+                                        Clicked="Edyt"/>
 
-                                <Frame BackgroundColor="#FFCC80"
+
+                                <Button BackgroundColor="#FFCC80"
                                        Padding="8"
-                                       CornerRadius="20"
-                                       HasShadow="False">
-                                    <Label Text="🗑"/>
-                                </Frame>
-                            </HorizontalStackLayout>
+                                       CornerRadius="10"
+                                       Text="🗑"
+                                       Clicked="Usun"/>
+                            </VerticalStackLayout>
 
                             <!-- NAZWA + OPIS -->
                             <VerticalStackLayout Grid.Column="1" Spacing="2">
@@ -83,22 +83,24 @@
                                                  HorizontalOptions="End">
 
                                 <Button Text="Powiadomienie mailowe"
-                                        FontSize="11"
+                                        FontSize="13"
                                         CornerRadius="20"
-                                        Padding="10,4"
+                                        Padding="10"
                                         BorderColor="#4FC3F7"
                                         BorderWidth="1"
                                         BackgroundColor="Transparent"
-                                        TextColor="#4FC3F7"/>
+                                        TextColor="#4FC3F7"
+                                        IsVisible="{Binding PowMail}"/>
 
                                 <Button Text="Powiadomienie SMS"
-                                        FontSize="11"
+                                        FontSize="13"
                                         CornerRadius="20"
-                                        Padding="10,4"
+                                        Padding="10"
                                         BorderColor="#4FC3F7"
                                         BorderWidth="1"
                                         BackgroundColor="Transparent"
-                                        TextColor="#4FC3F7"/>
+                                        TextColor="#4FC3F7"
+                                        IsVisible="{Binding PowSMS}"/>
                             </VerticalStackLayout>
 
                         </Grid>

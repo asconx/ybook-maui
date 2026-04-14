@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Ustawienia.PowiadomieniaFormPage"
+             Title="Nowe powiadomienie">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+
+            <!-- NAZWA -->
+            <Label Text="Nazwa"/>
+            <Entry x:Name="NazwaEntry"/>
+
+            <!-- NOTATKA -->
+            <Label Text="Typ"/>
+            <Picker x:Name="TypPow" SelectedIndex="0">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String> -- Wybierz typ powiadomienia -- </x:String>
+                        <x:String>Rezerwacja wstępna z danymi do przelewu</x:String>
+                        <x:String>Rezerwacja wstępna bez przedpłaty</x:String>
+                        <x:String>Rezerwacja wstępna bez kalkulacji</x:String>
+                        <x:String>Potwierdzenie wpłaty</x:String>
+                        <x:String>Ofterta z przekierowaniem do płatności</x:String>
+                        <x:String>Rozliczenie rezerwacji</x:String>
+                        <x:String>Anulowanie rezerwacji</x:String>
+                        <x:String>Korekta rezerwacji</x:String>
+                        <x:String>Powiadomienie niestandardowe</x:String>
+                        <x:String>Przypomnienie</x:String>
+                        <x:String>Ankieta ewaluacyjna</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+                <!-- CHECKBOX -->
+            <HorizontalStackLayout>
+                <CheckBox x:Name="PowiMail"/>
+                <Label Text="Powiadomienie mail" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <CheckBox x:Name="PowiSMS"/>
+                <Label Text="Powiadomienie SMS" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Label Text="Niestandardowa treść powiadomienia"  VerticalOptions="Center" Padding="0,0,10,0"/>
+                <Switch x:Name="NiestanPow" Toggled="ShowEntry" IsToggled="False"/>
+            </HorizontalStackLayout>
+
+            <Entry x:Name="PowNiest" IsVisible="False" />
+
+            <!-- BUTTONY -->
+            <Button Text="Zapisz"
+                    BackgroundColor="#1565C0"
+                    TextColor="White"
+                    Clicked="OnSaveClicked"/>
+
+            <Button Text="Anuluj"
+                    Clicked="OnCancelClicked"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
