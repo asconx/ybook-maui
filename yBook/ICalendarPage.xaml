@@ -17,13 +17,41 @@
         <!-- TOP BAR -->
         <HorizontalStackLayout Grid.Row="1" Padding="12" Spacing="12">
             <Label Text="Synchronizacje"
+                   FontSize="15"
                    FontAttributes="Bold"
-                   VerticalOptions="Center"/>
-            <Label x:Name="LblCount"
-                   Text="0"
-                   VerticalOptions="Center"/>
-            <Button Text="Dodaj"
-                    Clicked="OnDodajClicked"/>
+                   VerticalOptions="Center"
+                   TextColor="{AppThemeBinding Light=#1A1A1A, Dark=#ECEFF1}"/>
+
+            <Border
+                StrokeShape="RoundRectangle 10"
+                BackgroundColor="#F5A623"
+                Stroke="Transparent"
+                Padding="6,2"
+                VerticalOptions="Center">
+                
+                 <Label
+                      x:Name="LblCount"
+                      Text="0"
+                      VerticalOptions="Center"/>
+            </Border>
+
+            <Border StrokeShape="RoundRectangle 20"
+                    BackgroundColor="{AppThemeBinding Light=#1A1A1A, Dark=#ECEFF1}"
+                    Stroke="Transparent"
+                    Padding="18,8"
+                    VerticalOptions="Center">
+                <Label Text="dodaj"
+                     FontSize="13"
+                     FontAttributes="Bold"
+                     TextColor="{AppThemeBinding Light=White, Dark=#1A1A1A}"/>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnDodajClicked"/>
+                </Border.GestureRecognizers>
+            </Border>
+            <Entry
+                WidthRequest="100"
+                Placeholder="Szukaj"
+                TextChanged="OnSzukajChange"/>
         </HorizontalStackLayout>
 
         <!-- SCROLL -->
@@ -31,36 +59,33 @@
                     Orientation="Horizontal"
                     HorizontalScrollBarVisibility="Always">
 
-            <!-- FULL WIDTH -->
-            <VerticalStackLayout HorizontalOptions="FillAndExpand"
-                                 MinimumWidthRequest="800"
+            <VerticalStackLayout MinimumWidthRequest="900"
                                  Spacing="0">
 
                 <!-- HEADER -->
                 <Grid Padding="10"
-                      ColumnDefinitions="Auto,*,*,*,*"
+                      ColumnDefinitions="150,*,*,*,3*"
                       BackgroundColor="{AppThemeBinding Light=#E0E0E0, Dark=#2A2A2A}">
+
                     <Label Text="Akcje" FontAttributes="Bold"/>
-                    <Label Grid.Column="1" Text="Nazwa" FontAttributes="Bold"/>
-                    <Label Grid.Column="2" Text="Export link" FontAttributes="Bold"/>
-                    <Label Grid.Column="3" Text="Import 1" FontAttributes="Bold"/>
-                    <Label Grid.Column="4" Text="Import 2" FontAttributes="Bold"/>
+                    <Label Grid.Column="1" Text="Kwatera" FontAttributes="Bold"/>
+                    <Label Grid.Column="2" Text="Portal" FontAttributes="Bold"/>
+                    <Label Grid.Column="3" Text="Export link" FontAttributes="Bold"/>
+                    <Label Grid.Column="4" Text="Import link" FontAttributes="Bold"/>
                 </Grid>
 
                 <!-- LISTA -->
-                <CollectionView ItemsSource="{Binding Items}"
-                                VerticalOptions="FillAndExpand">
+                <CollectionView ItemsSource="{Binding Items}">
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Padding="10"
-                                  ColumnDefinitions="Auto,*,*,*,*"
+                                  ColumnDefinitions="150,*,*,*,3*"
                                   BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
                                 <!-- AKCJE -->
-                                <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
-                                    <Button Text="✏"
-                                            Clicked="OnEditClicked"/>
+                                <HorizontalStackLayout Spacing="5">
+                                    <Button Text="✏" Clicked="OnEditClicked"/>
                                     <Button Text="🗑"
                                             Clicked="OnDeleteClicked"
                                             BackgroundColor="#f44336"
@@ -68,22 +93,24 @@
                                 </HorizontalStackLayout>
 
                                 <!-- DANE -->
-                                <Label Grid.Column="1"
-                                       Text="{Binding Name}"
-                                       VerticalOptions="Center"/>
 
+
+                                <Label Grid.Column="1"
+                                       Text="{Binding Kwatera}"
+                                       VerticalOptions="Center"/>
                                 <Label Grid.Column="2"
-                                       Text="{Binding ExportLink}"
-                                       LineBreakMode="TailTruncation"
+                                       Text="{Binding Portal}"
                                        VerticalOptions="Center"/>
 
                                 <Label Grid.Column="3"
-                                       Text="{Binding Import1}"
-                                       VerticalOptions="Center"/>
+                                       Text="{Binding ExportLink}"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="1"/>
 
                                 <Label Grid.Column="4"
-                                       Text="{Binding Import2}"
-                                       VerticalOptions="Center"/>
+                                       Text="{Binding ImportLink}"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="1"/>
 
                             </Grid>
                         </DataTemplate>

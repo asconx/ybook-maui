@@ -17,10 +17,10 @@ namespace yBook.Views.ICalendar
             {
                 editingItem = item;
 
-                NameEntry.Text = item.Name;
+                PortalEntry.Text = item.Portal;
+                KwateraEntry.Text = item.Kwatera;
                 ExportLinkEntry.Text = item.ExportLink;
-                Import1Entry.Text = item.Import1;
-                Import2Entry.Text = item.Import2;
+                ImportLinkEntry.Text = item.ImportLink;
             }
         }
 
@@ -39,7 +39,7 @@ namespace yBook.Views.ICalendar
             if (string.IsNullOrWhiteSpace(ExportLinkEntry.Text))
             {
                 ExportLinkEntry.Text =
-                    $"https://api.ybook.com/export/{safeName}_{Guid.NewGuid()}";
+                    $"https://api.ybook.pl/ical{safeName}_{Guid.NewGuid()}";
             }
         }
 
@@ -47,10 +47,10 @@ namespace yBook.Views.ICalendar
         {
             var item = editingItem ?? new CalendarItem();
 
-            item.Name = NameEntry.Text;
+            item.Portal = PortalEntry.Text;
+            item.Kwatera = KwateraEntry.Text;
             item.ExportLink = ExportLinkEntry.Text;
-            item.Import1 = Import1Entry.Text;
-            item.Import2 = Import2Entry.Text;
+            item.ImportLink = ImportLinkEntry.Text;
 
             tcs.SetResult(item);
 

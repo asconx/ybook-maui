@@ -1,11 +1,20 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace yBook.Views.ICalendar
 {
     public partial class ICalendarPage : ContentPage
     {
+        
         public ObservableCollection<CalendarItem> Items { get; set; } = new();
+
+       
+        private List<CalendarItem> AllItems = new();
+
+        private CancellationTokenSource _cts;
 
         public ICalendarPage()
         {
@@ -23,11 +32,10 @@ namespace yBook.Views.ICalendar
 
             if (result != null)
             {
-                Items.Add(result);
-                LblCount.Text = Items.Count.ToString();
+                AllItems.Add(result);
+                FilterItems("");
             }
         }
-
         private async void OnEditClicked(object sender, EventArgs e)
         {
             var button = sender as Button;
@@ -43,12 +51,13 @@ namespace yBook.Views.ICalendar
 
             if (result != null)
             {
-                var index = Items.IndexOf(item);
+                var index = AllItems.IndexOf(item);
+                AllItems[index] = result;
 
-                Items.RemoveAt(index);
-                Items.Insert(index, result);
+                FilterItems("");
             }
         }
+
 
         private void OnDeleteClicked(object sender, EventArgs e)
         {
@@ -57,16 +66,51 @@ namespace yBook.Views.ICalendar
 
             if (item == null) return;
 
-            Items.Remove(item);
+            AllItems.Remove(item);
+            FilterItems("");
+        }
+
+        private async void OnSzukajChange(object sender, TextChangedEventArgs e)
+        {
+            _cts?.Cancel();
+            _cts = new CancellationTokenSource();
+
+            try
+            {
+                await Task.Delay(300, _cts.Token);
+                var query = e.NewTextValue?.ToLower() ?? "";
+                FilterItems(query);
+            }
+            catch
+            {
+                // anulowane
+            }
+        }
+
+
+        private void FilterItems(string query)
+        {
+            Items.Clear();
+
+            var filtered = AllItems.Where(x =>
+                (x.Portal?.ToLower().Contains(query) ?? false) ||
+                (x.Kwatera?.ToLower().Contains(query) ?? false) ||
+                (x.ExportLink?.ToLower().Contains(query) ?? false) ||
+                (x.ImportLink?.ToLower().Contains(query) ?? false)
+            );
+
+            foreach (var item in filtered)
+                Items.Add(item);
+
             LblCount.Text = Items.Count.ToString();
         }
     }
 
     public class CalendarItem
     {
-        public string Name { get; set; }
+        public string Portal { get; set; }
+        public string Kwatera { get; set; }
         public string ExportLink { get; set; }
-        public string Import1 { get; set; }
-        public string Import2 { get; set; }
+        public string ImportLink { get; set; }
     }
 }
