@@ -9,32 +9,34 @@ namespace yBook.Views.ICalendar
 
         private CalendarItem editingItem;
 
+        public List<string> Kwatera = new List<string>{"Mały Dom","Duży Dom","Apartament" };
+
         public AddCalendarPopup(CalendarItem item = null)
         {
             InitializeComponent();
-
+            KwateraEntry.ItemsSource = Kwatera;
             if (item != null)
             {
                 editingItem = item;
 
                 PortalEntry.Text = item.Portal;
-                KwateraEntry.Text = item.Kwatera;
+                KwateraEntry.SelectedItem = item.Kwatera;
                 ExportLinkEntry.Text = item.ExportLink;
                 ImportLinkEntry.Text = item.ImportLink;
             }
         }
 
-        private void OnNameChanged(object sender, TextChangedEventArgs e)
+        private void OnKwateraChanged(object sender, EventArgs e)
         {
-            var name = e.NewTextValue;
+            var selected = KwateraEntry.SelectedItem?.ToString();
 
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(selected))
             {
                 ExportLinkEntry.Text = string.Empty;
                 return;
             }
 
-            var safeName = name.Replace(" ", "_").ToLower();
+            var safeName = selected.Replace(" ", "_").ToLower();
 
             if (string.IsNullOrWhiteSpace(ExportLinkEntry.Text))
             {
@@ -48,7 +50,7 @@ namespace yBook.Views.ICalendar
             var item = editingItem ?? new CalendarItem();
 
             item.Portal = PortalEntry.Text;
-            item.Kwatera = KwateraEntry.Text;
+            item.Kwatera = KwateraEntry.SelectedItem?.ToString();
             item.ExportLink = ExportLinkEntry.Text;
             item.ImportLink = ImportLinkEntry.Text;
 

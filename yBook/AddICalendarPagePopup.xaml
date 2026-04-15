@@ -12,9 +12,10 @@
 
             <VerticalStackLayout Spacing="10">
 
-                <Entry Placeholder="Kwatera"
+                <Picker
+                       ItemsSource="{Binding Kwatera}"
                        x:Name="KwateraEntry"
-                       TextChanged="OnNameChanged"/>
+                       SelectedIndexChanged="OnKwateraChanged"/>
 
                 <Entry Placeholder="Portal"
                        x:Name="PortalEntry"/>
