@@ -50,27 +50,27 @@ namespace yBook
             IsBusy = true;
             try
             {
-                // Pobierz serwisy z DI przez MauiContext (bez u¿ycia Application.Current.Services)
-                var services = Application.Current?.Handler?.MauiContext?.Services;
+                // Pobierz serwisy z DI
+                var services = IPlatformApplication.Current?.Services;
                 var auth = services?.GetService<IAuthService>();
                 var http = services?.GetService<HttpClient>() ?? new HttpClient();
 
-                // Przywróæ/zweryfikuj sesjê jeœli mamy AuthService
+                // PrzywrÃ³Ã¦/zweryfikuj sesjÃª jeÅ“li mamy AuthService
                 if (auth is not null)
                 {
-                    // IsAuthenticatedAsync ustawi header w AuthService._http jeœli token w SecureStorage jest wa¿ny
+                    // IsAuthenticatedAsync ustawi header w AuthService._http jeÅ“li token w SecureStorage jest waÂ¿ny
                     var isAuth = await auth.IsAuthenticatedAsync();
                     var token = await auth.GetTokenAsync();
                     System.Diagnostics.Debug.WriteLine($"[Kasa] IsAuthenticated: {isAuth}, token present: {!string.IsNullOrEmpty(token)}");
 
-                    // Na wszelki wypadek — pobierz token i ustaw header w http (jeœli header dalej nie istnieje)
+                    // Na wszelki wypadek â€” pobierz token i ustaw header w http (jeÅ“li header dalej nie istnieje)
                     if (!string.IsNullOrEmpty(token) && http.DefaultRequestHeaders.Authorization == null)
                     {
                         http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                     }
                 }
 
-                // Wykonaj ¿¹danie korzystaj¹c z HttpClient z DI (powinien mieæ nag³ówek jeœli u¿ytkownik jest zalogowany)
+                // Wykonaj Â¿Â¹danie korzystajÂ¹c z HttpClient z DI (powinien mieÃ¦ nagÂ³Ã³wek jeÅ“li uÂ¿ytkownik jest zalogowany)
                 var json = await http.GetStringAsync(HistoryUrl);
 
                 var options = new JsonSerializerOptions
@@ -88,11 +88,11 @@ namespace yBook
             }
             catch (HttpRequestException httpEx)
             {
-                await DisplayAlert("B³¹d sieci", $"B³¹d po³¹czenia: {httpEx.Message}", "OK");
+                await DisplayAlert("BÂ³Â¹d sieci", $"BÂ³Â¹d poÂ³Â¹czenia: {httpEx.Message}", "OK");
             }
             catch (Exception ex)
             {
-                await DisplayAlert("B³¹d", $"Nie uda³o siê pobraæ historii: {ex.Message}", "OK");
+                await DisplayAlert("BÂ³Â¹d", $"Nie udaÂ³o siÃª pobraÃ¦ historii: {ex.Message}", "OK");
             }
             finally
             {
@@ -102,12 +102,12 @@ namespace yBook
 
         void OnShowDetailedReport(CashierShift shift)
         {
-            _ = DisplayAlert("Raport", $"Szczegó³y zmiany:\nStart: {shift?.StartDateStr}\nKoniec: {shift?.FinishDateStr}\nGotówka: {shift?.BalanceCashStr}", "OK");
+            _ = DisplayAlert("Raport", $"SzczegÃ³Â³y zmiany:\nStart: {shift?.StartDateStr}\nKoniec: {shift?.FinishDateStr}\nGotÃ³wka: {shift?.BalanceCashStr}", "OK");
         }
 
         void OnFinishShiftClicked(object sender, EventArgs e)
         {
-            _ = DisplayAlert("Zakoñcz", "Zakoñcz zmianê — funkcja do zaimplementowania.", "OK");
+            _ = DisplayAlert("ZakoÃ±cz", "ZakoÃ±cz zmianÃª â€” funkcja do zaimplementowania.", "OK");
         }
 
         void OnPageSizeChanged(object sender, EventArgs e)

@@ -31,7 +31,7 @@ namespace yBook
             switch (page)
             {
                 case "Recepcja":
-                    await Shell.Current.GoToAsync("///Recepcja");  // z /// - jak było
+                    await Shell.Current.GoToAsync("Recepcja");
                     break;
 
                 case "RejestrPlatnosci":

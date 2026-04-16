@@ -160,7 +160,7 @@ namespace yBook.Views.Recepcja
 
             var lblNoci = new Label
             {
-                Text = $"{rez.LiczbaNocy} noce",
+                Text = $"{rez.LiczbaNoci} noce",
                 FontSize = 11,
                 TextColor = Color.FromArgb("#78909C")
             };
