@@ -61,8 +61,8 @@ namespace yBook.Controls
         {
             if (ShowBack)
             {
-                // Wróć do poprzedniej strony w stosie Shell
-                await Shell.Current.GoToAsync("..");
+                // Wróć do MainPage zamiast ".."
+                await Shell.Current.GoToAsync("///MainPage");
             }
             else
             {
