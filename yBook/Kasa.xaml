@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:yBook.Models;assembly=yBook"
              x:Class="yBook.Kasa"
+             x:Name="ThisPage"
              BackgroundColor="#F1F6F7"
              Padding="16">
 
@@ -16,15 +18,15 @@
           <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <Label Text="08:45"
+        <Label Text="{Binding CurrentStartTime, StringFormat='{0:HH:mm}'}"
                FontAttributes="Bold"
                FontSize="24"
                TextColor="#111"
                VerticalOptions="Center"
                Grid.Column="0" />
 
-        <Label Text="Czas rozpoczęcia zmiany." 
-               TextColor="#333" 
+        <Label Text="Czas rozpoczęcia zmiany."
+               TextColor="#333"
                VerticalOptions="Center"
                Grid.Column="1"
                Margin="12,0" />
@@ -36,7 +38,8 @@
                 CornerRadius="20"
                 HorizontalOptions="End"
                 VerticalOptions="Center"
-                Grid.Column="2" />
+                Grid.Column="2"
+                Clicked="OnFinishShiftClicked" />
       </Grid>
     </Frame>
 
@@ -52,6 +55,7 @@
 
         <StackLayout Padding="12">
           <HorizontalStackLayout Spacing="12">
+            <!-- global actions can remain (optional) -->
             <Button Text="raport szczegółowy"
                     BackgroundColor="#F8E3E1"
                     TextColor="#333"
@@ -85,36 +89,57 @@
 
         <BoxView HeightRequest="1" Color="#EEE" />
 
-        <!-- Example data row -->
-        <Grid Padding="12" ColumnSpacing="8">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-          </Grid.ColumnDefinitions>
+        <!-- Collection of history items -->
+        <CollectionView ItemsSource="{Binding Shifts}" SelectionMode="None">
+          <CollectionView.ItemTemplate>
+            <DataTemplate x:DataType="models:CashierShift">
+              <Grid Padding="12" ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*" />
+                  <ColumnDefinition Width="*" />
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-          <Label Text="2026-04-08 08:45:42" Grid.Column="0" HorizontalOptions="Start" />
-          <Label Text="-" Grid.Column="1" HorizontalOptions="Start" />
-          <Label Text="0.00" Grid.Column="2" HorizontalOptions="End" />
-          <Label Text="0.00" Grid.Column="3" HorizontalOptions="End" />
-        </Grid>
+                <StackLayout Orientation="Horizontal" Grid.Column="0" Spacing="8">
+                  <Button Text="raport szczegółowy" 
+                          BackgroundColor="#F8E3E1" 
+                          TextColor="#333" 
+                          CornerRadius="20" 
+                          Padding="12,6"
+                          Command="{Binding Source={x:Reference ThisPage}, Path=BindingContext.ShowDetailedReportCommand}"
+                          CommandParameter="{Binding .}" />
+                </StackLayout>
+
+                <Label Text="{Binding StartDateStr}" Grid.Column="0" HorizontalOptions="Start" Margin="120,0,0,0" />
+
+                <Label Text="{Binding FinishDateStr}" Grid.Column="1" HorizontalOptions="Start" />
+
+                <Label Text="{Binding BalanceCashStr}" Grid.Column="2" HorizontalOptions="End" />
+
+                <Label Text="{Binding BalanceBankStr}" Grid.Column="3" HorizontalOptions="End" />
+              </Grid>
+            </DataTemplate>
+          </CollectionView.ItemTemplate>
+        </CollectionView>
 
         <BoxView HeightRequest="1" Color="#EEE" />
 
         <HorizontalStackLayout HorizontalOptions="End" Padding="12" Spacing="8">
           <Label Text="Wierszy na stronę:" VerticalOptions="Center" />
-          <Picker WidthRequest="60">
+          <Picker WidthRequest="60" SelectedIndexChanged="OnPageSizeChanged">
             <Picker.Items>
               <x:String>5</x:String>
               <x:String>10</x:String>
             </Picker.Items>
           </Picker>
-          <Label Text="1-1 z 1" VerticalOptions="Center" />
+          <Label Text="{Binding PagingText}" VerticalOptions="Center" />
         </HorizontalStackLayout>
 
       </VerticalStackLayout>
     </Frame>
+
+    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" VerticalOptions="Center" HorizontalOptions="Center" />
 
   </VerticalStackLayout>
 
