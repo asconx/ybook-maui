@@ -166,4 +166,19 @@ namespace yBook.Models
             new() { Id="4", NazwaPliku="wyciag_PKO_2024_03b.mt940", DataImportu=new(2024,3,19,8,55,0), Status=StatusImportu.Oczekuje,      LiczbaOper=8,  Dopasowano=0,  Suma=4_100.00m  },
         };
     }
+
+    // ─── Zmiana kasjera (Cashier Shift) ───────────────────────────────────────
+
+    public class CashierShift
+    {
+        public string       Id              { get; init; } = "";
+        public DateTime     StartDate       { get; init; }
+        public DateTime?    FinishDate      { get; init; }
+        public decimal      BalanceCash     { get; init; }
+        public bool         IsOpen          { get; init; }
+
+        public string StartDateStr  => StartDate.ToString("dd.MM.yyyy HH:mm");
+        public string FinishDateStr => FinishDate?.ToString("dd.MM.yyyy HH:mm") ?? "—";
+        public string BalanceCashStr => $"{BalanceCash:N2} zł";
+    }
 }

@@ -51,7 +51,7 @@ namespace yBook
             try
             {
                 // Pobierz serwisy z DI
-                var services = Application.Current?.Services;
+                var services = IPlatformApplication.Current?.Services;
                 var auth = services?.GetService<IAuthService>();
                 var http = services?.GetService<HttpClient>() ?? new HttpClient();
 
