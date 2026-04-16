@@ -30,6 +30,10 @@ namespace yBook
 
             switch (page)
             {
+                case "Recepcja":
+                    await Shell.Current.GoToAsync("Recepcja");
+                    break;
+
                 case "RejestrPlatnosci":
                 case "Dokumenty":
                 case "KontaFinansowe":
@@ -42,7 +46,7 @@ namespace yBook
                     break;
 
                 default:
-                    await DisplayAlert("yBook", $"Wkrótce: {page}", "OK");
+                    await DisplayAlert("yBook", $"Wkrotce: {page}", "OK");
                     break;
             }
         }

@@ -57,6 +57,9 @@ namespace yBook
             // Auth
             Routing.RegisterRoute("LoginPage", typeof(Views.Auth.LoginPage));
 
+            // Recepcja
+            Routing.RegisterRoute("Recepcja", typeof(Views.Recepcja.RecepcjaPage));
+
             // Finanse
             Routing.RegisterRoute("Dokumenty", typeof(DokumentyPage));
             Routing.RegisterRoute("KontaFinansowe", typeof(KontaFinansowePage));
@@ -89,6 +92,7 @@ namespace yBook
 
             // Użytkownicy
             Routing.RegisterRoute("UzytkownicyLista", typeof(Uzytkownicy1Page));
+            Routing.RegisterRoute(nameof(UzytkownicyIRolePage), typeof(UzytkownicyIRolePage));
 
             // Kalendarz
             Routing.RegisterRoute("KalendarzPage", typeof(Views.Kalendarz.KalendarzPage));

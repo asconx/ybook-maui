@@ -104,15 +104,7 @@ namespace yBook.Controls
         async void OnItemTapped(object? sender, TappedEventArgs e)
         {
             if (e.Parameter is not string page) return;
-
-            if (sender is View v)
-            {
-                await v.ScaleTo(0.96, 60);
-                await v.ScaleTo(1.00, 60);
-            }
-
             Close();
-            await Task.Delay(230);
 
             switch (page)
             {
@@ -192,10 +184,10 @@ namespace yBook.Controls
                 case "GrupoweSms":
                     await Shell.Current.Navigation.PushAsync(new GrupoweSmsPage());
                     break;
-                    //---Pakiety-------------------------------------------------
-                case "Pakiety":
-                    await Shell.Current.GoToAsync("PakietyPage");
+                case "Recepcja":
+                    await Shell.Current.GoToAsync("///Recepcja");
                     break;
+
 
                 // ── Logout ────────────────────────────────────────────────────
                 case "Logout":
