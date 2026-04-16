@@ -16,55 +16,46 @@ namespace yBook.Services
     {
         private readonly ApiClient _apiClient;
         private List<RezerwacjaOnline> _localCache = new();
-        private const string API_URL = "https://api.ybook.pl/activeReservation";
+        private const string API_URL = "/activeReservation";
 
-        public RezerwacjaService()
+        public RezerwacjaService(IAuthService authService = null)
         {
-            _apiClient = new ApiClient();
-            InitializeLocalData();
-        }
-
-        private void InitializeLocalData()
-        {
-            _localCache = new List<RezerwacjaOnline>
-            {
-                new RezerwacjaOnline
-                {
-                    Id = "6488",
-                    Imie = "booking2",
-                    Nazwisko = "CLOSED - Not available",
-                    TypPokoju = "Pokój Dwuosobowy typu Deluxe 8",
-                    DataPrzyjazdu = new DateTime(2026, 4, 16),
-                    DataWyjazdu = new DateTime(2026, 4, 26),
-                    LiczbaGosci = 0,
-                    Status = StatusRezerwacji.Oczekujaca,
-                    Email = "",
-                    Telefon = "111111111",
-                    Uwagi = "",
-                    Rozliczenie = "7 dni przed przyjazdem"
-                }
-            };
+            _apiClient = new ApiClient(authService);
         }
 
         private List<RezerwacjaOnline> MapApiResponseToRezerwacje(JsonElement response)
         {
             var rezerwacje = new List<RezerwacjaOnline>();
+            System.Diagnostics.Debug.WriteLine($"[RezerwacjaService] MapApiResponseToRezerwacje called");
+            System.Diagnostics.Debug.WriteLine($"[RezerwacjaService] Response type: {response.ValueKind}");
 
             try
             {
                 if (response.TryGetProperty("items", out var items) && items.ValueKind == JsonValueKind.Array)
                 {
+                    var count = items.GetArrayLength();
+                    System.Diagnostics.Debug.WriteLine($"[RezerwacjaService] Found 'items' array with {count} elements");
+
                     foreach (var item in items.EnumerateArray())
                     {
                         var rez = MapSingleItem(item);
                         if (rez != null)
+                        {
                             rezerwacje.Add(rez);
+                            System.Diagnostics.Debug.WriteLine($"[RezerwacjaService] Mapped reservation: {rez.Id} - {rez.Imie} {rez.Nazwisko}");
+                        }
                     }
+                    System.Diagnostics.Debug.WriteLine($"[RezerwacjaService] Total mapped: {rezerwacje.Count}");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"[RezerwacjaService] 'items' property not found or not array. Response keys: {string.Join(", ", response.EnumerateObject().Select(p => p.Name))}");
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Błąd mapowania API response: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[RezerwacjaService] ERROR in MapApiResponseToRezerwacje: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[RezerwacjaService] Stack: {ex.StackTrace}");
             }
 
             return rezerwacje;
@@ -74,34 +65,47 @@ namespace yBook.Services
         {
             try
             {
-                var reservation = item.GetProperty("reservation");
-                var room = item.GetProperty("room");
-                var client = item.GetProperty("client");
+                // Nowa struktura API - properties są bezpośrednio w item
                 var dateFrom = item.GetProperty("date_from").GetString();
                 var dateTo = item.GetProperty("date_to").GetString();
+                var booked_by_external_name = item.GetProperty("booked_by_external_name").GetString() ?? "";
 
-                var fullName = client.GetProperty("name").GetString() ?? "";
-                var nameParts = fullName.Split(' ');
+                // Optionally get nested objects if they exist
+                var room = item.TryGetProperty("room", out var roomElement) ? roomElement : default;
+                var client = item.TryGetProperty("client", out var clientElement) ? clientElement : default;
+                var reservation = item.TryGetProperty("reservation", out var reservationElement) ? reservationElement : default;
+
+                var nameParts = booked_by_external_name.Split(' ');
 
                 var rezerwacja = new RezerwacjaOnline
                 {
-                    Id = reservation.GetProperty("id").GetString() ?? "",
+                    Id = item.GetProperty("id").GetInt32().ToString(),
                     Imie = nameParts.Length > 0 ? nameParts[0] : "",
                     Nazwisko = nameParts.Length > 1 ? string.Join(" ", nameParts.Skip(1)) : "",
-                    TypPokoju = room.GetProperty("name").GetString() ?? "",
+                    TypPokoju = room.ValueKind != JsonValueKind.Undefined && room.TryGetProperty("name", out var roomName) 
+                        ? roomName.GetString() ?? "" 
+                        : "",
                     DataPrzyjazdu = DateTime.Parse(dateFrom ?? DateTime.Today.ToString()),
                     DataWyjazdu = DateTime.Parse(dateTo ?? DateTime.Today.ToString()),
-                    Telefon = client.GetProperty("phone").GetString() ?? "",
-                    Email = client.GetProperty("email").GetString() ?? "",
+                    Telefon = client.ValueKind != JsonValueKind.Undefined && client.TryGetProperty("phone", out var phone)
+                        ? phone.GetString() ?? ""
+                        : "",
+                    Email = client.ValueKind != JsonValueKind.Undefined && client.TryGetProperty("email", out var email)
+                        ? email.GetString() ?? ""
+                        : "",
                     Status = StatusRezerwacji.Potwierdzona,
-                    Uwagi = reservation.GetProperty("notes").GetString() ?? ""
+                    Uwagi = reservation.ValueKind != JsonValueKind.Undefined && reservation.TryGetProperty("notes", out var notes)
+                        ? notes.GetString() ?? ""
+                        : ""
                 };
 
+                System.Diagnostics.Debug.WriteLine($"[RezerwacjaService] Successfully mapped item {rezerwacja.Id}");
                 return rezerwacja;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Błąd mapowania elementu: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[RezerwacjaService] ERROR in MapSingleItem: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[RezerwacjaService] Item properties: {string.Join(", ", item.EnumerateObject().Select(p => p.Name))}");
                 return null;
             }
         }
