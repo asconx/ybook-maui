@@ -16,29 +16,45 @@ namespace yBook.Views.Recepcja
         public RecepcjaPage()
         {
             InitializeComponent();
-            _rezerwacjaService = new RezerwacjaService();
+            System.Diagnostics.Debug.WriteLine("[RecepcjaPage] Constructor called");
+
+            // Pobierz AuthService z DI container'a
+            var authService = IPlatformApplication.Current?.Services.GetService<IAuthService>();
+            _rezerwacjaService = new RezerwacjaService(authService);
+
             LoadRezerwacje();
         }
 
         private async void LoadRezerwacje()
         {
+            System.Diagnostics.Debug.WriteLine("[RecepcjaPage] LoadRezerwacje called");
             if (_isLoading) return;
-            
+
             _isLoading = true;
             try
             {
+                System.Diagnostics.Debug.WriteLine("[RecepcjaPage] Fetching zameldowane reservations...");
                 _rezerwacjeZameldowane = await _rezerwacjaService.GetRezerwacjeZameldowaneAsync();
+                System.Diagnostics.Debug.WriteLine($"[RecepcjaPage] Got {_rezerwacjeZameldowane.Count} zameldowane reservations");
+
+                System.Diagnostics.Debug.WriteLine("[RecepcjaPage] Fetching niezameldowane reservations...");
                 _rezerwacjeNiezameldowane = await _rezerwacjaService.GetRezerwacjeNiezameldowaneAsync();
+                System.Diagnostics.Debug.WriteLine($"[RecepcjaPage] Got {_rezerwacjeNiezameldowane.Count} niezameldowane reservations");
+
                 _rezerwacje = _rezerwacjeZameldowane;
+                System.Diagnostics.Debug.WriteLine($"[RecepcjaPage] Total reservations to display: {_rezerwacje.Count}");
 
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
+                    System.Diagnostics.Debug.WriteLine("[RecepcjaPage] Rendering on main thread...");
                     RenderRezerwacje();
                     UpdateTabColors();
                 });
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"[RecepcjaPage] ERROR: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[RecepcjaPage] Stack: {ex.StackTrace}");
                 await DisplayAlert("Blad", $"Nie udalo sie zaladowac rezerwacji: {ex.Message}", "OK");
             }
             finally
