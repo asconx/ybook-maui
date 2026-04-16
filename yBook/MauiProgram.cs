@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using yBook.Services;
 using yBook.ViewModels;
 using yBook.Views.Auth;
+using yBook.Views.Pakiety;
 using yBook.Views.Rabaty;
 using yBook.Views.Surveys;
 using yBook.Views.Ustawienia;
@@ -49,6 +50,7 @@ namespace yBook
             builder.Services.AddTransient<EditSurveyPage>();
             builder.Services.AddTransient<yBook.Views.Kalendarz.KalendarzPage>();
             builder.Services.AddTransient<GrupoweSmsPage>();
+            builder.Services.AddTransient<PakietyPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

@@ -1,18 +1,19 @@
+using yBook.Services;
 using yBook.Views.Blokady;
 using yBook.Views.Ceny;
-using yBook.Services;
 using yBook.Views.Finanse;
 using yBook.Views.ICalendar;
+using yBook.Views.Kalendarz;
 using yBook.Views.Klienci;
+using yBook.Views.Pakiety;
+using yBook.Views.Przyjazdy;
 using yBook.Views.Przyjazdy;
 using yBook.Views.Rabaty;
-using yBook.Views.Surveys;
-using yBook.Views.Ustawienia;
-using yBook.Views.Kalendarz;
-using yBook.Views.Uzytkownicy;
 using yBook.Views.Rabaty;
 using yBook.Views.Raporty;
-using yBook.Views.Przyjazdy;
+using yBook.Views.Surveys;
+using yBook.Views.Ustawienia;
+using yBook.Views.Uzytkownicy;
 
 namespace yBook
 {
@@ -65,9 +66,10 @@ namespace yBook
 			// ceny
 			Routing.RegisterRoute("UslugiOplaty", typeof(UslugiOplaty));
 			Routing.RegisterRoute("UslugiOplatyDodawanie", typeof(UslugiOplatyDodawanie)); //UslugiOplaty helper page
+            Routing.RegisterRoute("PakietyPage", typeof(PakietyPage));
 
-			// Inne
-			Routing.RegisterRoute("ICalendar", typeof(ICalendarPage));
+            // Inne
+            Routing.RegisterRoute("ICalendar", typeof(ICalendarPage));
             Routing.RegisterRoute("Cenniki", typeof(CennikPage));
             Routing.RegisterRoute("RabatyPage", typeof(RabatyPage));
             Routing.RegisterRoute("BlokadyPage", typeof(BlokadyPage));

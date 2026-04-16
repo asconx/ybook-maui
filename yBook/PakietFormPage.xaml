@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Pakiety.PakietFormPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#F4F6FA">
+
+    <ContentPage.Resources>
+
+        <!-- ── Sekcja karta ── -->
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 14"/>
+            <Setter Property="Stroke" Value="#E8ECF4"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="0,0,0,14"/>
+        </Style>
+
+        <!-- ── Nagłówek sekcji ── -->
+        <Style x:Key="SectionTitle" TargetType="Label">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="TextColor" Value="#1A237E"/>
+            <Setter Property="Margin" Value="0,0,0,14"/>
+        </Style>
+
+        <!-- ── Label pola ── -->
+        <Style x:Key="FieldLabel" TargetType="Label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="TextColor" Value="#607D8B"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <!-- ── Input ── -->
+        <Style x:Key="InputBorder" TargetType="Border">
+            <Setter Property="Stroke" Value="#DDE3EF"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 10"/>
+            <Setter Property="BackgroundColor" Value="#FAFBFE"/>
+            <Setter Property="Padding" Value="4,0"/>
+            <Setter Property="Margin" Value="0,0,0,14"/>
+        </Style>
+
+        <Style x:Key="InputEntry" TargetType="Entry">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextColor" Value="#1C1C1E"/>
+            <Setter Property="PlaceholderColor" Value="#BEC8D8"/>
+            <Setter Property="HeightRequest" Value="44"/>
+        </Style>
+
+        <Style x:Key="InputEditor" TargetType="Editor">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextColor" Value="#1C1C1E"/>
+            <Setter Property="PlaceholderColor" Value="#BEC8D8"/>
+        </Style>
+
+        <!-- ── Przycisk główny ── -->
+        <Style x:Key="BtnPrimary" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#1A237E"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 12"/>
+            <Setter Property="Stroke" Value="Transparent"/>
+            <Setter Property="Padding" Value="0,16"/>
+        </Style>
+
+        <!-- ── Przycisk drugorzędny ── -->
+        <Style x:Key="BtnSecondary" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="Transparent"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 12"/>
+            <Setter Property="Stroke" Value="#DDE3EF"/>
+            <Setter Property="Padding" Value="0,16"/>
+        </Style>
+
+        <!-- ── Tag/chip ── -->
+        <Style x:Key="Chip" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#EEF2FF"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 20"/>
+            <Setter Property="Stroke" Value="#C5CAE9"/>
+            <Setter Property="Padding" Value="12,6"/>
+        </Style>
+
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="60,*">
+
+        <!-- ══════════════════════════════════════════ -->
+        <!--                  HEADER                    -->
+        <!-- ══════════════════════════════════════════ -->
+        <Grid Grid.Row="0"
+              BackgroundColor="White"
+              Padding="16,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="44"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="44"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Wróć -->
+            <Border Grid.Column="0"
+                    BackgroundColor="#F4F6FA"
+                    StrokeShape="RoundRectangle 10"
+                    Stroke="Transparent"
+                    Padding="10,8"
+                    VerticalOptions="Center">
+                <Label Text="←" FontSize="18" TextColor="#1A237E" VerticalOptions="Center"/>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnAnulujClicked"/>
+                </Border.GestureRecognizers>
+            </Border>
+
+            <!-- Tytuł -->
+            <Label Grid.Column="1"
+                   x:Name="LblTytul"
+                   Text="Nowy pakiet"
+                   FontSize="17"
+                   FontAttributes="Bold"
+                   TextColor="#1C1C1E"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+
+        </Grid>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!--                FORMULARZ                   -->
+        <!-- ══════════════════════════════════════════ -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16,16,16,32" Spacing="0">
+
+                <!-- ─────────────────────────────── -->
+                <!--   SEKCJA 1: Podstawowe dane      -->
+                <!-- ─────────────────────────────── -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout>
+
+                        <HorizontalStackLayout Spacing="8" Margin="0,0,0,14">
+                            <Label Text="📋" FontSize="16" VerticalOptions="Center"/>
+                            <Label Text="PODSTAWOWE DANE" Style="{StaticResource SectionTitle}" Margin="0"/>
+                        </HorizontalStackLayout>
+
+                        <!-- Nazwa -->
+                        <Label Text="Nazwa pakietu *" Style="{StaticResource FieldLabel}"/>
+                        <Border Style="{StaticResource InputBorder}">
+                            <Entry x:Name="NazwaEntry"
+                                   Style="{StaticResource InputEntry}"
+                                   Placeholder="np. Pakiet romantyczny"/>
+                        </Border>
+
+                        <!-- Opis krótki -->
+                        <Label Text="Krótki opis" Style="{StaticResource FieldLabel}"/>
+                        <Border Style="{StaticResource InputBorder}">
+                            <Entry x:Name="KrotkyOpisEntry"
+                                   Style="{StaticResource InputEntry}"
+                                   Placeholder="np. 2 noce + kolacja dla dwojga"/>
+                        </Border>
+
+                        <!-- Pełny opis -->
+                        <Label Text="Pełny opis" Style="{StaticResource FieldLabel}"/>
+                        <Border Stroke="#DDE3EF"
+                                StrokeShape="RoundRectangle 10"
+                                BackgroundColor="#FAFBFE"
+                                Padding="4,4"
+                                Margin="0,0,0,14">
+                            <Editor x:Name="OpisEditor"
+                                    Style="{StaticResource InputEditor}"
+                                    Placeholder="Szczegółowy opis oferty pakietowej..."
+                                    HeightRequest="90"
+                                    AutoSize="TextChanges"/>
+                        </Border>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ─────────────────────────────── -->
+                <!--   SEKCJA 2: Zdjęcie             -->
+                <!-- ─────────────────────────────── -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout>
+
+                        <HorizontalStackLayout Spacing="8" Margin="0,0,0,14">
+                            <Label Text="🖼️" FontSize="16" VerticalOptions="Center"/>
+                            <Label Text="ZDJĘCIE" Style="{StaticResource SectionTitle}" Margin="0"/>
+                        </HorizontalStackLayout>
+
+                        <!-- Podgląd -->
+                        <Border x:Name="ZdjecieBorder"
+                                BackgroundColor="#F0F4FF"
+                                StrokeShape="RoundRectangle 12"
+                                Stroke="#DDE3EF"
+                                HeightRequest="160"
+                                Margin="0,0,0,12">
+                            <Grid>
+                                <!-- Placeholder -->
+                                <VerticalStackLayout x:Name="ZdjeciePlaceholder"
+                                                     HorizontalOptions="Center"
+                                                     VerticalOptions="Center"
+                                                     Spacing="6">
+                                    <Label Text="📷" FontSize="36" HorizontalOptions="Center"/>
+                                    <Label Text="Dodaj zdjęcie pakietu"
+                                           FontSize="13"
+                                           TextColor="#90A4AE"
+                                           HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+
+                                <!-- Podgląd zdjęcia po wybraniu -->
+                                <Image x:Name="ZdjeciePreview"
+                                       IsVisible="False"
+                                       Aspect="AspectFill"/>
+                            </Grid>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnWybierzZdjecieClicked"/>
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <!-- URL zdjęcia -->
+                        <Label Text="Lub podaj URL zdjęcia" Style="{StaticResource FieldLabel}"/>
+                        <Border Style="{StaticResource InputBorder}">
+                            <Entry x:Name="ZdjecieUrlEntry"
+                                   Style="{StaticResource InputEntry}"
+                                   Placeholder="https://..."
+                                   TextChanged="OnZdjecieUrlChanged"
+                                   Keyboard="Url"/>
+                        </Border>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ─────────────────────────────── -->
+                <!--   SEKCJA 3: Cena i płatności    -->
+                <!-- ─────────────────────────────── -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout>
+
+                        <HorizontalStackLayout Spacing="8" Margin="0,0,0,14">
+                            <Label Text="💰" FontSize="16" VerticalOptions="Center"/>
+                            <Label Text="CENA I PŁATNOŚCI" Style="{StaticResource SectionTitle}" Margin="0"/>
+                        </HorizontalStackLayout>
+
+                        <!-- Cena -->
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" Margin="0,0,0,14">
+                            <VerticalStackLayout Grid.Column="0">
+                                <Label Text="Cena pakietu (zł) *" Style="{StaticResource FieldLabel}"/>
+                                <Border Style="{StaticResource InputBorder}" Margin="0">
+                                    <Entry x:Name="CenaEntry"
+                                           Style="{StaticResource InputEntry}"
+                                           Placeholder="0.00"
+                                           Keyboard="Numeric"/>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" WidthRequest="110">
+                                <Label Text="Waluta" Style="{StaticResource FieldLabel}"/>
+                                <Border Stroke="#DDE3EF"
+                                        StrokeShape="RoundRectangle 10"
+                                        BackgroundColor="#FAFBFE"
+                                        Padding="4,0"
+                                        Margin="0">
+                                    <Picker x:Name="WalutaPicker"
+                                            FontSize="14"
+                                            TextColor="#1C1C1E"
+                                            HeightRequest="44">
+                                        <Picker.Items>
+                                            <x:String>PLN</x:String>
+                                            <x:String>EUR</x:String>
+                                            <x:String>USD</x:String>
+                                            <x:String>GBP</x:String>
+                                            <x:String>CZK</x:String>
+                                        </Picker.Items>
+                                    </Picker>
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- Typ ceny -->
+                        <Label Text="Typ ceny" Style="{StaticResource FieldLabel}"/>
+                        <Border Stroke="#DDE3EF"
+                                StrokeShape="RoundRectangle 10"
+                                BackgroundColor="#FAFBFE"
+                                Padding="4,0"
+                                Margin="0,0,0,14">
+                            <Picker x:Name="TypCenyPicker"
+                                    FontSize="14"
+                                    TextColor="#1C1C1E"
+                                    HeightRequest="44">
+                                <Picker.Items>
+                                    <x:String>Za pakiet (cena całkowita)</x:String>
+                                    <x:String>Za osobę</x:String>
+                                    <x:String>Za noc</x:String>
+                                    <x:String>Za osobę / noc</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+
+                        <!-- VAT -->
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,4">
+                            <Label Text="Stawka VAT" Style="{StaticResource FieldLabel}" VerticalOptions="Center"/>
+                            <Border Grid.Column="1"
+                                    Stroke="#DDE3EF"
+                                    StrokeShape="RoundRectangle 10"
+                                    BackgroundColor="#FAFBFE"
+                                    Padding="4,0"
+                                    WidthRequest="100">
+                                <Picker x:Name="VatPicker"
+                                        FontSize="14"
+                                        TextColor="#1C1C1E"
+                                        HeightRequest="40">
+                                    <Picker.Items>
+                                        <x:String>23%</x:String>
+                                        <x:String>8%</x:String>
+                                        <x:String>5%</x:String>
+                                        <x:String>0%</x:String>
+                                        <x:String>zw.</x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </Border>
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ─────────────────────────────── -->
+                <!--   SEKCJA 4: Zakres czasowy      -->
+                <!-- ─────────────────────────────── -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout>
+
+                        <HorizontalStackLayout Spacing="8" Margin="0,0,0,14">
+                            <Label Text="📅" FontSize="16" VerticalOptions="Center"/>
+                            <Label Text="ZAKRES CZASOWY" Style="{StaticResource SectionTitle}" Margin="0"/>
+                        </HorizontalStackLayout>
+
+                        <!-- Bezterminowy switch -->
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,14">
+                            <VerticalStackLayout Grid.Column="0">
+                                <Label Text="Pakiet bezterminowy"
+                                       FontSize="14"
+                                       TextColor="#1C1C1E"/>
+                                <Label Text="Brak dat ważności"
+                                       FontSize="11"
+                                       TextColor="#90A4AE"/>
+                            </VerticalStackLayout>
+                            <Switch x:Name="BezterminowySwitch"
+                                    Grid.Column="1"
+                                    OnColor="#1A237E"
+                                    Toggled="OnBezterminowyToggled"/>
+                        </Grid>
+
+                        <!-- Daty (ukrywane gdy bezterminowy) -->
+                        <VerticalStackLayout x:Name="DatyContainer">
+
+                            <Label Text="Data od *" Style="{StaticResource FieldLabel}"/>
+                            <Border Stroke="#DDE3EF"
+                                    StrokeShape="RoundRectangle 10"
+                                    BackgroundColor="#FAFBFE"
+                                    Padding="4,0"
+                                    Margin="0,0,0,14">
+                                <DatePicker x:Name="DataOdPicker"
+                                            FontSize="14"
+                                            TextColor="#1C1C1E"
+                                            HeightRequest="44"/>
+                            </Border>
+
+                            <Label Text="Data do *" Style="{StaticResource FieldLabel}"/>
+                            <Border Stroke="#DDE3EF"
+                                    StrokeShape="RoundRectangle 10"
+                                    BackgroundColor="#FAFBFE"
+                                    Padding="4,0"
+                                    Margin="0,0,0,14">
+                                <DatePicker x:Name="DataDoPicker"
+                                            FontSize="14"
+                                            TextColor="#1C1C1E"
+                                            HeightRequest="44"/>
+                            </Border>
+
+                        </VerticalStackLayout>
+
+                        <!-- Min / Maks noclegów -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0">
+                                <Label Text="Min. nocy" Style="{StaticResource FieldLabel}"/>
+                                <Border Style="{StaticResource InputBorder}" Margin="0">
+                                    <Entry x:Name="MinNocyEntry"
+                                           Style="{StaticResource InputEntry}"
+                                           Placeholder="1"
+                                           Keyboard="Numeric"/>
+                                </Border>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="Maks. nocy" Style="{StaticResource FieldLabel}"/>
+                                <Border Style="{StaticResource InputBorder}" Margin="0">
+                                    <Entry x:Name="MaxNocyEntry"
+                                           Style="{StaticResource InputEntry}"
+                                           Placeholder="np. 14"
+                                           Keyboard="Numeric"/>
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ─────────────────────────────── -->
+                <!--   SEKCJA 5: Zawartość pakietu   -->
+                <!-- ─────────────────────────────── -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout>
+
+                        <HorizontalStackLayout Spacing="8" Margin="0,0,0,14">
+                            <Label Text="🎁" FontSize="16" VerticalOptions="Center"/>
+                            <Label Text="ZAWARTOŚĆ PAKIETU" Style="{StaticResource SectionTitle}" Margin="0"/>
+                        </HorizontalStackLayout>
+
+                        <!-- Dynamiczna lista elementów -->
+                        <VerticalStackLayout x:Name="ElementyContainer" Spacing="8" Margin="0,0,0,12"/>
+
+                        <!-- Dodaj element -->
+                        <Border BackgroundColor="#EEF2FF"
+                                StrokeShape="RoundRectangle 10"
+                                Stroke="#C5CAE9"
+                                Padding="14,10">
+                            <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                                <Label Text="+" FontSize="16" TextColor="#1A237E" VerticalOptions="Center"/>
+                                <Label Text="Dodaj element pakietu"
+                                       FontSize="13"
+                                       TextColor="#1A237E"
+                                       VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnDodajElementClicked"/>
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ─────────────────────────────── -->
+                <!--   SEKCJA 6: Ustawienia online   -->
+                <!-- ─────────────────────────────── -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout>
+
+                        <HorizontalStackLayout Spacing="8" Margin="0,0,0,14">
+                            <Label Text="🌐" FontSize="16" VerticalOptions="Center"/>
+                            <Label Text="REZERWACJE ONLINE" Style="{StaticResource SectionTitle}" Margin="0"/>
+                        </HorizontalStackLayout>
+
+                        <!-- Widoczny online -->
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,12">
+                            <VerticalStackLayout Grid.Column="0">
+                                <Label Text="Widoczny w rezerwacjach online"
+                                       FontSize="14"
+                                       TextColor="#1C1C1E"/>
+                                <Label Text="Klienci zobaczą ten pakiet na stronie"
+                                       FontSize="11"
+                                       TextColor="#90A4AE"/>
+                            </VerticalStackLayout>
+                            <Switch x:Name="OnlineSwitch"
+                                    Grid.Column="1"
+                                    OnColor="#1A237E"/>
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="#F0F4FF" Margin="0,0,0,12"/>
+
+                        <!-- Limit rezerwacji -->
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,12">
+                            <VerticalStackLayout Grid.Column="0">
+                                <Label Text="Ogranicz liczbę rezerwacji"
+                                       FontSize="14"
+                                       TextColor="#1C1C1E"/>
+                                <Label Text="Maksymalna liczba pakietów do sprzedania"
+                                       FontSize="11"
+                                       TextColor="#90A4AE"/>
+                            </VerticalStackLayout>
+                            <Switch x:Name="LimitSwitch"
+                                    Grid.Column="1"
+                                    OnColor="#1A237E"
+                                    Toggled="OnLimitToggled"/>
+                        </Grid>
+
+                        <Border x:Name="LimitContainer"
+                                IsVisible="False"
+                                Style="{StaticResource InputBorder}">
+                            <Entry x:Name="LimitEntry"
+                                   Style="{StaticResource InputEntry}"
+                                   Placeholder="np. 50"
+                                   Keyboard="Numeric"/>
+                        </Border>
+
+                        <BoxView HeightRequest="1" Color="#F0F4FF" Margin="0,0,0,12"/>
+
+                        <!-- Opis dla klientów online -->
+                        <Label Text="Opis dla klientów (rezerwacje online)" Style="{StaticResource FieldLabel}"/>
+                        <Border Stroke="#DDE3EF"
+                                StrokeShape="RoundRectangle 10"
+                                BackgroundColor="#FAFBFE"
+                                Padding="4,4"
+                                Margin="0,0,0,4">
+                            <Editor x:Name="OpisOnlineEditor"
+                                    Style="{StaticResource InputEditor}"
+                                    Placeholder="Co klient powinien wiedzieć przed rezerwacją..."
+                                    HeightRequest="70"
+                                    AutoSize="TextChanges"/>
+                        </Border>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ─────────────────────────────── -->
+                <!--   SEKCJA 7: Dodatkowe opcje      -->
+                <!-- ─────────────────────────────── -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout>
+
+                        <HorizontalStackLayout Spacing="8" Margin="0,0,0,14">
+                            <Label Text="⚙️" FontSize="16" VerticalOptions="Center"/>
+                            <Label Text="DODATKOWE OPCJE" Style="{StaticResource SectionTitle}" Margin="0"/>
+                        </HorizontalStackLayout>
+
+                        <!-- Aktywny -->
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,12">
+                            <VerticalStackLayout Grid.Column="0">
+                                <Label Text="Pakiet aktywny"
+                                       FontSize="14"
+                                       TextColor="#1C1C1E"/>
+                                <Label Text="Nieaktywne pakiety nie są widoczne"
+                                       FontSize="11"
+                                       TextColor="#90A4AE"/>
+                            </VerticalStackLayout>
+                            <Switch x:Name="AktywnySwitch"
+                                    Grid.Column="1"
+                                    OnColor="#43A047"
+                                    IsToggled="True"/>
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="#F0F4FF" Margin="0,0,0,12"/>
+
+                        <!-- Pokoję / kwatery -->
+                        <Label Text="Przypisz do pokoi / kwater" Style="{StaticResource FieldLabel}"/>
+                        <Border Stroke="#DDE3EF"
+                                StrokeShape="RoundRectangle 10"
+                                BackgroundColor="#FAFBFE"
+                                Padding="4,0"
+                                Margin="0,0,0,14">
+                            <Picker x:Name="PokojePicker"
+                                    FontSize="14"
+                                    TextColor="#1C1C1E"
+                                    Title="Wybierz pokoje..."
+                                    HeightRequest="44"/>
+                        </Border>
+
+                        <!-- Tagi -->
+                        <Label Text="Tagi" Style="{StaticResource FieldLabel}"/>
+                        <HorizontalStackLayout x:Name="TagiContainer" Spacing="8" Margin="0,0,0,10">
+                            <Border Style="{StaticResource Chip}">
+                                <Label Text="🌹 Romantyczny" FontSize="12" TextColor="#3949AB"/>
+                            </Border>
+                            <Border Style="{StaticResource Chip}">
+                                <Label Text="👨‍👩‍👧 Rodzinny" FontSize="12" TextColor="#3949AB"/>
+                            </Border>
+                            <Border Style="{StaticResource Chip}">
+                                <Label Text="💼 Biznes" FontSize="12" TextColor="#3949AB"/>
+                            </Border>
+                        </HorizontalStackLayout>
+                        <Label Text="(edycja tagów — wkrótce)"
+                               FontSize="11"
+                               TextColor="#B0BEC5"
+                               Margin="0,0,0,4"/>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ─────────────────────────────── -->
+                <!--   PRZYCISKI AKCJI               -->
+                <!-- ─────────────────────────────── -->
+                <Border Style="{StaticResource BtnPrimary}">
+                    <Label Text="💾  Zapisz pakiet"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnZapiszClicked"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <Border Style="{StaticResource BtnSecondary}" Margin="0,8,0,0">
+                    <Label Text="Anuluj"
+                           FontSize="15"
+                           TextColor="#607D8B"
+                           HorizontalOptions="Center"/>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnAnulujClicked"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+</ContentPage>

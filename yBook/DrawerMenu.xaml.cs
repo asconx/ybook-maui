@@ -192,7 +192,10 @@ namespace yBook.Controls
                 case "GrupoweSms":
                     await Shell.Current.Navigation.PushAsync(new GrupoweSmsPage());
                     break;
-
+                    //---Pakiety-------------------------------------------------
+                case "Pakiety":
+                    await Shell.Current.GoToAsync("PakietyPage");
+                    break;
 
                 // ── Logout ────────────────────────────────────────────────────
                 case "Logout":
