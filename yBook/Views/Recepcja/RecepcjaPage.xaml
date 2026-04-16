@@ -61,13 +61,13 @@
                   Padding="16,12"
                   BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
 
-                <Border CornerRadius="20" Padding="14,8" BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2A2A2A}">
+                <Border CornerRadius="20" Padding="14,8" BackgroundColor="{AppThemeBinding Light:#F5F5F5, Dark:#2A2A2A}">
                     <Grid ColumnDefinitions="Auto,*">
                         <Label Grid.Column="0" Text="🔍" FontSize="16" VerticalOptions="Center" Margin="0,0,8,0"/>
                         <Entry Grid.Column="1"
                                x:Name="SearchEntry"
                                Placeholder="Szukaj po ID lub danych klienta"
-                               PlaceholderColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"
+                               PlaceholderColor="{AppThemeBinding Light:#9E9E9E, Dark:#616161}"
                                TextColor="{AppThemeBinding Light=#263238, Dark=#ECEFF1}"
                                BackgroundColor="Transparent"
                                FontSize="13"
@@ -76,30 +76,28 @@
                 </Border>
             </Grid>
 
-            <!-- LISTA REZERWACJI (SCROLL POZIOMY) -->
+            <!-- LISTA REZERWACJI (KAFELKI) -->
             <ScrollView Grid.Row="2"
                         Orientation="Vertical"
-                        BackgroundColor="{AppThemeBinding Light=#F4F6F9, Dark=#121212}">
-                <VerticalStackLayout Padding="16,0" Spacing="0">
+                        BackgroundColor="{AppThemeBinding Light:#F4F6F9, Dark:#121212}">
 
-                    <!-- Scroll poziomy kart -->
-                    <ScrollView Orientation="Horizontal" HeightRequest="240">
-                        <HorizontalStackLayout x:Name="RezerwacjeContainer"
-                                              Spacing="12"
-                                              Padding="0,12">
-                            <!-- Karty rezerwacji będą dodawane dynamicznie -->
-                        </HorizontalStackLayout>
-                    </ScrollView>
-
+                <FlexLayout x:Name="RezerwacjeContainer"
+                           Padding="16,12"
+                           Wrap="Wrap"
+                           JustifyContent="Start"
+                           AlignItems="Start"
+                           AlignContent="Start"
+                           Gap="12">
+                    
                     <!-- Komunikat gdy brak rezerwacji -->
                     <Label x:Name="LblBrakRezerwacji"
                            Text="Brak rezerwacji do wyświetlenia"
                            FontSize="14"
-                           TextColor="{AppThemeBinding Light=#9E9E9E, Dark=#616161}"
+                           TextColor="{AppThemeBinding Light:#9E9E9E, Dark:#616161}"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
                            Margin="0,24"/>
-                </VerticalStackLayout>
+                </FlexLayout>
             </ScrollView>
         </Grid>
     </Grid>

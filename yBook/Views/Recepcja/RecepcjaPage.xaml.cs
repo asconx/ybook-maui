@@ -91,7 +91,7 @@ namespace yBook.Views.Recepcja
                 BackgroundColor = Colors.White,
                 Stroke = Color.FromArgb("#E0E0E0"),
                 StrokeThickness = 1,
-                WidthRequest = 240,
+                WidthRequest = 300,
                 MinimumHeightRequest = 200
             };
 
