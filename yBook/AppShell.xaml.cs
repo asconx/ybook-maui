@@ -87,6 +87,7 @@ namespace yBook
 
             // Użytkownicy
             Routing.RegisterRoute("UzytkownicyLista", typeof(Uzytkownicy1Page));
+            Routing.RegisterRoute(nameof(UzytkownicyIRolePage), typeof(UzytkownicyIRolePage));
 
             // Kalendarz
             Routing.RegisterRoute("KalendarzPage", typeof(Views.Kalendarz.KalendarzPage));
