@@ -50,8 +50,8 @@ namespace yBook
             IsBusy = true;
             try
             {
-                // Pobierz serwisy z DI
-                var services = Application.Current?.Services;
+                // Pobierz serwisy z DI przez MauiContext (bez u¿ycia Application.Current.Services)
+                var services = Application.Current?.Handler?.MauiContext?.Services;
                 var auth = services?.GetService<IAuthService>();
                 var http = services?.GetService<HttpClient>() ?? new HttpClient();
 
@@ -59,10 +59,11 @@ namespace yBook
                 if (auth is not null)
                 {
                     // IsAuthenticatedAsync ustawi header w AuthService._http jeœli token w SecureStorage jest wa¿ny
-                    await auth.IsAuthenticatedAsync();
+                    var isAuth = await auth.IsAuthenticatedAsync();
+                    var token = await auth.GetTokenAsync();
+                    System.Diagnostics.Debug.WriteLine($"[Kasa] IsAuthenticated: {isAuth}, token present: {!string.IsNullOrEmpty(token)}");
 
                     // Na wszelki wypadek — pobierz token i ustaw header w http (jeœli header dalej nie istnieje)
-                    var token = await auth.GetTokenAsync();
                     if (!string.IsNullOrEmpty(token) && http.DefaultRequestHeaders.Authorization == null)
                     {
                         http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
