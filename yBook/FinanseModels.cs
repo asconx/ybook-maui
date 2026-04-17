@@ -169,7 +169,7 @@ namespace yBook.Models
 
     // ─── Zmiana kasjera (Cashier Shift) ───────────────────────────────────────
 
-    public class CashierShift
+    public class CashierShiftB
     {
         public string       Id              { get; init; } = "";
         public DateTime     StartDate       { get; init; }
