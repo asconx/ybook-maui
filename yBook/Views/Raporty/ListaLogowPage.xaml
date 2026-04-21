@@ -7,166 +7,160 @@
 
     <ContentPage.Resources>
         <Style x:Key="ColHeader" TargetType="Label">
-            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontAttributes" Value="Bold"/>
-            <Setter Property="TextColor" Value="{AppThemeBinding Light=#555555, Dark=#90A4AE}"/>
+            <Setter Property="TextColor" Value="#555555"/>
             <Setter Property="VerticalOptions" Value="Center"/>
             <Setter Property="LineBreakMode" Value="TailTruncation"/>
         </Style>
         <Style x:Key="ColCell" TargetType="Label">
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="TextColor" Value="{AppThemeBinding Light=#1A1A1A, Dark=#ECEFF1}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="TextColor" Value="#1A1A1A"/>
             <Setter Property="VerticalOptions" Value="Center"/>
             <Setter Property="LineBreakMode" Value="TailTruncation"/>
         </Style>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="60, Auto, *"
-          BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#121212}">
+    <Grid RowDefinitions="60, Auto, *, Auto"
+          BackgroundColor="#F5F5F5">
 
-        <!-- Nagłówek z hamburgerem -->
+        <!-- Nagłówek -->
         <ctrl:PageHeader Grid.Row="0"
                          Title="Lista logów"
                          Icon="📜"
                          ShowBack="True"
                          x:Name="Header"/>
 
-        <!-- Pasek filtrów -->
-        <ScrollView Grid.Row="1"
-                    Orientation="Horizontal"
-                    HorizontalScrollBarVisibility="Never"
-                    VerticalScrollBarVisibility="Never">
-            <HorizontalStackLayout Spacing="8" Padding="12,10" VerticalOptions="Center">
+        <!-- Pasek górny: tytuł + licznik + wyszukiwarka -->
+        <Grid Grid.Row="1" ColumnDefinitions="Auto, *, Auto"
+              BackgroundColor="White" Padding="12,8"
+              RowDefinitions="Auto, Auto">
 
-                <!-- Tytuł + licznik -->
-                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
-                    <Label Text="Rejestr akcji"
-                           FontSize="15"
+            <!-- Wiersz 1: Logi + badge + wyszukiwarka -->
+            <HorizontalStackLayout Grid.Row="0" Grid.Column="0" Spacing="8" VerticalOptions="Center">
+                <Label Text="Logi"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="#1A1A1A"
+                       VerticalOptions="Center"/>
+                <Border StrokeShape="RoundRectangle 10"
+                        BackgroundColor="#F59E0B"
+                        Stroke="Transparent"
+                        Padding="6,2"
+                        VerticalOptions="Center">
+                    <Label x:Name="LblCount"
+                           Text="0"
+                           FontSize="12"
                            FontAttributes="Bold"
-                           VerticalOptions="Center"
-                           TextColor="{AppThemeBinding Light=#1A1A1A, Dark=#ECEFF1}"/>
-                    <Border StrokeShape="RoundRectangle 10"
-                            BackgroundColor="#607D8B"
-                            Stroke="Transparent"
-                            Padding="6,2"
-                            VerticalOptions="Center">
-                        <Label x:Name="LblCount"
-                               Text="0"
-                               FontSize="12"
-                               FontAttributes="Bold"
-                               TextColor="White"/>
-                    </Border>
-                </HorizontalStackLayout>
-
-                <BoxView WidthRequest="1" HeightRequest="20" Color="#CCCCCC" VerticalOptions="Center"/>
-
-                <!-- Filtr: Data od -->
-                <Border StrokeShape="RoundRectangle 8"
-                        Stroke="#CCCCCC"
-                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
-                        Padding="10,6">
-                    <Label x:Name="LblDataOd"
-                           Text="Data od"
-                           FontSize="13"
-                           TextColor="{AppThemeBinding Light=#555, Dark=#90A4AE}">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnDataOdTapped"/>
-                        </Label.GestureRecognizers>
-                    </Label>
+                           TextColor="White"/>
                 </Border>
-
-                <!-- Filtr: Data do -->
-                <Border StrokeShape="RoundRectangle 8"
-                        Stroke="#CCCCCC"
-                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
-                        Padding="10,6">
-                    <Label x:Name="LblDataDo"
-                           Text="Data do"
-                           FontSize="13"
-                           TextColor="{AppThemeBinding Light=#555, Dark=#90A4AE}">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnDataDoTapped"/>
-                        </Label.GestureRecognizers>
-                    </Label>
-                </Border>
-
-                <!-- Filtr: Użytkownik -->
-                <Border StrokeShape="RoundRectangle 8"
-                        Stroke="#CCCCCC"
-                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
-                        Padding="10,6">
-                    <Label x:Name="LblFiltrUzytkownik"
-                           Text="Użytkownik"
-                           FontSize="13"
-                           TextColor="{AppThemeBinding Light=#555, Dark=#90A4AE}">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnFiltrUzytkownikTapped"/>
-                        </Label.GestureRecognizers>
-                    </Label>
-                </Border>
-
-                <!-- Filtr: Typ akcji -->
-                <Border StrokeShape="RoundRectangle 8"
-                        Stroke="#CCCCCC"
-                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
-                        Padding="10,6">
-                    <Label x:Name="LblFiltrTyp"
-                           Text="Typ akcji"
-                           FontSize="13"
-                           TextColor="{AppThemeBinding Light=#555, Dark=#90A4AE}">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnFiltrTypTapped"/>
-                        </Label.GestureRecognizers>
-                    </Label>
-                </Border>
-
-                <!-- Reset filtrów -->
-                <Border StrokeShape="RoundRectangle 8"
-                        Stroke="#EF5350"
-                        BackgroundColor="Transparent"
-                        Padding="10,6">
-                    <Label Text="✕ Wyczyść"
-                           FontSize="13"
-                           TextColor="#EF5350">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnResetFiltrów"/>
-                        </Label.GestureRecognizers>
-                    </Label>
-                </Border>
-
             </HorizontalStackLayout>
-        </ScrollView>
+
+            <!-- Wyszukiwarka -->
+            <Border Grid.Row="0" Grid.Column="2"
+                    StrokeShape="RoundRectangle 20"
+                    Stroke="#E0E0E0"
+                    BackgroundColor="#F5F5F5"
+                    Padding="12,4">
+                <HorizontalStackLayout Spacing="6">
+                    <Label Text="🔍" FontSize="13" VerticalOptions="Center" TextColor="#888"/>
+                    <Entry x:Name="EntrySearch"
+                           Placeholder="Szukaj po id obiektu"
+                           PlaceholderColor="#AAAAAA"
+                           TextColor="#333"
+                           FontSize="13"
+                           WidthRequest="180"
+                           BackgroundColor="Transparent"
+                           VerticalOptions="Center"
+                           TextChanged="OnSearchTextChanged"/>
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- Wiersz 2: filtry -->
+            <ScrollView Grid.Row="1" Grid.ColumnSpan="3"
+                        Orientation="Horizontal"
+                        HorizontalScrollBarVisibility="Never"
+                        VerticalScrollBarVisibility="Never"
+                        Margin="0,6,0,0">
+                <HorizontalStackLayout Spacing="8">
+
+                    <Border StrokeShape="RoundRectangle 8" Stroke="#CCCCCC"
+                            BackgroundColor="White" Padding="10,5">
+                        <Label x:Name="LblDataOd" Text="Data od" FontSize="13" TextColor="#555">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnDataOdTapped"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Border>
+
+                    <Border StrokeShape="RoundRectangle 8" Stroke="#CCCCCC"
+                            BackgroundColor="White" Padding="10,5">
+                        <Label x:Name="LblDataDo" Text="Data do" FontSize="13" TextColor="#555">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnDataDoTapped"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Border>
+
+                    <Border StrokeShape="RoundRectangle 8" Stroke="#CCCCCC"
+                            BackgroundColor="White" Padding="10,5">
+                        <Label x:Name="LblFiltrUzytkownik" Text="Użytkownik" FontSize="13" TextColor="#555">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnFiltrUzytkownikTapped"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Border>
+
+                    <Border StrokeShape="RoundRectangle 8" Stroke="#CCCCCC"
+                            BackgroundColor="White" Padding="10,5">
+                        <Label x:Name="LblFiltrTyp" Text="Typ akcji" FontSize="13" TextColor="#555">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnFiltrTypTapped"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Border>
+
+                    <Border StrokeShape="RoundRectangle 8" Stroke="#EF5350"
+                            BackgroundColor="Transparent" Padding="10,5">
+                        <Label Text="✕ Wyczyść" FontSize="13" TextColor="#EF5350">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnResetFiltrów"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Border>
+
+                </HorizontalStackLayout>
+            </ScrollView>
+        </Grid>
 
         <!-- Tabela -->
         <Grid Grid.Row="2" RowDefinitions="Auto, *">
 
             <!-- Nagłówek tabeli -->
-            <ScrollView Grid.Row="0"
-                        x:Name="HeaderScroll"
+            <ScrollView Grid.Row="0" x:Name="HeaderScroll"
                         Orientation="Horizontal"
                         HorizontalScrollBarVisibility="Never"
                         VerticalScrollBarVisibility="Never">
-                <Grid x:Name="TableHeader"
-                      BackgroundColor="{AppThemeBinding Light=#EEEEEE, Dark=#1E1E2E}"
-                      Padding="12,8">
+                <Grid BackgroundColor="#F5F5F5" Padding="12,10">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="140"/>
-                        <ColumnDefinition Width="110"/>
-                        <ColumnDefinition Width="90"/>
-                        <ColumnDefinition Width="300"/>
-                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="170"/>
+                        <ColumnDefinition Width="130"/>
+                        <ColumnDefinition Width="220"/>
+                        <ColumnDefinition Width="130"/>
+                        <ColumnDefinition Width="200"/>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Text="Data i godzina"   Style="{StaticResource ColHeader}"/>
-                    <Label Grid.Column="1" Text="Użytkownik"       Style="{StaticResource ColHeader}"/>
-                    <Label Grid.Column="2" Text="Typ akcji"        Style="{StaticResource ColHeader}"/>
-                    <Label Grid.Column="3" Text="Opis"             Style="{StaticResource ColHeader}"/>
-                    <Label Grid.Column="4" Text="Adres IP"         Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="0" Text="Id"                  Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="1" Text="Czas wykonania"      Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="2" Text="Użytkownik"          Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="3" Text="Akcja"               Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="4" Text="Id obiektu akcji"    Style="{StaticResource ColHeader}"/>
+                    <Label Grid.Column="5" Text="Dostępne dane"       Style="{StaticResource ColHeader}"/>
                 </Grid>
             </ScrollView>
 
             <!-- Lista wierszy -->
-            <ScrollView Grid.Row="1"
-                        x:Name="BodyScroll"
+            <ScrollView Grid.Row="1" x:Name="BodyScroll"
                         Orientation="Both"
                         HorizontalScrollBarVisibility="Never"
                         VerticalScrollBarVisibility="Default"
@@ -174,69 +168,67 @@
                 <CollectionView x:Name="LogiList">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Padding="12,9"
-                                  BackgroundColor="{AppThemeBinding Light=White, Dark=#1A1A2E}">
+                            <Grid Padding="12,10" BackgroundColor="White">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="140"/>
-                                    <ColumnDefinition Width="110"/>
-                                    <ColumnDefinition Width="90"/>
-                                    <ColumnDefinition Width="300"/>
-                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="170"/>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="220"/>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="200"/>
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Data i godzina -->
-                                <Label Grid.Column="0"
-                                       Text="{Binding DataStr}"
-                                       Style="{StaticResource ColCell}"
-                                       FontSize="11"/>
-
-                                <!-- Użytkownik -->
-                                <Label Grid.Column="1"
-                                       Text="{Binding Uzytkownik}"
-                                       Style="{StaticResource ColCell}"
-                                       FontAttributes="Bold"/>
-
-                                <!-- Typ – kolorowy badge -->
-                                <Border Grid.Column="2"
-                                        StrokeShape="RoundRectangle 6"
-                                        BackgroundColor="{Binding TypKolor}"
-                                        Stroke="Transparent"
-                                        Padding="6,2"
-                                        HorizontalOptions="Start"
-                                        VerticalOptions="Center">
-                                    <Label Text="{Binding TypLabel}"
-                                           FontSize="10"
-                                           FontAttributes="Bold"
-                                           TextColor="White"/>
-                                </Border>
-
-                                <!-- Opis -->
-                                <Label Grid.Column="3"
-                                       Text="{Binding Opis}"
+                                <Label Grid.Column="0" Text="{Binding Id}"
+                                       Style="{StaticResource ColCell}"/>
+                                <Label Grid.Column="1" Text="{Binding DataStr}"
+                                       Style="{StaticResource ColCell}"/>
+                                <Label Grid.Column="2" Text="{Binding Uzytkownik}"
+                                       Style="{StaticResource ColCell}"/>
+                                <Label Grid.Column="3" Text="{Binding Opis}"
+                                       Style="{StaticResource ColCell}"/>
+                                <Label Grid.Column="4" Text="{Binding ItemId}"
+                                       Style="{StaticResource ColCell}"/>
+                                <Label Grid.Column="5" Text="{Binding Data}"
                                        Style="{StaticResource ColCell}"/>
 
-                                <!-- IP -->
-                                <Label Grid.Column="4"
-                                       Text="{Binding AdresIp}"
-                                       Style="{StaticResource ColCell}"
-                                       FontSize="11"
-                                       TextColor="{AppThemeBinding Light=#888, Dark=#607D8B}"/>
-
-                                <!-- separator -->
-                                <BoxView Grid.ColumnSpan="5"
-                                         HeightRequest="1"
+                                <BoxView Grid.ColumnSpan="6" HeightRequest="1"
                                          VerticalOptions="End"
-                                         Color="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A3E}"/>
+                                         Color="#F0F0F0"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </ScrollView>
+        </Grid>
 
+        <!-- Paginacja -->
+        <Grid Grid.Row="3" ColumnDefinitions="*, Auto"
+              BackgroundColor="White" Padding="16,8">
+            <Label Grid.Column="0" x:Name="LblPaginacja"
+                   Text="…" FontSize="13" TextColor="#666"
+                   VerticalOptions="Center"/>
+            <HorizontalStackLayout Grid.Column="1" Spacing="4">
+                <Button x:Name="BtnFirst" Text="«" Clicked="OnFirstPage"
+                        BackgroundColor="Transparent" TextColor="#666"
+                        BorderColor="#E0E0E0" BorderWidth="1" CornerRadius="4"
+                        HeightRequest="32" WidthRequest="32" Padding="0" FontSize="14"/>
+                <Button x:Name="BtnPrev" Text="‹" Clicked="OnPrevPage"
+                        BackgroundColor="Transparent" TextColor="#666"
+                        BorderColor="#E0E0E0" BorderWidth="1" CornerRadius="4"
+                        HeightRequest="32" WidthRequest="32" Padding="0" FontSize="14"/>
+                <Button x:Name="BtnNext" Text="›" Clicked="OnNextPage"
+                        BackgroundColor="Transparent" TextColor="#666"
+                        BorderColor="#E0E0E0" BorderWidth="1" CornerRadius="4"
+                        HeightRequest="32" WidthRequest="32" Padding="0" FontSize="14"/>
+                <Button x:Name="BtnLast" Text="»" Clicked="OnLastPage"
+                        BackgroundColor="Transparent" TextColor="#666"
+                        BorderColor="#E0E0E0" BorderWidth="1" CornerRadius="4"
+                        HeightRequest="32" WidthRequest="32" Padding="0" FontSize="14"/>
+            </HorizontalStackLayout>
         </Grid>
 
         <!-- DrawerMenu -->
-        <ctrl:DrawerMenu Grid.RowSpan="3" x:Name="Drawer"/>
+        <ctrl:DrawerMenu Grid.RowSpan="4" x:Name="Drawer"/>
 
     </Grid>
 </ContentPage>
