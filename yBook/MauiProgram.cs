@@ -26,6 +26,7 @@ namespace yBook
             builder.Services.AddSingleton<HttpClient>();
 
             // ── Services ─────────────────────────────────────────────────────
+            builder.Services.AddTransient<ILogiService, LogiService>();
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<ISurveyService, SurveyService>();
             builder.Services.AddSingleton<IBlockadeService, BlockadeService>();
@@ -41,6 +42,7 @@ namespace yBook
             builder.Services.AddTransient<EditSurveyViewModel>();
 
             // ── Pages ─────────────────────────────────────────────────────────
+            builder.Services.AddTransient<yBook.Views.Raporty.ListaLogowPage>();
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<RabatyPage>();
@@ -51,6 +53,7 @@ namespace yBook
             builder.Services.AddTransient<yBook.Views.Kalendarz.KalendarzPage>();
             builder.Services.AddTransient<GrupoweSmsPage>();
             builder.Services.AddTransient<PakietyPage>();
+
 
 #if DEBUG
             builder.Logging.AddDebug();
