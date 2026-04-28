@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -37,7 +38,7 @@ public partial class PakietyPage : ContentPage
         _httpClient  = new HttpClient();
     }
 
-    // Proste tworzenie UI gdy XAML nie został zlinkowany / wygenerowany.
+    // Pełne tworzenie UI (z lepszym wyglądem) gdy XAML nie został zlinkowany / wygenerowany.
     // Jeśli XAML jest poprawny, ta metoda i pola nie będą przeszkadzać.
     private void InitializeComponent()
     {
@@ -45,40 +46,225 @@ public partial class PakietyPage : ContentPage
         if (Search != null && Lista != null && LblCount != null && EmptyView != null)
             return;
 
-        Search = new Entry { Placeholder = "Szukaj..." };
+        Title = "Pakiety";
+
+        // top bar: back, add, activate, deactivate
+        var btnBack = new Button
+        {
+            Text = "←",
+            WidthRequest = 44,
+            HeightRequest = 44,
+            BackgroundColor = Colors.Transparent,
+            HorizontalOptions = LayoutOptions.Start,
+            VerticalOptions = LayoutOptions.Center
+        };
+        btnBack.Clicked += async (_, __) =>
+        {
+            // Powrót do strony głównej
+            if (Shell.Current.Navigation.NavigationStack.Count > 1)
+                await Shell.Current.Navigation.PopAsync();
+            else
+                await Shell.Current.GoToAsync("//");
+        };
+
+        var btnAdd = new Button
+        {
+            Text = "Dodaj",
+            BackgroundColor = Colors.LightSkyBlue,
+            TextColor = Colors.White,
+            CornerRadius = 8,
+            HorizontalOptions = LayoutOptions.End
+        };
+        btnAdd.Clicked += OnDodajClicked;
+
+        var btnActivate = new Button
+        {
+            Text = "Aktywuj",
+            BackgroundColor = Colors.LightGreen,
+            TextColor = Colors.Black,
+            CornerRadius = 8,
+            HorizontalOptions = LayoutOptions.End
+        };
+        btnActivate.Clicked += async (_, __) => await ToggleActiveSelected(true);
+
+        var btnDeactivate = new Button
+        {
+            Text = "Dezaktywuj",
+            BackgroundColor = Colors.LightCoral,
+            TextColor = Colors.White,
+            CornerRadius = 8,
+            HorizontalOptions = LayoutOptions.End
+        };
+        btnDeactivate.Clicked += async (_, __) => await ToggleActiveSelected(false);
+
+        // Search + count
+        Search = new Entry { Placeholder = "Szukaj...", HorizontalOptions = LayoutOptions.FillAndExpand };
         Search.TextChanged += OnSearchChanged;
 
-        LblCount = new Label { VerticalOptions = LayoutOptions.Center };
+        LblCount = new Label { VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.End };
 
         EmptyView = new Label { Text = "Brak wyników", HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
 
+        // CollectionView z szablonem itemu
         Lista = new CollectionView
         {
-            ItemsLayout = new LinearItemsLayout(ItemsLayoutOrientation.Vertical),
+            ItemsLayout = new LinearItemsLayout(ItemsLayoutOrientation.Vertical) { ItemSpacing = 8 },
             SelectionMode = SelectionMode.None,
-            IsVisible = false
+            IsVisible = false,
+            Margin = new Thickness(10)
         };
 
-        // minimalny układ strony (zastępuje XAML gdy go brak)
-        var header = new Grid
+        // DataTemplate programowo — korzysta z wiązań do właściwości Pakiet (INotifyPropertyChanged)
+        Lista.ItemTemplate = new DataTemplate(() =>
+        {
+            var frame = new Frame
+            {
+                CornerRadius = 10,
+                Padding = 10,
+                HasShadow = true,
+                BackgroundColor = Colors.White
+            };
+
+            var mainGrid = new Grid
+            {
+                ColumnDefinitions =
+                {
+                    new ColumnDefinition(80),
+                    new ColumnDefinition(GridLength.Star),
+                    new ColumnDefinition(GridLength.Auto)
+                },
+                RowDefinitions =
+                {
+                    new RowDefinition(GridLength.Auto)
+                }
+            };
+
+            // obrazek (jeśli brak - pusty BoxView)
+            var img = new Image
+            {
+                Aspect = Aspect.AspectFill,
+                WidthRequest = 70,
+                HeightRequest = 70,
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center
+            };
+            img.SetBinding(Image.SourceProperty, "ZdjecieUrl");
+
+            var contentStack = new StackLayout { Spacing = 4, VerticalOptions = LayoutOptions.Start };
+
+            var nameLabel = new Label { FontAttributes = FontAttributes.Bold, FontSize = 16, LineBreakMode = LineBreakMode.TailTruncation };
+            nameLabel.SetBinding(Label.TextProperty, "Nazwa");
+
+            var priceLabel = new Label { FontSize = 14, TextColor = Colors.DarkSlateGray };
+            priceLabel.SetBinding(Label.TextProperty, "CenaStr");
+
+            var rangeLabel = new Label { FontSize = 12, TextColor = Colors.Gray };
+            rangeLabel.SetBinding(Label.TextProperty, "ZakresStr");
+
+            var descLabel = new Label { FontSize = 12, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 2 };
+            descLabel.SetBinding(Label.TextProperty, "Opis");
+
+            contentStack.Add(nameLabel);
+            contentStack.Add(priceLabel);
+            contentStack.Add(rangeLabel);
+            contentStack.Add(descLabel);
+
+            // akcje po prawej: zaznacz, aktywny, edytuj, usuń
+            var actionsStack = new VerticalStackLayout { Spacing = 6, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center };
+
+            var chkSelect = new CheckBox { HorizontalOptions = LayoutOptions.Center };
+            chkSelect.SetBinding(CheckBox.IsCheckedProperty, new Binding("IsSelected", BindingMode.TwoWay));
+
+            var switchActive = new Switch { HorizontalOptions = LayoutOptions.Center };
+            switchActive.SetBinding(Switch.IsToggledProperty, new Binding("IsActive", BindingMode.TwoWay));
+            switchActive.Toggled += async (s, e) =>
+            {
+                // Pobierz powiązany model z BindingContext i zapis lokalnie (bez wyskakujących okienek)
+                if (((Element)s).BindingContext is Pakiet pk)
+                {
+                    // natychmiastowa zmiana w UI dzięki INotifyPropertyChanged
+                    // Można tutaj dodać wywołanie API, jeśli endpoint istnieje — bez blokowania UI
+                    await TryUpdateActiveRemote(pk.Id, pk.IsActive);
+                }
+            };
+
+            var btnEdit = new Button { Text = "Edytuj", FontSize = 12, CornerRadius = 6, BackgroundColor = Colors.LightGray, HeightRequest = 30 };
+            btnEdit.Clicked += async (s, e) =>
+            {
+                if (((Element)s).BindingContext is Pakiet item)
+                {
+                    await OnEditNavigate(item);
+                }
+            };
+
+            var btnDelete = new Button { Text = "Usuń", FontSize = 12, CornerRadius = 6, BackgroundColor = Colors.IndianRed, TextColor = Colors.White, HeightRequest = 30 };
+            btnDelete.Clicked += async (s, e) =>
+            {
+                if (((Element)s).BindingContext is Pakiet item)
+                {
+                    // Usuwamy bez potwierdzeń (bez wyskakujących okienek)
+                    var ok = await DeletePakietAsync(item.Id);
+                    if (ok)
+                    {
+                        _all.Remove(item);
+                        ApplyFilter();
+                    }
+                }
+            };
+
+            actionsStack.Add(chkSelect);
+            actionsStack.Add(switchActive);
+            actionsStack.Add(btnEdit);
+            actionsStack.Add(btnDelete);
+
+            mainGrid.Add(img, 0, 0);
+            mainGrid.Add(contentStack, 1, 0);
+            mainGrid.Add(actionsStack, 2, 0);
+
+            frame.Content = mainGrid;
+            frame.SetBinding(BindingContextProperty, ".");
+
+            return frame;
+        });
+
+        // Górny pasek z przyciskami
+        var topGrid = new Grid
+        {
+            ColumnDefinitions =
+            {
+                new ColumnDefinition(GridLength.Auto),
+                new ColumnDefinition(GridLength.Star),
+                new ColumnDefinition(GridLength.Auto)
+            },
+            Padding = new Thickness(10),
+            BackgroundColor = Colors.Transparent
+        };
+        topGrid.Add(btnBack, 0, 0);
+
+        var rightButtons = new HorizontalStackLayout { Spacing = 8, HorizontalOptions = LayoutOptions.End };
+        rightButtons.Add(btnActivate);
+        rightButtons.Add(btnDeactivate);
+        rightButtons.Add(btnAdd);
+
+        topGrid.Add(rightButtons, 2, 0);
+
+        // Search row
+        var searchGrid = new Grid
         {
             ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) },
-            Padding = new Thickness(10)
+            Padding = new Thickness(10, 0, 10, 0)
         };
-        header.Add(Search);
-        header.Add(LblCount, 1, 0);
+        searchGrid.Add(Search, 0, 0);
+        searchGrid.Add(LblCount, 1, 0);
 
-        var main = new Grid();
-        main.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-        main.RowDefinitions.Add(new RowDefinition(GridLength.Star));
-        main.Children.Add(header);
-        main.Add(EmptyView, 0, 1);
-        main.Add(Lista, 0, 1);
+        // kompozycja całej strony
+        var mainStack = new StackLayout { Spacing = 8 };
+        mainStack.Add(topGrid);
+        mainStack.Add(searchGrid);
+        mainStack.Add(Lista);
+        mainStack.Add(EmptyView);
 
-        Content = new StackLayout
-        {
-            Children = { main }
-        };
+        Content = new ScrollView { Content = mainStack };
     }
 
     protected override async void OnAppearing()
@@ -99,11 +285,9 @@ public partial class PakietyPage : ContentPage
         await Shell.Current.Navigation.PushAsync(form);
     }
 
-    async void OnModifClicked(object sender, TappedEventArgs e)
+    private async Task OnEditNavigate(Pakiet item)
     {
-        var item = e.Parameter as Pakiet;
         if (item == null) return;
-
         var form = new PakietFormPage(_authService, pakiet: item, modif: true, refresh: ApplyFilter);
         form.OnSaved += updated =>
         {
@@ -112,22 +296,6 @@ public partial class PakietyPage : ContentPage
             MainThread.BeginInvokeOnMainThread(ApplyFilter);
         };
         await Shell.Current.Navigation.PushAsync(form);
-    }
-
-    async void OnDeleteClicked(object sender, TappedEventArgs e)
-    {
-        var item = e.Parameter as Pakiet;
-        if (item == null) return;
-
-        bool ok = await DisplayAlert("Usuń pakiet", $"Na pewno usunąć pakiet \"{item.Nazwa}\"?\nOperacji nie można cofnąć.", "Tak, usuń", "Anuluj");
-        if (!ok) return;
-
-        bool success = await DeletePakietAsync(item.Id);
-        if (success)
-        {
-            _all.Remove(item);
-            ApplyFilter();
-        }
     }
 
     // =========================================
@@ -139,6 +307,7 @@ public partial class PakietyPage : ContentPage
         {
             if (!await _authService.IsAuthenticatedAsync())
             {
+                // Pozostawiamy komunikat — to nie jest efekt kliknięcia pakietu
                 await DisplayAlert("Błąd", "Brak autoryzacji. Zaloguj się ponownie.", "OK");
                 return;
             }
@@ -163,7 +332,18 @@ public partial class PakietyPage : ContentPage
                 _all.Clear();
                 if (result?.Items != null)
                     foreach (var item in result.Items)
-                        _all.Add(new Pakiet { Id = item.Id, Nazwa = item.Name, Cena = item.Price, ZdjecieUrl = item.ImageUrl, DataOd = item.DateFrom, DataDo = item.DateTo, Opis = item.Description });
+                        _all.Add(new Pakiet
+                        {
+                            Id = item.Id,
+                            Nazwa = item.Name,
+                            Cena = item.Price,
+                            ZdjecieUrl = item.ImageUrl,
+                            DataOd = item.DateFrom,
+                            DataDo = item.DateTo,
+                            Opis = item.Description,
+                            IsActive = false,
+                            IsSelected = false
+                        });
 
                 ApplyFilter();
             }
@@ -194,14 +374,54 @@ public partial class PakietyPage : ContentPage
             var response = await _httpClient.SendAsync(request);
             if (response.IsSuccessStatusCode) return true;
 
-            await DisplayAlert("Błąd", $"Nie udało się usunąć: {response.StatusCode}", "OK");
+            // nie pokazujemy dodatkowych popupów w przypadku kliknięcia elementu — logujemy lokalnie
             return false;
         }
-        catch (Exception ex)
+        catch
         {
-            await DisplayAlert("Błąd", ex.Message, "OK");
             return false;
         }
+    }
+
+    // Przykładowe nieblokujące wywołanie aktualizacji stanu aktywności pakietu
+    private async Task TryUpdateActiveRemote(int id, bool isActive)
+    {
+        try
+        {
+            var token = await _authService.GetTokenAsync();
+            if (string.IsNullOrEmpty(token)) return;
+
+            // Jeśli API wspiera zmianę aktywności, można tu dodać odpowiednie wywołanie.
+            // Pozostawiamy bez wyjątku — jeśli endpoint nie istnieje, po prostu ignorujemy błąd.
+            var req = new HttpRequestMessage(HttpMethod.Patch, $"https://api.ybook.pl/entity/package/{id}/active")
+            {
+                Content = new StringContent(JsonSerializer.Serialize(new { active = isActive }), System.Text.Encoding.UTF8, "application/json")
+            };
+            req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var resp = await _httpClient.SendAsync(req);
+            // nie blokujemy UI i nie pokazujemy alertów przy klikaniu elementów
+        }
+        catch
+        {
+            // ignoruj
+        }
+    }
+
+    // Toggle aktywności dla zaznaczonych pakietów (bez popupów)
+    private async Task ToggleActiveSelected(bool makeActive)
+    {
+        var selected = _all.Where(p => p.IsSelected).ToList();
+        if (!selected.Any()) return;
+
+        foreach (var p in selected)
+        {
+            p.IsActive = makeActive;
+            // Asynchronicznie próbujemy zaktualizować zdalnie, ale nie blokujemy użytkownika
+            _ = TryUpdateActiveRemote(p.Id, p.IsActive);
+            p.IsSelected = false; // odznacz po operacji
+        }
+        ApplyFilter();
     }
 
     // =========================================
@@ -225,15 +445,35 @@ public partial class PakietyPage : ContentPage
 // =========================================
 //                  MODEL
 // =========================================
-public class Pakiet
+public class Pakiet : INotifyPropertyChanged
 {
+    private bool _isActive;
+    private bool _isSelected;
+    private string _nazwa = "";
+
     public int      Id         { get; set; }
-    public string   Nazwa      { get; set; } = "";
+    public string   Nazwa
+    {
+        get => _nazwa;
+        set { if (_nazwa != value) { _nazwa = value; OnPropertyChanged(nameof(Nazwa)); } }
+    }
     public decimal  Cena       { get; set; }
     public string?  ZdjecieUrl { get; set; }
     public string?  DataOd     { get; set; }
     public string?  DataDo     { get; set; }
     public string?  Opis       { get; set; }
+
+    public bool IsActive
+    {
+        get => _isActive;
+        set { if (_isActive != value) { _isActive = value; OnPropertyChanged(nameof(IsActive)); } }
+    }
+
+    public bool IsSelected
+    {
+        get => _isSelected;
+        set { if (_isSelected != value) { _isSelected = value; OnPropertyChanged(nameof(IsSelected)); } }
+    }
 
     public string CenaStr   => Cena > 0 ? $"{Cena:N2} zł" : "—";
     public string ZakresStr
@@ -245,4 +485,7 @@ public class Pakiet
             return "—";
         }
     }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }

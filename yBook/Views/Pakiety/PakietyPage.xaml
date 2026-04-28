@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="yBook.Views.Pakiety.PakietyPage"
+             BackgroundColor="{DynamicResource PageBackgroundColor}"
+             Title="Pakiety">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="12" RowSpacing="8">
+        <!-- Top bar: back + title + extra actions -->
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" VerticalOptions="Center">
+            <Button x:Name="BtnBack" Text="←" WidthRequest="44" HeightRequest="44" BackgroundColor="Transparent" />
+            <Label Text="Pakiety" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
+            <HorizontalStackLayout Spacing="8" HorizontalOptions="End">
+                <Button x:Name="BtnExport" Text="Eksportuj" CornerRadius="8" BackgroundColor="#6C7A89" TextColor="White" />
+                <Button x:Name="BtnDuplicate" Text="Duplikuj" CornerRadius="8" BackgroundColor="#8E44AD" TextColor="White" />
+                <Button x:Name="BtnAdd" Text="Dodaj" CornerRadius="8" BackgroundColor="#2D9CDB" TextColor="White" />
+            </HorizontalStackLayout>
+        </Grid>
+
+        <!-- Search + count + mass actions + sort -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" VerticalOptions="Center" ColumnSpacing="8">
+            <Frame HasShadow="False" Padding="6" CornerRadius="8" BackgroundColor="#F2F6FA">
+                <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                    <SearchBar x:Name="Search" Placeholder="Szukaj pakietów..." />
+                    <Label x:Name="LblCount" VerticalOptions="Center" HorizontalOptions="End" Margin="8,0" />
+                </Grid>
+            </Frame>
+
+            <HorizontalStackLayout Spacing="6" VerticalOptions="Center" HorizontalOptions="End">
+                <Picker x:Name="PickerSort" Title="Sortuj" WidthRequest="140">
+                    <Picker.Items>
+                        <x:String>Domyślnie</x:String>
+                        <x:String>Alfabet</x:String>
+                        <x:String>Cena ↑</x:String>
+                        <x:String>Cena ↓</x:String>
+                        <x:String>Aktywne najpierw</x:String>
+                    </Picker.Items>
+                </Picker>
+                <Button x:Name="BtnActivate" Text="Aktywuj" BackgroundColor="#C8E6C9" TextColor="#0B6623" CornerRadius="8" />
+                <Button x:Name="BtnDeactivate" Text="Dezaktywuj" BackgroundColor="#FFCDD2" TextColor="#B71C1C" CornerRadius="8" />
+                <Button x:Name="BtnDeleteSelected" Text="Usuń zazn." BackgroundColor="#E53935" TextColor="White" CornerRadius="8" />
+            </HorizontalStackLayout>
+        </Grid>
+
+        <!-- List -->
+        <CollectionView x:Name="Lista" Grid.Row="2" SelectionMode="None" ItemsLayout="VerticalList" Margin="0,4,0,8">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame CornerRadius="10" Padding="10" Margin="0,6" HasShadow="True" BackgroundColor="White">
+                        <Grid ColumnDefinitions="80,*,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="8">
+                            <Image Source="{Binding ZdjecieUrl}" Aspect="AspectFill" WidthRequest="70" HeightRequest="70" Grid.RowSpan="2" />
+                            <Label Text="{Binding Nazwa}" FontAttributes="Bold" FontSize="16" Grid.Column="1" />
+                            <Label Text="{Binding CenaStr}" TextColor="#37474F" Grid.Column="1" Grid.Row="1" />
+                            <Label Text="{Binding ZakresStr}" FontSize="12" TextColor="#9E9E9E" Grid.Column="1" Grid.Row="1" HorizontalOptions="Start" Margin="0,20,0,0"/>
+
+                            <VerticalStackLayout Grid.Column="2" Spacing="6" HorizontalOptions="End" VerticalOptions="Center">
+                                <CheckBox IsChecked="{Binding IsSelected}" HorizontalOptions="Center" />
+                                <Switch IsToggled="{Binding IsActive}" HorizontalOptions="Center" />
+                                <Button Text="Edytuj" FontSize="12" CornerRadius="6" BackgroundColor="#ECEFF1" Clicked="OnEditClicked" />
+                                <Button Text="Usuń" FontSize="12" CornerRadius="6" BackgroundColor="#E57373" TextColor="White" Clicked="OnDeleteClicked" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <Label Text="Brak pakietów" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#9E9E9E" />
+            </CollectionView.EmptyView>
+        </CollectionView>
+
+        <!-- Footer: help / small hint -->
+        <Label Grid.Row="3" Text="Zaznacz pakiety, użyj Aktywuj / Dezaktywuj. Edycja i usuwanie bez wyskakujących okien." FontSize="12" TextColor="#757575" HorizontalOptions="Center" />
+    </Grid>
+</ContentPage>
