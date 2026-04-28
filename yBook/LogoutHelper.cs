@@ -15,7 +15,7 @@ namespace yBook.Controls
 
         private async void OnLogoutTapped(object? sender, TappedEventArgs e)
         {
-            var confirm = await Application.Current!.Windows[0].Page!
+            var confirm = await Microsoft.Maui.Controls.Application.Current!.Windows[0].Page!
                 .DisplayAlert("Wylogowanie", "Czy na pewno chcesz się wylogować?", "Tak", "Anuluj");
 
             if (!confirm) return;

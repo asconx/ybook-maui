@@ -48,14 +48,14 @@
                     <Label Grid.Column="1" Text="Zdjęcie" FontSize="12" TextColor="#888"/>
                     <Label Grid.Column="2" Text="Nazwa" FontSize="12" TextColor="#888"/>
                     <Label Grid.Column="3" Text="Skrócona nazwa" FontSize="12" TextColor="#888"/>
-                    <Label Grid.Column="4" Text="Kolor" FontSize="12" TextColor="#888"/>
+                    <Label Grid.Column="4" Text="Kolor" FontSize="12" TextColor="#888" HorizontalOptions="Center"/>
                     <Label Grid.Column="5" Text="Cena podstawowa" FontSize="12" TextColor="#888"/>
                     <Label Grid.Column="6" Text="Metraż" FontSize="12" TextColor="#888"/>
                     <Label Grid.Column="7" Text="Łóżka" FontSize="12" TextColor="#888"/>
                     <Label Grid.Column="8" Text="Udogodnienia" FontSize="12" TextColor="#888"/>
                 </Grid>
-
-                <CollectionView x:Name="PokojList">
+                <RefreshView x:Name="RefreshControl" Refreshing="OnRefreshRequested">
+                     <CollectionView x:Name="PokojList">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid ColumnDefinitions="90, 100, 250, 100, 60, 140, 80, 300, 400" 
@@ -81,38 +81,50 @@
                                     <Image Source="{Binding ImageUrl}" Aspect="AspectFill"/>
                                 </Border>
 
-                                <Label Grid.Column="2" Text="{Binding Nazwa}" VerticalOptions="Center" FontAttributes="Bold" FontSize="13"/>
-                                <Label Grid.Column="3" Text="{Binding ShortName}" VerticalOptions="Center" HorizontalOptions="Start" FontSize="13"/>
-                                <Label Grid.Column="4" Text="O" VerticalOptions="Center" HorizontalOptions="Start" FontSize="13"/>
-                                <Label Grid.Column="5" Text="0" VerticalOptions="Center" HorizontalOptions="Start" FontSize="13"/>
-                                <Label Grid.Column="6" Text="{Binding Metraz}" VerticalOptions="Center" FontSize="13"/>
+                                <Label Grid.Column="2" Text="{Binding NazwaText}" VerticalOptions="Center" FontAttributes="Bold" FontSize="13" TextColor="#222222"/>
+                                <Label Grid.Column="3" Text="{Binding ShortNameText}" VerticalOptions="Center" HorizontalOptions="Start" FontSize="13" TextColor="#222222"/>
+                                <HorizontalStackLayout Grid.Column="4" Spacing="6" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Border StrokeShape="RoundRectangle 10"
+                                            HeightRequest="16" WidthRequest="16"
+                                            Stroke="#DDDDDD" StrokeThickness="1"
+                                            BackgroundColor="{Binding ColorValue}" />
+                                    <Label Text="{Binding ColorText}" FontSize="12" TextColor="#222222" VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+                                <Label Grid.Column="5" Text="{Binding DefaultPrice}" VerticalOptions="Center" HorizontalOptions="Start" FontSize="13" TextColor="#222222"/>
+                                <Label Grid.Column="6" Text="{Binding AreaText}" VerticalOptions="Center" FontSize="13" TextColor="#222222"/>
 
-                                <HorizontalStackLayout Grid.Column="7" Spacing="5" VerticalOptions="Center">
-                                    <Border StrokeShape="RoundRectangle 12" Stroke="#76B5C5" Padding="10,2" BackgroundColor="Transparent">
-                                        <Label Text="Duże łóżko podwójne 180-200 cm" FontSize="11" TextColor="#76B5C5"/>
-                                    </Border>
+                                <HorizontalStackLayout Grid.Column="7" Spacing="5" VerticalOptions="Center"
+                                                       BindableLayout.ItemsSource="{Binding BedItems}">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border StrokeShape="RoundRectangle 12" Stroke="#76B5C5" Padding="10,2" BackgroundColor="Transparent">
+                                                <Label Text="{Binding .}" FontSize="11" TextColor="#76B5C5"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
                                 </HorizontalStackLayout>
 
-                                <HorizontalStackLayout Grid.Column="8" Spacing="12" VerticalOptions="Center">
-                                    <HorizontalStackLayout Spacing="4">
-                                        <Label Text="✓" TextColor="#4CAF50" FontAttributes="Bold"/>
-                                        <Label Text="Biurko" FontSize="11"/>
-                                    </HorizontalStackLayout>
-                                    <HorizontalStackLayout Spacing="4">
-                                        <Label Text="✓" TextColor="#4CAF50" FontAttributes="Bold"/>
-                                        <Label Text="Mydło" FontSize="11"/>
-                                    </HorizontalStackLayout>
-                                    <HorizontalStackLayout Spacing="4">
-                                        <Label Text="✓" TextColor="#4CAF50" FontAttributes="Bold"/>
-                                        <Label Text="Ogrzewanie" FontSize="11"/>
-                                    </HorizontalStackLayout>
-                                </HorizontalStackLayout>
+                                <FlexLayout Grid.Column="8" Wrap="Wrap" AlignItems="Center"
+                                            BindableLayout.ItemsSource="{Binding AmenityItems}">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <HorizontalStackLayout Spacing="4" Margin="6,0,0,0">
+                                                <Label Text="✓" TextColor="#4CAF50" FontAttributes="Bold" FontSize="12"/>
+                                                <Label Text="{Binding .}" FontSize="12"/>
+                                            </HorizontalStackLayout>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </FlexLayout>
 
                                 <BoxView Grid.ColumnSpan="9" HeightRequest="1" Color="#F0F0F0" VerticalOptions="End"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+                    
+                    
+                </RefreshView>
+               
 
             </VerticalStackLayout>
         </ScrollView>

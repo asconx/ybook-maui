@@ -32,9 +32,9 @@
             <VerticalStackLayout Padding="16" Spacing="12">
 
                 <!-- ── WIERSZ 1: Kolory ── -->
-                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
-                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
-                       BorderColor="#E8E8E8">
+                <Border StrokeShape="RoundRectangle 10" Padding="14,12"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                        Stroke="#E8E8E8" StrokeThickness="1">
                     <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="10">
 
                         <!-- Kolor podstawowy -->
@@ -111,12 +111,12 @@
                         </VerticalStackLayout>
 
                     </Grid>
-                </Frame>
+                </Border>
 
                 <!-- ── WIERSZ 2: Czcionka, Nazwa przedpłaty, Rozliczenie, Slug, Ile dni ── -->
-                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
-                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
-                       BorderColor="#E8E8E8">
+                <Border StrokeShape="RoundRectangle 10" Padding="14,12"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                        Stroke="#E8E8E8" StrokeThickness="1">
                     <Grid ColumnDefinitions="*,*,*,*,80" ColumnSpacing="10">
 
                         <VerticalStackLayout Grid.Column="0" Spacing="4">
@@ -179,12 +179,12 @@
                         </VerticalStackLayout>
 
                     </Grid>
-                </Frame>
+                </Border>
 
                 <!-- ── Domyślne daty ── -->
-                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
-                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
-                       BorderColor="#E8E8E8">
+                <Border StrokeShape="RoundRectangle 10" Padding="14,12"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                        Stroke="#E8E8E8" StrokeThickness="1">
                     <VerticalStackLayout Spacing="10">
                         <Label Text="Domyślne daty" FontSize="13" FontAttributes="Bold"
                                TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
@@ -205,36 +205,36 @@
                             </VerticalStackLayout>
                         </Grid>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <!-- ── Wybierz obiekt ── -->
-                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
-                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
-                       BorderColor="#E8E8E8">
+                <Border StrokeShape="RoundRectangle 10" Padding="14,12"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                        Stroke="#E8E8E8" StrokeThickness="1">
                     <VerticalStackLayout Spacing="10">
                         <Label Text="Wybierz obiekt" FontSize="13" FontAttributes="Bold"
                                TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
                         <FlexLayout x:Name="PokojeContainer"
                                     Wrap="Wrap" Direction="Row"/>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <!-- ── Grupowanie ── -->
-                <Frame CornerRadius="10" Padding="14,10" HasShadow="False"
-                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
-                       BorderColor="#E8E8E8">
+                <Border StrokeShape="RoundRectangle 10" Padding="14,10"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                        Stroke="#E8E8E8" StrokeThickness="1">
                     <HorizontalStackLayout Spacing="10">
                         <Switch x:Name="GrupowanieSwitch"/>
                         <Label Text="Grupuj kwatery po standardzie"
                                VerticalOptions="Center" FontSize="13"
                                TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
                     </HorizontalStackLayout>
-                </Frame>
+                </Border>
 
                 <!-- ── Konto finansowe + statusy ── -->
-                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
-                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
-                       BorderColor="#E8E8E8">
+                <Border StrokeShape="RoundRectangle 10" Padding="14,12"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                        Stroke="#E8E8E8" StrokeThickness="1">
                     <VerticalStackLayout Spacing="10">
 
                         <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
@@ -271,24 +271,24 @@
                         </Border>
 
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <!-- ── Opcja faktury ── -->
-                <Frame CornerRadius="10" Padding="14,10" HasShadow="False"
-                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
-                       BorderColor="#E8E8E8">
+                <Border StrokeShape="RoundRectangle 10" Padding="14,10"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                        Stroke="#E8E8E8" StrokeThickness="1">
                     <HorizontalStackLayout Spacing="10">
                         <Switch x:Name="OpcjaFakturySwitch"/>
                         <Label Text="Istnieje opcja wystawienia faktury"
                                VerticalOptions="Center" FontSize="13"
                                TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
                     </HorizontalStackLayout>
-                </Frame>
+                </Border>
 
                 <!-- ── Dodatkowe pola ── -->
-                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
-                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
-                       BorderColor="#E8E8E8">
+                <Border StrokeShape="RoundRectangle 10" Padding="14,12"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                        Stroke="#E8E8E8" StrokeThickness="1">
                     <VerticalStackLayout Spacing="8">
                         <Label Text="Dodatkowe pola" FontSize="13" FontAttributes="Bold"
                                TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
@@ -308,12 +308,12 @@
                                    TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <!-- ── Typ formularza ── -->
-                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
-                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
-                       BorderColor="#E8E8E8">
+                <Border StrokeShape="RoundRectangle 10" Padding="14,12"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                        Stroke="#E8E8E8" StrokeThickness="1">
                     <VerticalStackLayout Spacing="8">
                         <Label Text="Typ formularza" FontSize="13" FontAttributes="Bold"
                                TextColor="{AppThemeBinding Light=#455A64, Dark=#CFD8DC}"/>
@@ -341,12 +341,12 @@
                             </HorizontalStackLayout>
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <!-- ── Treść zgody ── -->
-                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
-                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
-                       BorderColor="#E8E8E8">
+                <Border StrokeShape="RoundRectangle 10" Padding="14,12"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                        Stroke="#E8E8E8" StrokeThickness="1">
                     <Border BackgroundColor="{AppThemeBinding Light=#F9FAFB, Dark=#252545}"
                             StrokeShape="RoundRectangle 6" Stroke="#E0E0E0" Padding="10,8">
                         <Editor x:Name="TrescZgodyEditor"
@@ -355,12 +355,12 @@
                                 HeightRequest="70"
                                 BackgroundColor="Transparent"/>
                     </Border>
-                </Frame>
+                </Border>
 
                 <!-- ── Skrypt / Szablony — info ── -->
-                <Frame CornerRadius="10" Padding="14,12" HasShadow="False"
-                       BackgroundColor="{AppThemeBinding Light=#E3F2FD, Dark=#0D1442}"
-                       BorderColor="#90CAF9">
+                <Border StrokeShape="RoundRectangle 10" Padding="14,12"
+                        BackgroundColor="{AppThemeBinding Light=#E3F2FD, Dark=#0D1442}"
+                        Stroke="#90CAF9" StrokeThickness="1">
                     <VerticalStackLayout Spacing="6">
                         <Label Text="Skrypt do wstawienia na stronę"
                                FontSize="13" FontAttributes="Bold"
@@ -370,12 +370,12 @@
                                FontSize="11"
                                TextColor="#1976D2"/>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <!-- ── Szablony ── -->
-                <Frame CornerRadius="10" Padding="0" HasShadow="False"
-                       BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
-                       BorderColor="#E8E8E8">
+                <Border StrokeShape="RoundRectangle 10" Padding="0"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E2E}"
+                        Stroke="#E8E8E8" StrokeThickness="1">
                     <VerticalStackLayout Spacing="0">
                         <Grid ColumnDefinitions="*,*,*,*">
                             <Button Grid.Column="0" x:Name="BtnSzablon1"
@@ -409,7 +409,7 @@
                                FontSize="12" TextColor="#90A4AE"
                                Padding="14,10"/>
                     </VerticalStackLayout>
-                </Frame>
+                </Border>
 
                 <!-- ── Przycisk Zapisz ── -->
                 <Button Text="Zapisz"
